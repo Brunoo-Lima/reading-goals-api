@@ -1,28 +1,42 @@
 import type { IUser } from '../../@types/IUser';
 
-import type { ICreateUserRepository } from '../../interfaces/repositories/user';
+import type {
+  ICreateUserRepository,
+  IGetUserByEmailRepository,
+} from '../../interfaces/repositories/user';
 import type {
   IPasswordHashAdapter,
   IIdGeneratorAdapter,
 } from '../../interfaces/adapters';
 
 export class CreateUserUseCase {
+  private getUserByEmailRepository: IGetUserByEmailRepository;
   private createUserRepository: ICreateUserRepository;
   private idGeneratorAdapter: IIdGeneratorAdapter;
   private passwordHashAdapter: IPasswordHashAdapter;
 
   constructor(
+    getUserByEmailRepository: IGetUserByEmailRepository,
     createUserRepository: ICreateUserRepository,
     idGeneratorAdapter: IIdGeneratorAdapter,
     passwordHashAdapter: IPasswordHashAdapter,
   ) {
+    this.getUserByEmailRepository = getUserByEmailRepository;
     this.createUserRepository = createUserRepository;
     this.idGeneratorAdapter = idGeneratorAdapter;
     this.passwordHashAdapter = passwordHashAdapter;
   }
 
   async execute(user: IUser) {
-    const userId = await this.idGeneratorAdapter.execute();
+    const userAlreadyExists = await this.getUserByEmailRepository.execute(
+      user.email,
+    );
+
+    if (userAlreadyExists) {
+      throw new Error('User already exists');
+    }
+
+    const userId = this.idGeneratorAdapter.execute();
 
     const hashedPassword = await this.passwordHashAdapter.execute(
       user.password,

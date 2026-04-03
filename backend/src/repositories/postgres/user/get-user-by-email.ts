@@ -1,6 +1,6 @@
 import { prisma } from '../../../lib/prisma';
 
-export class GetUserByEmailRepository {
+export class PostgresGetUserByEmailRepository {
   async execute(email: string) {
     return await prisma.user.findUnique({
       where: {

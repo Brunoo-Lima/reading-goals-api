@@ -1,18 +1,29 @@
-import bcrypt from 'bcryptjs';
 import type { IUser } from '../../@types/IUser';
-import { v4 as uuid } from 'uuid';
+
 import type { ICreateUserRepository } from '../../interfaces/repositories/user';
+import type { IPasswordHashAdapter } from '../../interfaces/adapters/password-hash';
+import type { IIdGeneratorAdapter } from '../../interfaces/adapters/id-generator';
 
 export class CreateUserUseCase {
   private createUserRepository: ICreateUserRepository;
-  constructor(createUserRepository: ICreateUserRepository) {
+  private idGeneratorAdapter: IIdGeneratorAdapter;
+  private passwordHashAdapter: IPasswordHashAdapter;
+  constructor(
+    createUserRepository: ICreateUserRepository,
+    idGeneratorAdapter: IIdGeneratorAdapter,
+    passwordHashAdapter: IPasswordHashAdapter,
+  ) {
     this.createUserRepository = createUserRepository;
+    this.idGeneratorAdapter = idGeneratorAdapter;
+    this.passwordHashAdapter = passwordHashAdapter;
   }
 
   async execute(user: IUser) {
-    const userId = uuid();
+    const userId = await this.idGeneratorAdapter.execute();
 
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await this.passwordHashAdapter.execute(
+      user.password,
+    );
 
     const createUser = await this.createUserRepository.execute({
       ...user,

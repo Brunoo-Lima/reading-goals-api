@@ -4,9 +4,10 @@ node_modules
 # Environment variable
 .env
 
-
+# Prisma
 /generated
 
+# postgres-docker
 .postgres-data
 
 

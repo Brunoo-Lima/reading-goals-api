@@ -1,10 +1,7 @@
 import bcrypt from 'bcryptjs';
 import type { IUser } from '../../@types/IUser';
 import { v4 as uuid } from 'uuid';
-
-interface ICreateUserRepository {
-  execute(user: IUser): Promise<IUser>;
-}
+import type { ICreateUserRepository } from '../../interfaces/repositories/user';
 
 export class CreateUserUseCase {
   private createUserRepository: ICreateUserRepository;

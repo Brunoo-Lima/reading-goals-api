@@ -1,9 +1,5 @@
 import type { Request, Response } from 'express';
-import type { IUser } from '../../@types/IUser';
-
-interface ICreateUserUseCase {
-  execute(user: IUser): Promise<IUser>;
-}
+import type { ICreateUserUseCase } from '../../interfaces/use-cases/user';
 
 export class CreateUserController {
   private createUserUseCase: ICreateUserUseCase;

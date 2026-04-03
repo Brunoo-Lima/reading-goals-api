@@ -23,6 +23,7 @@
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+ 
 
     // Style Options
     // "noImplicitReturns": true,
@@ -40,5 +41,9 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    //prisma
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
   }
 }

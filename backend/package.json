@@ -1,5 +1,5 @@
 {
-  "name": "training",
+  "name": "reading-goals-api",
   "version": "1.0.0",
   "main": "./src/server.ts",
   "scripts": {

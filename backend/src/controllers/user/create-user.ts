@@ -1,5 +1,7 @@
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 import type { ICreateUserUseCase } from '../../interfaces/use-cases/user';
+import { badRequest, created, serverError } from '../helpers';
+import { EmailAlreadyInUseError } from '../../errors';
 
 export class CreateUserController {
   private createUserUseCase: ICreateUserUseCase;
@@ -7,15 +9,20 @@ export class CreateUserController {
     this.createUserUseCase = createUserUseCase;
   }
 
-  async execute(res: Response, req: Request) {
+  async execute(req: Request) {
     try {
-      const user = req.body;
+      const params = req.body;
 
-      const createdUser = await this.createUserUseCase.execute(user);
+      const user = await this.createUserUseCase.execute(params);
 
-      return res.status(201).json(createdUser);
+      return created(user);
     } catch (error) {
+      if (error instanceof EmailAlreadyInUseError) {
+        return badRequest({ message: error.message });
+      }
+
       console.error(error);
+      return serverError();
     }
   }
 }

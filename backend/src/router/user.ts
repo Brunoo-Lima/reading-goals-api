@@ -5,7 +5,9 @@ const userRoutes: IRouter = Router();
 
 userRoutes.post('/api/users', async (req: Request, res: Response) => {
   const createUserController = makeCreateUseController();
-  await createUserController.execute(res, req);
+  const { statusCode, body } = await createUserController.execute(req);
+
+  return res.status(statusCode).json(body);
 });
 
 export { userRoutes };

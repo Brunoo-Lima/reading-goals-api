@@ -43,12 +43,12 @@ export class CreateUserUseCase {
       user.password,
     );
 
-    const createUser = await this.createUserRepository.execute({
+    const userData = {
       ...user,
       password: hashedPassword,
       id: userId,
-    });
+    };
 
-    return createUser;
+    return await this.createUserRepository.execute(userData);
   }
 }

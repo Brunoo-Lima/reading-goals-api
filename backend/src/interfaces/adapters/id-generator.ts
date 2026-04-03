@@ -1,3 +1,3 @@
 export interface IIdGeneratorAdapter {
-  execute(): Promise<string>;
+  execute(): string;
 }

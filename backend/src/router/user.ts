@@ -1,16 +1,10 @@
 import { Router, type IRouter, type Request, type Response } from 'express';
-import { CreateUserUseCase } from '../use-cases/user/create-user';
-import { PostgresCreateUserRepository } from '../repositories/postgres/user/create-user';
-import { CreateUserController } from '../controllers/user/create-user';
+import { makeCreateUseController } from '../factories/controllers/user';
 
 const userRoutes: IRouter = Router();
 
 userRoutes.post('/api/users', async (req: Request, res: Response) => {
-  const createUserRepository = new PostgresCreateUserRepository();
-  const createUserUseCase = new CreateUserUseCase(createUserRepository);
-
-  const createUserController = new CreateUserController(createUserUseCase);
-
+  const createUserController = makeCreateUseController();
   await createUserController.execute(res, req);
 });
 

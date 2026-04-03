@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "main": "./src/server.ts",
   "scripts": {
-    "prepare": "husky",
-    "postinstall": "npx husky install",
     "dev": "node --watch src/server.ts",
     "lint": "eslint ."
   },
@@ -23,7 +21,6 @@
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.4.0",
-    "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2",

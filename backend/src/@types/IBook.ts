@@ -1,3 +1,5 @@
+import type { StatusReading } from '../../generated/prisma/enums';
+
 export interface IBook {
   id: string;
   user_id: string;
@@ -6,16 +8,9 @@ export interface IBook {
   genre: string[];
   status: StatusReading;
   total_pages: number;
-  start_date: Date;
-  end_date: Date;
+  start_date?: Date | null;
+  end_date?: Date | null;
 
   created_at: Date;
   updated_at?: Date;
-}
-
-enum StatusReading {
-  WISHLIST = 'WISHLIST',
-  READING = 'READING',
-  COMPLETED = 'COMPLETED',
-  ABANDONED = 'ABANDONED',
 }

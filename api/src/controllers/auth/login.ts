@@ -3,6 +3,7 @@ import type { ILoginUseCase } from '../../interfaces/use-cases';
 import { badRequest, ok, serverError } from '../helpers';
 import { loginSchema } from '../../schemas';
 import { ZodError } from 'zod';
+import { InvalidPasswordError, UserNotFoundError } from '../../errors';
 
 export class LoginController {
   private loginUseCase: ILoginUseCase;
@@ -23,6 +24,14 @@ export class LoginController {
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });
+      }
+
+      if (error instanceof InvalidPasswordError) {
+        return badRequest({ message: error.message });
+      }
+
+      if (error instanceof UserNotFoundError) {
+        return badRequest({ message: error.message });
       }
 
       console.log(error);

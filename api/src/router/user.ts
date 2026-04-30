@@ -1,13 +1,13 @@
 import { Router, type IRouter, type Request, type Response } from 'express';
-import { makeCreateUseController } from '../factories/controllers/user';
+import { makeCreateUseController } from '../factories/controllers';
 
 const userRoutes: IRouter = Router();
 
-userRoutes.post('/api/users', async (req: Request, res: Response) => {
+userRoutes.post('/', async (request: Request, response: Response) => {
   const createUserController = makeCreateUseController();
-  const { statusCode, body } = await createUserController.execute(req);
+  const { statusCode, body } = await createUserController.execute(request);
 
-  return res.status(statusCode).json(body);
+  return response.status(statusCode).send(body);
 });
 
 export { userRoutes };

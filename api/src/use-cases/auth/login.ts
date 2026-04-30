@@ -18,7 +18,7 @@ export class LoginUseCase {
     this.tokensGeneratorAdapter = tokensGeneratorAdapter;
   }
 
-  async execute(email: string, password: string) {
+  async execute(email: string, password: string, rememberMe: boolean = false) {
     const user = await this.getUserByEmailRepository.execute(email);
 
     if (!user) {
@@ -34,7 +34,7 @@ export class LoginUseCase {
       throw new InvalidPasswordError();
     }
 
-    const tokens = this.tokensGeneratorAdapter.execute(user.id);
+    const tokens = this.tokensGeneratorAdapter.execute(user.id, rememberMe);
 
     return {
       ...user,

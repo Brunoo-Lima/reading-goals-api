@@ -1,10 +1,17 @@
 import { CreateBookController } from '../../controllers';
-import { PostgresCreateBookRepository } from '../../repositories/postgres';
+import {
+  PostgresCreateBookRepository,
+  PostgresGetBookByTitleRepository,
+} from '../../repositories/postgres';
 import { CreateBookUseCase } from '../../use-cases';
 
 export const makeCreateBookController = () => {
   const createBookRepository = new PostgresCreateBookRepository();
-  const createBookUseCase = new CreateBookUseCase(createBookRepository);
+  const getBookByTitleRepository = new PostgresGetBookByTitleRepository();
+  const createBookUseCase = new CreateBookUseCase(
+    createBookRepository,
+    getBookByTitleRepository,
+  );
 
   const createBookController = new CreateBookController(createBookUseCase);
 

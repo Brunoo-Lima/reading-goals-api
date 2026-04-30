@@ -6,10 +6,10 @@ const bookRoutes: IRouter = Router();
 
 bookRoutes.post('/', auth, async (request: Request, response: Response) => {
   const createBookController = makeCreateBookController();
-  const { statusCode, body } = await createBookController.execute({
-    ...request.body,
-    user_id: request.userId,
-  });
+
+  request.body.user_id = request.userId;
+
+  const { statusCode, body } = await createBookController.execute(request);
 
   return response.status(statusCode).json(body);
 });

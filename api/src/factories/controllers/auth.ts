@@ -1,10 +1,11 @@
 import {
   PasswordComparatorAdapter,
   TokensGeneratorAdapter,
+  TokenVerifierAdapter,
 } from '../../adapters';
-import { LoginController } from '../../controllers';
+import { LoginController, RefreshTokenController } from '../../controllers';
 import { PostgresGetUserByEmailRepository } from '../../repositories/postgres';
-import { LoginUseCase } from '../../use-cases';
+import { LoginUseCase, RefreshTokenUseCase } from '../../use-cases';
 
 export const makeLoginController = () => {
   const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
@@ -20,4 +21,19 @@ export const makeLoginController = () => {
   const loginController = new LoginController(loginUseCase);
 
   return loginController;
+};
+
+export const makeRefreshTokenController = () => {
+  const tokensGeneratorAdapter = new TokensGeneratorAdapter();
+  const tokenVerifierAdapter = new TokenVerifierAdapter();
+  const refreshTokenUseCase = new RefreshTokenUseCase(
+    tokensGeneratorAdapter,
+    tokenVerifierAdapter,
+  );
+
+  const refreshTokenController = new RefreshTokenController(
+    refreshTokenUseCase,
+  );
+
+  return refreshTokenController;
 };

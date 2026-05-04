@@ -1,6 +1,8 @@
 import { InvalidPasswordError, UserNotFoundError } from '../../errors';
-import type { IPasswordComparatorAdapter } from '../../interfaces/adapters';
-import type { ITokensGeneratorAdapter } from '../../interfaces/adapters/tokens-generator';
+import type {
+  IPasswordComparatorAdapter,
+  ITokensGeneratorAdapter,
+} from '../../interfaces/adapters';
 import type { IGetUserByEmailRepository } from '../../interfaces/repositories';
 
 export class LoginUseCase {

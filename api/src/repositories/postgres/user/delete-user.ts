@@ -11,6 +11,9 @@ export class PostgresDeleteUserRepository {
         },
         include: {
           books: true,
+          goals: true,
+          notes: true,
+          readingLogs: true,
         },
       });
     } catch (error) {

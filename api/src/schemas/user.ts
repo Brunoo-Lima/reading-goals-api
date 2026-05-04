@@ -24,3 +24,5 @@ const createUserSchema = z.strictObject(
 );
 
 export { createUserSchema };
+
+export const updateUserSchema = createUserSchema.partial();

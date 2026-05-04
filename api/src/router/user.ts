@@ -3,6 +3,7 @@ import {
   makeCreateUseController,
   makeDeleteUserController,
   makeGetUserByIdController,
+  makeUpdateUserController,
 } from '../factories/controllers';
 import { auth } from '../middlewares/auth';
 
@@ -31,6 +32,16 @@ userRoutes.delete('/me', auth, async (request: Request, response: Response) => {
   request.params.userId = request.userId as string;
 
   const { statusCode, body } = await deleteUserController.execute(request);
+
+  return response.status(statusCode).send(body);
+});
+
+userRoutes.patch('/me', auth, async (request: Request, response: Response) => {
+  const updateUserController = makeUpdateUserController();
+
+  request.params.userId = request.userId as string;
+
+  const { statusCode, body } = await updateUserController.execute(request);
 
   return response.status(statusCode).send(body);
 });

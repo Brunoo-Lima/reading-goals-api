@@ -3,18 +3,21 @@ import {
   CreateUserController,
   DeleteUserController,
   GetUserByIdController,
+  UpdateUserController,
 } from '../../controllers';
 import {
   PostgresCreateUserRepository,
   PostgresDeleteUserRepository,
   PostgresGetUserByEmailRepository,
   PostgresGetUserByIdRepository,
+  PostgresUpdateUserRepository,
 } from '../../repositories/postgres';
 
 import {
   CreateUserUseCase,
   DeleteUserUseCase,
   GetUserByIdUseCase,
+  UpdateUserUseCase,
 } from '../../use-cases';
 
 export const makeCreateUseController = () => {
@@ -50,4 +53,19 @@ export const makeGetUserByIdController = () => {
   const getUserByIdController = new GetUserByIdController(getUserByIdUseCase);
 
   return getUserByIdController;
+};
+
+export const makeUpdateUserController = () => {
+  const updateUserRepository = new PostgresUpdateUserRepository();
+  const passwordHashAdapter = new PasswordHashAdapter();
+  const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
+  const updateUserUseCase = new UpdateUserUseCase(
+    updateUserRepository,
+    passwordHashAdapter,
+    getUserByEmailRepository,
+  );
+
+  const updateUserController = new UpdateUserController(updateUserUseCase);
+
+  return updateUserController;
 };

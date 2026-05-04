@@ -6,3 +6,4 @@ export * from './user/update-user';
 
 export * from './book/create-book';
 export * from './book/get-book-by-title';
+export * from './book/get-book-by-id';

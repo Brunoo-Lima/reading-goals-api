@@ -11,3 +11,10 @@ export class InvalidBookDatesError extends Error {
     this.name = 'InvalidBookDatesError';
   }
 }
+
+export class BookNotFoundError extends Error {
+  constructor() {
+    super('Book not found');
+    this.name = 'BookNotFoundError';
+  }
+}

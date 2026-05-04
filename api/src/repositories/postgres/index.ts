@@ -1,5 +1,6 @@
 export * from './user/create-user';
 export * from './user/get-user-by-email';
+export * from './user/delete-user';
 
 export * from './book/create-book';
 export * from './book/get-book-by-title';

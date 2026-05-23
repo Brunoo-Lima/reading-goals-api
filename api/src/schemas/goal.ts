@@ -3,6 +3,9 @@ import { GoalsType } from '../../generated/prisma/enums';
 
 export const createGoalSchema = z.strictObject(
   {
+    user_id: z.string('User id is required').min(1, {
+      error: 'User id is required',
+    }),
     type: z.enum(GoalsType, {
       error: 'Type is required',
     }),

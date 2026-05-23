@@ -3,7 +3,7 @@ import { StatusReading } from '../../generated/prisma/enums';
 
 const createBookSchema = z.strictObject(
   {
-    user_id: z.string('User id  is required').min(1, {
+    user_id: z.string('User id is required').min(1, {
       error: 'User id is required',
     }),
     title: z.string('Title is required').trim().min(1, {

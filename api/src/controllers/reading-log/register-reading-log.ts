@@ -4,8 +4,8 @@ import {
   badRequest,
   bookNotFoundResponse,
   checkIfIdIsValid,
+  created,
   invalidIdResponse,
-  ok,
   serverError,
   userNotFoundResponse,
 } from '../helpers';
@@ -25,14 +25,9 @@ export class RegisterReadingLogController {
       const bookId = request.query.bookId as string;
 
       const isUserIdValid = checkIfIdIsValid(userId);
-
-      if (!isUserIdValid) {
-        return invalidIdResponse();
-      }
-
       const isBookIdValid = checkIfIdIsValid(bookId);
 
-      if (!isBookIdValid) {
+      if (!isUserIdValid || !isBookIdValid) {
         return invalidIdResponse();
       }
 
@@ -46,7 +41,7 @@ export class RegisterReadingLogController {
         bookId,
       );
 
-      return ok(registerReadingLog);
+      return created(registerReadingLog);
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });

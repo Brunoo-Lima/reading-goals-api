@@ -10,3 +10,5 @@ export interface IGoal {
   created_at: Date;
   updated_at: Date;
 }
+
+export type IUpdateGoal = Omit<IGoal, 'id' | 'user_id' | 'created_at'>;

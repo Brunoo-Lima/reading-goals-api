@@ -37,7 +37,7 @@ describe('Register Reading Log Controller', () => {
 
     const result = await sut.execute(baseHttpRequest);
 
-    expect(result.statusCode).toBe(200);
+    expect(result.statusCode).toBe(201);
     expect(result.body).toEqual(readingLog);
   });
 

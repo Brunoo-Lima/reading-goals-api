@@ -1,11 +1,20 @@
 import { IdGeneratorAdapter } from '../../adapters';
-import { CreateGoalController, GetGoalByIdController } from '../../controllers';
+import {
+  CreateGoalController,
+  GetGoalByIdController,
+  GetGoalsController,
+} from '../../controllers';
 import {
   PostgresCreateGoalRepository,
   PostgresGetGoalByIdRepository,
+  PostgresGetGoalsRepository,
   PostgresGetUserByIdRepository,
 } from '../../repositories/postgres';
-import { CreateGoalUseCase, GetGoalByIdUseCase } from '../../use-cases';
+import {
+  CreateGoalUseCase,
+  GetGoalByIdUseCase,
+  GetGoalsUseCase,
+} from '../../use-cases';
 
 export const makeCreateGoalController = () => {
   const createGoalRepository = new PostgresCreateGoalRepository();
@@ -21,6 +30,20 @@ export const makeCreateGoalController = () => {
   const createGoalController = new CreateGoalController(createGoalUseCase);
 
   return createGoalController;
+};
+
+export const makeGetGoalsController = () => {
+  const getGoalsRepository = new PostgresGetGoalsRepository();
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+
+  const getGoalsUseCase = new GetGoalsUseCase(
+    getGoalsRepository,
+    getUserByIdRepository,
+  );
+
+  const getGoalsController = new GetGoalsController(getGoalsUseCase);
+
+  return getGoalsController;
 };
 
 export const makeGetGoalByIdController = () => {

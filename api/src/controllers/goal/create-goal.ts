@@ -31,9 +31,14 @@ export class CreateGoalController {
 
       const params = request.body;
 
-      await createGoalSchema.parseAsync(params);
+      const goalData = {
+        ...params,
+        user_id: userId,
+      };
 
-      const createGoal = await this.createGoalUseCase.execute(params);
+      await createGoalSchema.parseAsync(goalData);
+
+      const createGoal = await this.createGoalUseCase.execute(goalData);
 
       return created(createGoal);
     } catch (error) {

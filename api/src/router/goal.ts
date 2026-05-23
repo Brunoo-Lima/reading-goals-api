@@ -2,6 +2,7 @@ import { Router, type IRouter, type Request, type Response } from 'express';
 import {
   makeCreateGoalController,
   makeGetGoalByIdController,
+  makeGetGoalsController,
 } from '../factories/controllers';
 import { auth } from '../middlewares/auth';
 
@@ -13,6 +14,16 @@ goalRoutes.post('/', auth, async (request: Request, response: Response) => {
   request.params.userId = request.userId as string;
 
   const { statusCode, body } = await createGoalController.execute(request);
+
+  return response.status(statusCode).send(body);
+});
+
+goalRoutes.get('/', auth, async (request: Request, response: Response) => {
+  const getGoalsController = makeGetGoalsController();
+
+  request.params.userId = request.userId as string;
+
+  const { statusCode, body } = await getGoalsController.execute(request);
 
   return response.status(statusCode).send(body);
 });

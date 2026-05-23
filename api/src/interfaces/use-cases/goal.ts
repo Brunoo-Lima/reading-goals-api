@@ -9,5 +9,5 @@ export interface IGetGoalsUseCase {
 }
 
 export interface IGetGoalByIdUseCase {
-  execute(goalId: string): Promise<IGoal | null>;
+  execute(goalId: string, userId: string): Promise<IGoal | null>;
 }

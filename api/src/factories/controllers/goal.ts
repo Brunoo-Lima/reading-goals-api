@@ -3,17 +3,20 @@ import {
   CreateGoalController,
   GetGoalByIdController,
   GetGoalsController,
+  UpdateGoalController,
 } from '../../controllers';
 import {
   PostgresCreateGoalRepository,
   PostgresGetGoalByIdRepository,
   PostgresGetGoalsRepository,
   PostgresGetUserByIdRepository,
+  PostgresUpdateGoalRepository,
 } from '../../repositories/postgres';
 import {
   CreateGoalUseCase,
   GetGoalByIdUseCase,
   GetGoalsUseCase,
+  UpdateGoalUseCase,
 } from '../../use-cases';
 
 export const makeCreateGoalController = () => {
@@ -53,4 +56,18 @@ export const makeGetGoalByIdController = () => {
   const getGoalByIdController = new GetGoalByIdController(getGoalByIdUseCase);
 
   return getGoalByIdController;
+};
+
+export const makeUpdateGoalController = () => {
+  const updateGoalRepository = new PostgresUpdateGoalRepository();
+  const getGoalByIdRepository = new PostgresGetGoalByIdRepository();
+
+  const updateGoalUseCase = new UpdateGoalUseCase(
+    updateGoalRepository,
+    getGoalByIdRepository,
+  );
+
+  const updateGoalController = new UpdateGoalController(updateGoalUseCase);
+
+  return updateGoalController;
 };

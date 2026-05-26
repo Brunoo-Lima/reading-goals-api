@@ -2,11 +2,13 @@ import {
   CreateGoalController,
   GetGoalByIdController,
   GetGoalsController,
+  UpdateGoalController,
 } from '../../../controllers';
 import {
   makeCreateGoalController,
   makeGetGoalByIdController,
   makeGetGoalsController,
+  makeUpdateGoalController,
 } from '../goal';
 
 describe('Factory Goal Controller', () => {
@@ -23,5 +25,10 @@ describe('Factory Goal Controller', () => {
   test('should return a GetGoalByIdController', () => {
     const getGoalByIdController = makeGetGoalByIdController();
     expect(getGoalByIdController).toBeInstanceOf(GetGoalByIdController);
+  });
+
+  test('should return a UpdateGoalController', () => {
+    const updateGoalController = makeUpdateGoalController();
+    expect(updateGoalController).toBeInstanceOf(UpdateGoalController);
   });
 });

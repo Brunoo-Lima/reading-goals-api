@@ -1,4 +1,4 @@
-import { NoteFoundError, UserNotFoundError } from '../../errors';
+import { NoteNotFoundError, UserNotFoundError } from '../../errors';
 import type {
   IGetNoteByIdRepository,
   IGetUserByIdRepository,
@@ -26,7 +26,7 @@ export class GetNoteByIdUseCase {
     const note = await this.getNoteByIdRepository.execute(noteId);
 
     if (!note) {
-      throw new NoteFoundError();
+      throw new NoteNotFoundError();
     }
 
     return note;

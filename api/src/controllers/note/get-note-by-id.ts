@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import { NoteFoundError, UserNotFoundError } from '../../errors';
+import { NoteNotFoundError, UserNotFoundError } from '../../errors';
 import {
   checkIfIdIsValid,
   invalidIdResponse,
@@ -37,7 +37,7 @@ export class GetNoteByIdController {
         return userNotFoundResponse();
       }
 
-      if (error instanceof NoteFoundError) {
+      if (error instanceof NoteNotFoundError) {
         return noteNotFoundResponse();
       }
 

@@ -1,10 +1,15 @@
 import { IdGeneratorAdapter } from '../../adapters';
-import { CreateNoteController } from '../../controllers';
+import {
+  CreateNoteController,
+  GetNotesByUserIdController,
+} from '../../controllers';
 import {
   PostgresCreateNoteRepository,
   PostgresGetBookByIdRepository,
+  PostgresGetNotesByUserIdRepository,
+  PostgresGetUserByIdRepository,
 } from '../../repositories/postgres';
-import { CreateNoteUseCase } from '../../use-cases';
+import { CreateNoteUseCase, GetNotesByUserIdUseCase } from '../../use-cases';
 
 export const makeCreateNoteController = () => {
   const createNoteRepository = new PostgresCreateNoteRepository();
@@ -20,4 +25,20 @@ export const makeCreateNoteController = () => {
   const createNoteController = new CreateNoteController(createNoteUseCase);
 
   return createNoteController;
+};
+
+export const makeGetNotesByUserIdController = () => {
+  const getNotesByUserIdRepository = new PostgresGetNotesByUserIdRepository();
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+
+  const getNotesByUserIdUseCase = new GetNotesByUserIdUseCase(
+    getNotesByUserIdRepository,
+    getUserByIdRepository,
+  );
+
+  const getNotesByUserIdController = new GetNotesByUserIdController(
+    getNotesByUserIdUseCase,
+  );
+
+  return getNotesByUserIdController;
 };

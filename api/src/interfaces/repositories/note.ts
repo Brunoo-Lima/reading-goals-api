@@ -7,3 +7,7 @@ export interface ICreateNoteRepository {
 export interface IGetNotesByUserIdRepository {
   execute(userId: string): Promise<INote[]>;
 }
+
+export interface IGetNoteByIdRepository {
+  execute(noteId: string): Promise<INote | null>;
+}

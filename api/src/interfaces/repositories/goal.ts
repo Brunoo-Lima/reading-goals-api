@@ -15,3 +15,7 @@ export interface IGetGoalByIdRepository {
 export interface IUpdateGoalRepository {
   execute(goalId: string, updateGoalParams: IUpdateGoal): Promise<IGoal>;
 }
+
+export interface IDeleteGoalRepository {
+  execute(goalId: string): Promise<IGoal>;
+}

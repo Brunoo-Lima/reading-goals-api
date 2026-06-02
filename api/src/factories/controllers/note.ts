@@ -1,6 +1,7 @@
 import { IdGeneratorAdapter } from '../../adapters';
 import {
   CreateNoteController,
+  DeleteNoteController,
   GetNoteByIdController,
   GetNotesByUserIdController,
   UpdateNoteController,
@@ -16,6 +17,7 @@ import {
 } from '../../repositories/postgres';
 import {
   CreateNoteUseCase,
+  DeleteNoteUseCase,
   GetNoteByIdUseCase,
   GetNotesByUserIdUseCase,
   UpdateNoteUseCase,
@@ -86,15 +88,13 @@ export const makeUpdateNoteController = () => {
 export const makeDeleteNoteController = () => {
   const deleteNoteRepository = new PostgresDeleteNoteRepository();
   const getNoteByIdRepository = new PostgresGetNoteByIdRepository();
-  const getBookByIdRepository = new PostgresGetBookByIdRepository();
 
-  const deleteNoteUseCase = new UpdateNoteUseCase(
+  const deleteNoteUseCase = new DeleteNoteUseCase(
     deleteNoteRepository,
     getNoteByIdRepository,
-    getBookByIdRepository,
   );
 
-  const deleteNoteController = new UpdateNoteController(deleteNoteUseCase);
+  const deleteNoteController = new DeleteNoteController(deleteNoteUseCase);
 
   return deleteNoteController;
 };

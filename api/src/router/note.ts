@@ -2,6 +2,7 @@ import { Router, type IRouter, type Request, type Response } from 'express';
 import { auth } from '../middlewares/auth';
 import {
   makeCreateNoteController,
+  makeDeleteNoteController,
   makeGetNoteByIdController,
   makeGetNotesByUserIdController,
   makeUpdateNoteController,
@@ -57,6 +58,20 @@ noteRoutes.patch(
     request.params.userId = request.userId as string;
 
     const { statusCode, body } = await updateNoteController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
+
+noteRoutes.delete(
+  '/:noteId',
+  auth,
+  async (request: Request, response: Response) => {
+    const deleteNoteController = makeDeleteNoteController();
+
+    request.params.userId = request.userId as string;
+
+    const { statusCode, body } = await deleteNoteController.execute(request);
 
     return response.status(statusCode).send(body);
   },

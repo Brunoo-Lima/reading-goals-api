@@ -1,4 +1,4 @@
-import { NoteFoundError, UserNotFoundError } from '../../../errors';
+import { NoteNotFoundError, UserNotFoundError } from '../../../errors';
 import { note, user } from '../../../tests';
 import { GetNoteByIdUseCase } from '../get-note-by-id';
 
@@ -60,6 +60,6 @@ describe('Get Note By Id Use Case', () => {
 
     const promise = sut.execute(note.id, user.id);
 
-    await expect(promise).rejects.toThrow(new NoteFoundError());
+    await expect(promise).rejects.toThrow(new NoteNotFoundError());
   });
 });

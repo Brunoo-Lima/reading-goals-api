@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { note } from '../../../tests';
 import type { Request } from 'express';
 import { GetNoteByIdController } from '../get-note-by-id';
-import { NoteFoundError, UserNotFoundError } from '../../../errors';
+import { NoteNotFoundError, UserNotFoundError } from '../../../errors';
 
 describe('Get Note By Id Controller', () => {
   class GetNoteByIdUseCaseStub {
@@ -67,7 +67,7 @@ describe('Get Note By Id Controller', () => {
     const { sut, getNoteByIdUseCase } = makeSut();
 
     vi.spyOn(getNoteByIdUseCase, 'execute').mockImplementationOnce(() => {
-      throw new NoteFoundError();
+      throw new NoteNotFoundError();
     });
 
     const httpResponse = await sut.execute(baseHttpRequest);

@@ -2,7 +2,10 @@ import { faker } from '@faker-js/faker';
 import { note } from '../../../tests';
 import { CreateNoteController } from '../create-note';
 import type { Request } from 'express';
-import { BookNotFoundError } from '../../../errors';
+import {
+  BookNotFoundError,
+  NotePageNumberExceedsTotalPagesError,
+} from '../../../errors';
 
 describe('Create Note Controller', () => {
   class CreateNoteUseCaseStub {
@@ -29,7 +32,7 @@ describe('Create Note Controller', () => {
     body: {
       content: faker.lorem.sentence(),
       rating: faker.number.int({ min: 1, max: 5 }),
-      page_number: faker.number.int({ min: 1 }),
+      page_number: 300,
     },
   } as Partial<Request> as Request;
 
@@ -37,7 +40,6 @@ describe('Create Note Controller', () => {
     const { sut } = makeSut();
 
     const result = await sut.execute(baseHttpRequest);
-    console.log(result);
 
     expect(result.statusCode).toBe(201);
     expect(result.body).toEqual(note);
@@ -127,7 +129,7 @@ describe('Create Note Controller', () => {
       },
       body: {
         ...baseHttpRequest.body,
-        page_number: 0,
+        page_number: -1,
       },
     } as Partial<Request> as Request;
 
@@ -156,5 +158,17 @@ describe('Create Note Controller', () => {
     const result = await sut.execute(baseHttpRequest);
 
     expect(result.statusCode).toBe(404);
+  });
+
+  test('should return 400 if page number exceeds total pages of the book', async () => {
+    const { sut, createNoteUseCase } = makeSut();
+
+    vi.spyOn(createNoteUseCase, 'execute').mockImplementationOnce(async () => {
+      throw new NotePageNumberExceedsTotalPagesError();
+    });
+
+    const result = await sut.execute(baseHttpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });

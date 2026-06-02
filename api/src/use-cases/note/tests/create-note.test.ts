@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { book, note } from '../../../tests';
 import { CreateNoteUseCase } from '../create-note';
-import { BookNotFoundError } from '../../../errors';
+import {
+  BookNotFoundError,
+  NotePageNumberExceedsTotalPagesError,
+} from '../../../errors';
 
 describe('Create Note Use Case', () => {
   class CreateNoteRepositoryStub {
@@ -58,6 +61,20 @@ describe('Create Note Use Case', () => {
     const promise = sut.execute(note, faker.string.uuid());
 
     await expect(promise).rejects.toThrow(new BookNotFoundError());
+  });
+
+  test('should return NotePageNumberExceedsTotalPagesError if page number exceeds total pages of the book', async () => {
+    const { sut, getBookByIdRepository } = makeSut();
+    vi.spyOn(getBookByIdRepository, 'execute').mockResolvedValueOnce({
+      ...book,
+      total_pages: 100,
+    });
+
+    const promise = sut.execute({ ...note, page_number: 101 }, book.id);
+
+    await expect(promise).rejects.toThrow(
+      new NotePageNumberExceedsTotalPagesError(),
+    );
   });
 
   test('should throw if CreateNoteRepository throws', async () => {

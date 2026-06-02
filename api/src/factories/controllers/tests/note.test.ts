@@ -1,9 +1,11 @@
 import {
   CreateNoteController,
+  GetNoteByIdController,
   GetNotesByUserIdController,
 } from '../../../controllers';
 import {
   makeCreateNoteController,
+  makeGetNoteByIdController,
   makeGetNotesByUserIdController,
 } from '../note';
 
@@ -18,5 +20,10 @@ describe('Factory Note Controller', () => {
     expect(getNotesByUserIdController).toBeInstanceOf(
       GetNotesByUserIdController,
     );
+  });
+
+  test('should return a GetNoteByIdController', () => {
+    const getNoteByIdController = makeGetNoteByIdController();
+    expect(getNoteByIdController).toBeInstanceOf(GetNoteByIdController);
   });
 });

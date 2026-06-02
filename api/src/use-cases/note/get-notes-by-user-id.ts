@@ -1,4 +1,4 @@
-import { UserNotFoundError } from '../../errors';
+import { BookNotFoundError, UserNotFoundError } from '../../errors';
 import type {
   IGetNotesByUserIdRepository,
   IGetUserByIdRepository,
@@ -16,14 +16,18 @@ export class GetNotesByUserIdUseCase {
     this.getUserByIdRepository = getUserByIdRepository;
   }
 
-  async execute(userId: string) {
+  async execute(userId: string, bookId?: string) {
     const user = await this.getUserByIdRepository.execute(userId);
 
     if (!user) {
       throw new UserNotFoundError();
     }
 
-    const notes = await this.getNotesByUserIdRepository.execute(userId);
+    if (!bookId) {
+      throw new BookNotFoundError();
+    }
+
+    const notes = await this.getNotesByUserIdRepository.execute(userId, bookId);
 
     return notes;
   }

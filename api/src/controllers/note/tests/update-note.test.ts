@@ -124,4 +124,20 @@ describe('Update Note Controller', () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  test('should return 400 if rating is invalid', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      ...baseHttpRequest,
+      body: {
+        ...baseHttpRequest.body,
+        rating: 6,
+      },
+    } as Partial<Request> as Request;
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(400);
+  });
 });

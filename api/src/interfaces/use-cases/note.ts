@@ -15,3 +15,7 @@ export interface IGetNoteByIdUseCase {
 export interface IUpdateNoteUseCase {
   execute(noteId: string, updateNoteParams: IUpdateNote): Promise<INote>;
 }
+
+export interface IDeleteNoteUseCase {
+  execute(noteId: string): Promise<INote>;
+}

@@ -9,7 +9,10 @@ import {
   serverError,
 } from '../helpers';
 import { ZodError } from 'zod';
-import { BookNotFoundError } from '../../errors';
+import {
+  BookNotFoundError,
+  NotePageNumberExceedsTotalPagesError,
+} from '../../errors';
 import { createNoteSchema } from '../../schemas/note';
 
 export class CreateNoteController {
@@ -51,6 +54,10 @@ export class CreateNoteController {
 
       if (error instanceof BookNotFoundError) {
         return bookNotFoundResponse();
+      }
+
+      if (error instanceof NotePageNumberExceedsTotalPagesError) {
+        return badRequest({ message: error.message });
       }
 
       return serverError();

@@ -5,8 +5,8 @@ export interface INote {
   page_number?: number | null;
   book_id: string;
   user_id: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export type IUpdateNote = Omit<INote, 'id' | 'created_at'>;

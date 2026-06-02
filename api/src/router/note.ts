@@ -4,6 +4,7 @@ import {
   makeCreateNoteController,
   makeGetNoteByIdController,
   makeGetNotesByUserIdController,
+  makeUpdateNoteController,
 } from '../factories/controllers';
 
 const noteRoutes: IRouter = Router();
@@ -42,6 +43,20 @@ noteRoutes.get(
     request.params.userId = request.userId as string;
 
     const { statusCode, body } = await getNoteByIdController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
+
+noteRoutes.patch(
+  '/:noteId',
+  auth,
+  async (request: Request, response: Response) => {
+    const updateNoteController = makeUpdateNoteController();
+
+    request.params.userId = request.userId as string;
+
+    const { statusCode, body } = await updateNoteController.execute(request);
 
     return response.status(statusCode).send(body);
   },

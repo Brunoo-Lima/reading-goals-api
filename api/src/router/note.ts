@@ -4,14 +4,18 @@ import { makeCreateNoteController } from '../factories/controllers';
 
 const noteRoutes: IRouter = Router();
 
-noteRoutes.post('/', auth, async (request: Request, response: Response) => {
-  const createNoteController = makeCreateNoteController();
+noteRoutes.post(
+  '/:bookId',
+  auth,
+  async (request: Request, response: Response) => {
+    const createNoteController = makeCreateNoteController();
 
-  request.params.userId = request.userId as string;
+    request.params.userId = request.userId as string;
 
-  const { statusCode, body } = await createNoteController.execute(request);
+    const { statusCode, body } = await createNoteController.execute(request);
 
-  return response.status(statusCode).send(body);
-});
+    return response.status(statusCode).send(body);
+  },
+);
 
 export { noteRoutes };

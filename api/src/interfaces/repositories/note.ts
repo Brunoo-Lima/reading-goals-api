@@ -15,3 +15,7 @@ export interface IGetNoteByIdRepository {
 export interface IUpdateNoteRepository {
   execute(noteId: string, updateNoteParams: IUpdateNote): Promise<INote>;
 }
+
+export interface IDeleteNoteRepository {
+  execute(noteId: string): Promise<INote | null>;
+}

@@ -1,5 +1,8 @@
 import type { INote } from '../../@types/INote';
-import { BookNotFoundError } from '../../errors';
+import {
+  BookNotFoundError,
+  NotePageNumberExceedsTotalPagesError,
+} from '../../errors';
 import type { IIdGeneratorAdapter } from '../../interfaces/adapters';
 import type {
   ICreateNoteRepository,
@@ -26,6 +29,10 @@ export class CreateNoteUseCase {
 
     if (!book) {
       throw new BookNotFoundError();
+    }
+
+    if (noteParams.page_number && noteParams.page_number > book.total_pages) {
+      throw new NotePageNumberExceedsTotalPagesError();
     }
 
     const noteId = this.idGeneratorAdapter.execute();

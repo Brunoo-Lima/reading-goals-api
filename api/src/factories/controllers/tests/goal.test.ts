@@ -4,8 +4,10 @@ import {
   GetGoalsController,
   UpdateGoalController,
 } from '../../../controllers';
+import { DeleteGoalController } from '../../../controllers/goal/delete-goal';
 import {
   makeCreateGoalController,
+  makeDeleteGoalController,
   makeGetGoalByIdController,
   makeGetGoalsController,
   makeUpdateGoalController,
@@ -30,5 +32,10 @@ describe('Factory Goal Controller', () => {
   test('should return a UpdateGoalController', () => {
     const updateGoalController = makeUpdateGoalController();
     expect(updateGoalController).toBeInstanceOf(UpdateGoalController);
+  });
+
+  test('should return a DeleteGoalController', () => {
+    const deleteGoalController = makeDeleteGoalController();
+    expect(deleteGoalController).toBeInstanceOf(DeleteGoalController);
   });
 });

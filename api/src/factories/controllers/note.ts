@@ -3,6 +3,7 @@ import {
   CreateNoteController,
   GetNoteByIdController,
   GetNotesByUserIdController,
+  UpdateNoteController,
 } from '../../controllers';
 import {
   PostgresCreateNoteRepository,
@@ -10,11 +11,13 @@ import {
   PostgresGetNoteByIdRepository,
   PostgresGetNotesByUserIdRepository,
   PostgresGetUserByIdRepository,
+  PostgresUpdateNoteRepository,
 } from '../../repositories/postgres';
 import {
   CreateNoteUseCase,
   GetNoteByIdUseCase,
   GetNotesByUserIdUseCase,
+  UpdateNoteUseCase,
 } from '../../use-cases';
 
 export const makeCreateNoteController = () => {
@@ -61,4 +64,20 @@ export const makeGetNoteByIdController = () => {
   const getNoteByIdController = new GetNoteByIdController(getNoteByIdUseCase);
 
   return getNoteByIdController;
+};
+
+export const makeUpdateNoteController = () => {
+  const updateNoteRepository = new PostgresUpdateNoteRepository();
+  const getNoteByIdRepository = new PostgresGetNoteByIdRepository();
+  const getBookByIdRepository = new PostgresGetBookByIdRepository();
+
+  const updateNoteUseCase = new UpdateNoteUseCase(
+    updateNoteRepository,
+    getNoteByIdRepository,
+    getBookByIdRepository,
+  );
+
+  const updateNoteController = new UpdateNoteController(updateNoteUseCase);
+
+  return updateNoteController;
 };

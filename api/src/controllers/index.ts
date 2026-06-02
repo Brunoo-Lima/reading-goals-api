@@ -25,3 +25,4 @@ export * from './note/create-note';
 export * from './note/get-notes-by-user-id';
 export * from './note/get-note-by-id';
 export * from './note/update-note';
+export * from './note/delete-note';

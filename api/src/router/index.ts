@@ -4,6 +4,7 @@ import { bookRoutes } from './book';
 import { authRoutes } from './auth';
 import { readingLogRoutes } from './reading-log';
 import { goalRoutes } from './goal';
+import { noteRoutes } from './note';
 
 const routes: IRouter = Router();
 
@@ -12,5 +13,6 @@ routes.use('/api/books', bookRoutes);
 routes.use('/api/auth', authRoutes);
 routes.use('/api/reading-logs', readingLogRoutes);
 routes.use('/api/goals', goalRoutes);
+routes.use('/api/notes', noteRoutes);
 
 export { routes };

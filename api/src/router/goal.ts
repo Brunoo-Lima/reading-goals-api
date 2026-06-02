@@ -3,6 +3,7 @@ import {
   makeCreateGoalController,
   makeGetGoalByIdController,
   makeGetGoalsController,
+  makeUpdateGoalController,
 } from '../factories/controllers';
 import { auth } from '../middlewares/auth';
 
@@ -37,6 +38,20 @@ goalRoutes.get(
     request.params.userId = request.userId as string;
 
     const { statusCode, body } = await getGoalByIdController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
+
+goalRoutes.patch(
+  '/:goalId',
+  auth,
+  async (request: Request, response: Response) => {
+    const updateGoalController = makeUpdateGoalController();
+
+    request.params.userId = request.userId as string;
+
+    const { statusCode, body } = await updateGoalController.execute(request);
 
     return response.status(statusCode).send(body);
   },

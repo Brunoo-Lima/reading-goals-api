@@ -8,3 +8,5 @@ export interface INote {
   created_at: Date;
   updated_at: Date;
 }
+
+export type IUpdateNote = Omit<INote, 'id' | 'created_at'>;

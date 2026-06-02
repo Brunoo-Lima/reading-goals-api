@@ -4,3 +4,10 @@ export class NotePageNumberExceedsTotalPagesError extends Error {
     this.name = 'NotePageNumberExceedsTotalPagesError';
   }
 }
+
+export class NoteFoundError extends Error {
+  constructor() {
+    super('Note not found.');
+    this.name = 'NoteFoundError';
+  }
+}

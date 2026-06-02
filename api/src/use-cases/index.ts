@@ -23,3 +23,4 @@ export * from './goal/update-goal';
 
 export * from './note/create-note';
 export * from './note/get-notes-by-user-id';
+export * from './note/get-note-by-id';

@@ -7,3 +7,7 @@ export interface ICreateNoteUseCase {
 export interface IGetNotesByUserIdUseCase {
   execute(userId: string): Promise<INote[]>;
 }
+
+export interface IGetNoteByIdUseCase {
+  execute(noteId: string, userId: string): Promise<INote>;
+}

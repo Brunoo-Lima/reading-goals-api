@@ -23,3 +23,5 @@ export const createNoteSchema = z.strictObject(
     error: 'Some provided field is not allowed.',
   },
 );
+
+export const updateNoteSchema = createNoteSchema.partial();

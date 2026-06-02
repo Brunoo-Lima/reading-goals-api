@@ -1,15 +1,25 @@
 import { IdGeneratorAdapter } from '../../adapters';
 import {
   CreateNoteController,
+  GetNoteByIdController,
   GetNotesByUserIdController,
+  UpdateNoteController,
 } from '../../controllers';
 import {
   PostgresCreateNoteRepository,
+  PostgresDeleteNoteRepository,
   PostgresGetBookByIdRepository,
+  PostgresGetNoteByIdRepository,
   PostgresGetNotesByUserIdRepository,
   PostgresGetUserByIdRepository,
+  PostgresUpdateNoteRepository,
 } from '../../repositories/postgres';
-import { CreateNoteUseCase, GetNotesByUserIdUseCase } from '../../use-cases';
+import {
+  CreateNoteUseCase,
+  GetNoteByIdUseCase,
+  GetNotesByUserIdUseCase,
+  UpdateNoteUseCase,
+} from '../../use-cases';
 
 export const makeCreateNoteController = () => {
   const createNoteRepository = new PostgresCreateNoteRepository();
@@ -41,4 +51,50 @@ export const makeGetNotesByUserIdController = () => {
   );
 
   return getNotesByUserIdController;
+};
+
+export const makeGetNoteByIdController = () => {
+  const getNoteByIdRepository = new PostgresGetNoteByIdRepository();
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+
+  const getNoteByIdUseCase = new GetNoteByIdUseCase(
+    getNoteByIdRepository,
+    getUserByIdRepository,
+  );
+
+  const getNoteByIdController = new GetNoteByIdController(getNoteByIdUseCase);
+
+  return getNoteByIdController;
+};
+
+export const makeUpdateNoteController = () => {
+  const updateNoteRepository = new PostgresUpdateNoteRepository();
+  const getNoteByIdRepository = new PostgresGetNoteByIdRepository();
+  const getBookByIdRepository = new PostgresGetBookByIdRepository();
+
+  const updateNoteUseCase = new UpdateNoteUseCase(
+    updateNoteRepository,
+    getNoteByIdRepository,
+    getBookByIdRepository,
+  );
+
+  const updateNoteController = new UpdateNoteController(updateNoteUseCase);
+
+  return updateNoteController;
+};
+
+export const makeDeleteNoteController = () => {
+  const deleteNoteRepository = new PostgresDeleteNoteRepository();
+  const getNoteByIdRepository = new PostgresGetNoteByIdRepository();
+  const getBookByIdRepository = new PostgresGetBookByIdRepository();
+
+  const deleteNoteUseCase = new UpdateNoteUseCase(
+    deleteNoteRepository,
+    getNoteByIdRepository,
+    getBookByIdRepository,
+  );
+
+  const deleteNoteController = new UpdateNoteController(deleteNoteUseCase);
+
+  return deleteNoteController;
 };

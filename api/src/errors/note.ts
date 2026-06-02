@@ -4,3 +4,10 @@ export class NotePageNumberExceedsTotalPagesError extends Error {
     this.name = 'NotePageNumberExceedsTotalPagesError';
   }
 }
+
+export class NoteNotFoundError extends Error {
+  constructor(noteId?: string) {
+    super(`Note with id ${noteId ? `'${noteId}'` : ''} not found.`);
+    this.name = 'NoteNotFoundError';
+  }
+}

@@ -17,5 +17,5 @@ export interface IUpdateNoteUseCase {
 }
 
 export interface IDeleteNoteUseCase {
-  execute(noteId: string): Promise<INote>;
+  execute(noteId: string): Promise<INote | null>;
 }

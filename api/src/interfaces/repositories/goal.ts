@@ -17,5 +17,5 @@ export interface IUpdateGoalRepository {
 }
 
 export interface IDeleteGoalRepository {
-  execute(goalId: string): Promise<IGoal>;
+  execute(goalId: string): Promise<IGoal | null>;
 }

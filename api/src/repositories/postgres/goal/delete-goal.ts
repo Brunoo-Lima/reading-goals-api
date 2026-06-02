@@ -5,7 +5,7 @@ import { GoalNotFoundError } from '../../../errors';
 export class PostgresDeleteGoalRepository {
   async execute(goalId: string) {
     try {
-      return await prisma.note.delete({
+      return await prisma.goal.delete({
         where: {
           id: goalId,
         },

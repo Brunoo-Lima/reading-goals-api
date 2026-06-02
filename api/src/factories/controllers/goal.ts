@@ -5,8 +5,10 @@ import {
   GetGoalsController,
   UpdateGoalController,
 } from '../../controllers';
+import { DeleteGoalController } from '../../controllers/goal/delete-goal';
 import {
   PostgresCreateGoalRepository,
+  PostgresDeleteGoalRepository,
   PostgresGetGoalByIdRepository,
   PostgresGetGoalsRepository,
   PostgresGetUserByIdRepository,
@@ -14,6 +16,7 @@ import {
 } from '../../repositories/postgres';
 import {
   CreateGoalUseCase,
+  DeleteGoalUseCase,
   GetGoalByIdUseCase,
   GetGoalsUseCase,
   UpdateGoalUseCase,
@@ -70,4 +73,18 @@ export const makeUpdateGoalController = () => {
   const updateGoalController = new UpdateGoalController(updateGoalUseCase);
 
   return updateGoalController;
+};
+
+export const makeDeleteGoalController = () => {
+  const deleteGoalRepository = new PostgresDeleteGoalRepository();
+  const getGoalByIdRepository = new PostgresGetGoalByIdRepository();
+
+  const deleteGoalUseCase = new DeleteGoalUseCase(
+    deleteGoalRepository,
+    getGoalByIdRepository,
+  );
+
+  const deleteGoalController = new DeleteGoalController(deleteGoalUseCase);
+
+  return deleteGoalController;
 };

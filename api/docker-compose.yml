@@ -3,9 +3,9 @@ services:
     image: postgres:18
     container_name: reading-goals-api
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=reading-goals
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: reading-goals
     ports:
       - 5432:5432
     volumes:
@@ -15,8 +15,8 @@ services:
     image: postgres:18
     container_name: reading-goals-postgres-test
     environment:
-      POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: reading-goals
     ports:
       - '5433:5432'

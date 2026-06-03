@@ -58,7 +58,10 @@ describe('Update User Repository', () => {
 
   test('should throw UserNotFoundError if user is not found', async () => {
     vi.spyOn(prisma.user, 'update').mockRejectedValueOnce(
-      new PrismaClientKnownRequestError('', { code: 'P2025' } as any),
+      new PrismaClientKnownRequestError('', {
+        code: 'P2025',
+        clientVersion: '5.0.0',
+      }),
     );
 
     const promise = sut.execute(fakeUser.id, updateUserParams);

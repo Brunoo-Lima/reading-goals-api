@@ -57,7 +57,10 @@ describe('Delete User Repository', () => {
 
   test('should throw UserNotFoundError if user does not exist', async () => {
     vi.spyOn(prisma.user, 'delete').mockRejectedValueOnce(
-      new PrismaClientKnownRequestError('', { code: 'P2025' } as any),
+      new PrismaClientKnownRequestError('', {
+        code: 'P2025',
+        clientVersion: '5.0.0',
+      }),
     );
 
     const promise = sut.execute(user.id);

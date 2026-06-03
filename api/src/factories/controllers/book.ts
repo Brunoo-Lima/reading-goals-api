@@ -1,3 +1,4 @@
+import { IdGeneratorAdapter } from '../../adapters';
 import {
   CreateBookController,
   DeleteBookController,
@@ -25,9 +26,12 @@ import {
 export const makeCreateBookController = () => {
   const createBookRepository = new PostgresCreateBookRepository();
   const getBookByTitleRepository = new PostgresGetBookByTitleRepository();
+  const idGeneratorAdapter = new IdGeneratorAdapter();
+
   const createBookUseCase = new CreateBookUseCase(
     createBookRepository,
     getBookByTitleRepository,
+    idGeneratorAdapter,
   );
 
   const createBookController = new CreateBookController(createBookUseCase);

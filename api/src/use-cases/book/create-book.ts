@@ -1,5 +1,6 @@
 import type { IBook } from '../../@types/IBook';
 import { BookAlreadyExistsError, InvalidBookDatesError } from '../../errors';
+import type { IIdGeneratorAdapter } from '../../interfaces/adapters';
 import type {
   ICreateBookRepository,
   IGetBookByTitleRepository,
@@ -8,13 +9,16 @@ import type {
 export class CreateBookUseCase {
   private createBookRepository: ICreateBookRepository;
   private getBookByTitleRepository: IGetBookByTitleRepository;
+  private idGeneratorAdapter: IIdGeneratorAdapter;
 
   constructor(
     createBookRepository: ICreateBookRepository,
     getBookByTitleRepository: IGetBookByTitleRepository,
+    idGeneratorAdapter: IIdGeneratorAdapter,
   ) {
     this.createBookRepository = createBookRepository;
     this.getBookByTitleRepository = getBookByTitleRepository;
+    this.idGeneratorAdapter = idGeneratorAdapter;
   }
 
   async execute(book: IBook) {
@@ -30,6 +34,13 @@ export class CreateBookUseCase {
       throw new InvalidBookDatesError();
     }
 
-    return await this.createBookRepository.execute(book);
+    const bookId = this.idGeneratorAdapter.execute();
+
+    const bookData = {
+      ...book,
+      id: bookId,
+    };
+
+    return await this.createBookRepository.execute(bookData);
   }
 }

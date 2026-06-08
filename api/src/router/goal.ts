@@ -1,6 +1,7 @@
 import { Router, type IRouter, type Request, type Response } from 'express';
 import {
   makeCreateGoalController,
+  makeDeleteGoalController,
   makeGetGoalByIdController,
   makeGetGoalsController,
   makeUpdateGoalController,
@@ -52,6 +53,20 @@ goalRoutes.patch(
     request.params.userId = request.userId as string;
 
     const { statusCode, body } = await updateGoalController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
+
+goalRoutes.delete(
+  '/:goalId',
+  auth,
+  async (request: Request, response: Response) => {
+    const deleteGoalController = makeDeleteGoalController();
+
+    request.params.userId = request.userId as string;
+
+    const { statusCode, body } = await deleteGoalController.execute(request);
 
     return response.status(statusCode).send(body);
   },

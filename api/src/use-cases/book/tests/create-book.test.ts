@@ -16,15 +16,29 @@ describe('Create Book Use Case', () => {
     }
   }
 
+  class IdGeneratorAdapterStub {
+    execute() {
+      return 'generated_id';
+    }
+  }
+
   const makeSut = () => {
     const createBookUseCase = new CreateBookUseCaseStub();
     const getBookByTitleRepository = new GetBookByTitleRepositoryStub();
+    const idGeneratorAdapter = new IdGeneratorAdapterStub();
+
     const sut = new CreateBookUseCase(
       createBookUseCase,
       getBookByTitleRepository,
+      idGeneratorAdapter,
     );
 
-    return { sut, createBookUseCase, getBookByTitleRepository };
+    return {
+      sut,
+      createBookUseCase,
+      getBookByTitleRepository,
+      idGeneratorAdapter,
+    };
   };
 
   test('should create a book successfully', async () => {
@@ -64,6 +78,17 @@ describe('Create Book Use Case', () => {
     vi.spyOn(getBookByTitleRepository, 'execute').mockRejectedValueOnce(
       new Error(),
     );
+
+    const promise = sut.execute(book);
+
+    await expect(promise).rejects.toThrow();
+  });
+
+  test('should throw if IdGeneratorAdapter throws', async () => {
+    const { sut, idGeneratorAdapter } = makeSut();
+    vi.spyOn(idGeneratorAdapter, 'execute').mockImplementationOnce(() => {
+      throw new Error();
+    });
 
     const promise = sut.execute(book);
 

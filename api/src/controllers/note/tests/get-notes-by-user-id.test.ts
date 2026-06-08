@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { notes } from '../../../tests';
 import { GetNotesByUserIdController } from '../get-notes-by-user-id';
 import type { Request } from 'express';
-import { UserNotFoundError } from '../../../errors';
+import { BookNotFoundError, UserNotFoundError } from '../../../errors';
 
 describe('Get Notes By User Id Controller', () => {
   class GetNotesByUserIdUseCaseStub {
@@ -24,6 +24,9 @@ describe('Get Notes By User Id Controller', () => {
   const baseHttpRequest = {
     params: {
       userId: faker.string.uuid(),
+    },
+    query: {
+      bookId: faker.string.uuid(),
     },
   } as Partial<Request> as Request;
 
@@ -56,6 +59,18 @@ describe('Get Notes By User Id Controller', () => {
 
     vi.spyOn(getNotesByUserIdUseCase, 'execute').mockRejectedValueOnce(
       new UserNotFoundError(),
+    );
+
+    const response = await sut.execute(baseHttpRequest);
+
+    expect(response.statusCode).toEqual(404);
+  });
+
+  test('should return 404 if book is not found', async () => {
+    const { sut, getNotesByUserIdUseCase } = makeSut();
+
+    vi.spyOn(getNotesByUserIdUseCase, 'execute').mockRejectedValueOnce(
+      new BookNotFoundError(),
     );
 
     const response = await sut.execute(baseHttpRequest);

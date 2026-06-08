@@ -10,7 +10,7 @@
     "docker:down": "docker compose down",
     "eslint:check": "eslint src --ext .ts",
     "prettier:check": "prettier --check src",
-    "test": "vitest --silent --passWithNoTests",
+    "test": "dotenv -e .env.test vitest --silent --passWithNoTests",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
@@ -23,6 +23,7 @@
     "@prisma/client": "^7.6.0",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.3.1",
+    "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",

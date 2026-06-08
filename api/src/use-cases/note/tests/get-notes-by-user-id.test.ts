@@ -1,5 +1,5 @@
 import { UserNotFoundError } from '../../../errors';
-import { notes, user } from '../../../tests';
+import { book, notes, user } from '../../../tests';
 import { GetNotesByUserIdUseCase } from '../get-notes-by-user-id';
 
 describe('Get Notes By User Id Use Case', () => {
@@ -33,7 +33,7 @@ describe('Get Notes By User Id Use Case', () => {
   test('should return an array of notes on success', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute(user.id);
+    const result = await sut.execute(user.id, book.id);
 
     expect(result).toEqual(notes);
   });
@@ -45,7 +45,7 @@ describe('Get Notes By User Id Use Case', () => {
       null as any,
     );
 
-    const promise = sut.execute(user.id);
+    const promise = sut.execute(user.id, book.id);
 
     await expect(promise).rejects.toThrow(new UserNotFoundError());
   });
@@ -55,7 +55,7 @@ describe('Get Notes By User Id Use Case', () => {
 
     vi.spyOn(getNotesByUserIdRepository, 'execute').mockResolvedValueOnce([]);
 
-    const result = await sut.execute(user.id);
+    const result = await sut.execute(user.id, book.id);
 
     expect(result).toEqual([]);
   });

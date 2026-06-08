@@ -15,3 +15,7 @@ export interface IGetGoalByIdUseCase {
 export interface IUpdateGoalUseCase {
   execute(goalId: string, updateGoalParams: IUpdateGoal): Promise<IGoal>;
 }
+
+export interface IDeleteGoalUseCase {
+  execute(goalId: string): Promise<IGoal | null>;
+}

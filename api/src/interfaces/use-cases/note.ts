@@ -5,7 +5,7 @@ export interface ICreateNoteUseCase {
 }
 
 export interface IGetNotesByUserIdUseCase {
-  execute(userId: string): Promise<INote[]>;
+  execute(userId: string, bookId?: string): Promise<INote[]>;
 }
 
 export interface IGetNoteByIdUseCase {
@@ -17,5 +17,5 @@ export interface IUpdateNoteUseCase {
 }
 
 export interface IDeleteNoteUseCase {
-  execute(noteId: string): Promise<INote>;
+  execute(noteId: string): Promise<INote | null>;
 }

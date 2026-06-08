@@ -20,6 +20,7 @@ export * from './goal/create-goal';
 export * from './goal/get-goals';
 export * from './goal/get-goal-by-id';
 export * from './goal/update-goal';
+export * from './goal/delete-goal';
 
 export * from './note/create-note';
 export * from './note/get-notes-by-user-id';

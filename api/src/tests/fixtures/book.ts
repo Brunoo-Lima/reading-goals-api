@@ -7,7 +7,7 @@ export const book = {
   author: faker.person.fullName(),
   genre: ['Fiction', 'Mystery', 'Thriller'],
   status: StatusReading.WISHLIST,
-  total_pages: faker.number.int(),
+  total_pages: 500,
   start_date: faker.date.anytime(),
   end_date: null,
   created_at: faker.date.anytime(),

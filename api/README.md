@@ -1,4 +1,4 @@
-# Metas de leitura - API
+# Diário de metas de leitura - API
 
 Breve API REST em Node.js + TypeScript, atualmente em desenvolvimento.
 

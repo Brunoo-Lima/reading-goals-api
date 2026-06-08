@@ -123,7 +123,7 @@ describe('Login Controller', () => {
     expect(result.statusCode).toBe(404);
   });
 
-  test('should return 400 if InvalidPasswordError throws', async () => {
+  test('should return 401 if InvalidPasswordError throws', async () => {
     const { sut, loginUseCaseStub } = makeSut();
     vi.spyOn(loginUseCaseStub, 'execute').mockRejectedValueOnce(
       new InvalidPasswordError(),
@@ -131,6 +131,6 @@ describe('Login Controller', () => {
 
     const result = await sut.execute(baseHttpRequest);
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(401);
   });
 });

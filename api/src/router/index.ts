@@ -1,10 +1,10 @@
 import { Router, type IRouter } from 'express';
-import { userRoutes } from './user';
-import { bookRoutes } from './book';
+import { userRoutes } from './users';
+import { bookRoutes } from './books';
 import { authRoutes } from './auth';
-import { readingLogRoutes } from './reading-log';
-import { goalRoutes } from './goal';
-import { noteRoutes } from './note';
+import { readingLogRoutes } from './reading-logs';
+import { goalRoutes } from './goals';
+import { noteRoutes } from './notes';
 
 const routes: IRouter = Router();
 

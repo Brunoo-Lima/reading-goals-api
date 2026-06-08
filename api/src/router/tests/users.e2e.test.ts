@@ -3,9 +3,6 @@ import { user } from '../../tests';
 import request from 'supertest';
 
 describe('User Routes E2E tests', () => {
-  // const from = '2026-04-13';
-  // const to = '2026-04-14';
-
   test('POST /api/users should return 201 when user is created', async () => {
     const response = await request(app)
       .post('/api/users')

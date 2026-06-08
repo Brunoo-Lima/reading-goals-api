@@ -40,9 +40,9 @@ export class InvalidBookTitleError extends Error {
   }
 }
 
-export class BookGenreNotFoundError extends Error {
-  constructor(genre?: string) {
-    super(`Book genre not found: ${genre ?? 'unknown'}`);
-    this.name = 'BookGenreNotFoundError';
-  }
-}
+// export class BookGenreNotFoundError extends Error {
+//   constructor(genre?: string) {
+//     super(`Book genre not found: ${genre ?? 'unknown'}`);
+//     this.name = 'BookGenreNotFoundError';
+//   }
+// }

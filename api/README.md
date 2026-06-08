@@ -35,15 +35,6 @@ Rodar testes:
 pnpm test
 ```
 
-## Contribuindo
-
-- Abra issues para mudanças maiores.
-- Envie pull requests com descrições claras.
-
-## Licença
-
-MIT — ou escolha a licença preferida para o projeto.
-
 ## Observação
 
 README breve pois o projeto ainda está em construção. Posso detalhar comandos, scripts e exemplos de uso quando desejar.

@@ -49,6 +49,14 @@ export class CreateUserUseCase {
       id: userId,
     };
 
-    return await this.createUserRepository.execute(userData);
+    const createdUser = await this.createUserRepository.execute(userData);
+
+    return {
+      id: createdUser.id,
+      name: createdUser.name,
+      email: createdUser.email,
+      created_at: createdUser.created_at,
+      updated_at: createdUser.updated_at,
+    };
   }
 }

@@ -31,12 +31,6 @@ describe('Books Routes E2E tests', () => {
       password: user.password,
     });
 
-    if (!authResponse.body.tokens?.accessToken) {
-      throw new Error(
-        `Login failed: ${JSON.stringify(authResponse.body)} | user: ${JSON.stringify(createdUser)}`,
-      );
-    }
-
     const response = await request(app)
       .post('/api/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)

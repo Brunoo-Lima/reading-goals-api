@@ -3,15 +3,15 @@ import { user } from '../../tests';
 import request from 'supertest';
 
 describe('User Routes E2E tests', () => {
+  const userData = {
+    ...user,
+    id: undefined,
+    created_at: undefined,
+    updated_at: undefined,
+  };
+
   test('POST /api/users should return 201 when user is created', async () => {
-    const response = await request(app)
-      .post('/api/users')
-      .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      });
+    const response = await request(app).post('/api/users').send(userData);
 
     expect(response.status).toBe(201);
   });
@@ -19,16 +19,11 @@ describe('User Routes E2E tests', () => {
   test('GET /api/users should return 200 when user is found', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/users')
-      .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      });
+      .send(userData);
 
     const authResponse = await request(app).post('/api/auth/login').send({
       email: createdUser.email,
-      password: user.password,
+      password: userData.password,
     });
 
     const response = await request(app)
@@ -42,12 +37,7 @@ describe('User Routes E2E tests', () => {
   test('PATCH /api/users/me should return 200 when user is updated', async () => {
     const { body: createdUser, status: createStatus } = await request(app)
       .post('/api/users')
-      .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      });
+      .send(userData);
 
     console.log(
       '[test] createUser status:',
@@ -58,8 +48,14 @@ describe('User Routes E2E tests', () => {
 
     const authResponse = await request(app).post('/api/auth/login').send({
       email: createdUser.email,
-      password: user.password,
+      password: userData.password,
     });
+
+    if (!authResponse.body.tokens?.accessToken) {
+      throw new Error(
+        `Login failed: ${JSON.stringify(authResponse.body)} | user: ${JSON.stringify(createdUser)}`,
+      );
+    }
 
     console.log(
       '[test] auth status:',
@@ -80,16 +76,11 @@ describe('User Routes E2E tests', () => {
   test('DELETE /api/users/me should return 200 when user is deleted', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/users')
-      .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      });
+      .send(userData);
 
     const authResponse = await request(app).post('/api/auth/login').send({
       email: createdUser.email,
-      password: user.password,
+      password: userData.password,
     });
 
     const response = await request(app)
@@ -102,20 +93,12 @@ describe('User Routes E2E tests', () => {
   test('POST /api/users should return 400 when the provided email is already in use', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/users')
-      .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      });
+      .send(userData);
 
     const response = await request(app)
       .post('/api/users')
       .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
+        ...userData,
         email: createdUser.email,
       });
 
@@ -126,10 +109,7 @@ describe('User Routes E2E tests', () => {
     const response = await request(app)
       .post('/api/users')
       .send({
-        ...user,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
+        ...userData,
         password: '123',
       });
 

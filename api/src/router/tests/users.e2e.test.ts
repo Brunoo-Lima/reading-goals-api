@@ -40,7 +40,7 @@ describe('User Routes E2E tests', () => {
   });
 
   test('PATCH /api/users/me should return 200 when user is updated', async () => {
-    const { body: createdUser } = await request(app)
+    const { body: createdUser, status: createStatus } = await request(app)
       .post('/api/users')
       .send({
         ...user,
@@ -49,10 +49,24 @@ describe('User Routes E2E tests', () => {
         updated_at: undefined,
       });
 
+    console.log(
+      '[test] createUser status:',
+      createStatus,
+      '| body:',
+      createdUser,
+    );
+
     const authResponse = await request(app).post('/api/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
+
+    console.log(
+      '[test] auth status:',
+      authResponse.status,
+      '| body:',
+      authResponse.body,
+    );
 
     const response = await request(app)
       .patch('/api/users/me')

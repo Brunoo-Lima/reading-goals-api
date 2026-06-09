@@ -46,5 +46,14 @@ jobs:
       - name: Start test database
         run: docker compose up -d --wait postgres-test
 
+      - name: Run migrations
+        run: pnpm prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5433/reading-goals-test
+
       - name: Test
-        run: DATABASE_URL="postgresql://postgres:password@localhost:5433" pnpm run test
+        env:
+          DATABASE_URL: 'postgresql://postgres:password@localhost:5433/reading-goals-test'
+          JWT_ACCESS_TOKEN_SECRET: 'test-access-secret'
+          JWT_REFRESH_TOKEN_SECRET: 'test-refresh-secret'
+        run: pnpm run test

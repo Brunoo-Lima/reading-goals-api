@@ -1,7 +1,7 @@
-import type { IUpdateUser, IUser } from '../../@types/IUser';
+import type { IUpdateUser, IUser, IUserSafe } from '../../@types/IUser';
 
 export interface ICreateUserUseCase {
-  execute(user: IUser): Promise<IUser>;
+  execute(user: IUser): Promise<IUserSafe>;
 }
 
 export interface IDeleteUserUseCase {

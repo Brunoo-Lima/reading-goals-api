@@ -48,9 +48,10 @@ jobs:
       - name: Run test migrations
         run: pnpm prisma migrate deploy
         env:
-          DATABASE_URL: 'postgresql://postgres:password@localhost:5433'
+          DATABASE_URL: 'postgresql://postgres:password@localhost:5433/reading-goals'
 
       - name: Test
-        run: pnpm run test
+        run: pnpm run test --reporter=verbose
         env:
-          DATABASE_URL: 'postgresql://postgres:password@localhost:5433'
+          DATABASE_URL: 'postgresql://postgres:password@localhost:5433/reading-goals'
+          DEBUG: 'prisma:*'

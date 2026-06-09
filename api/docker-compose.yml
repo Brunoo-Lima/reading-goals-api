@@ -17,6 +17,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: reading-goals
+      POSTGRES_DB: reading-goals-test
     ports:
       - '5433:5432'

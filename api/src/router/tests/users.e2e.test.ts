@@ -35,34 +35,14 @@ describe('User Routes E2E tests', () => {
   });
 
   test('PATCH /api/users/me should return 200 when user is updated', async () => {
-    const { body: createdUser, status: createStatus } = await request(app)
+    const { body: createdUser } = await request(app)
       .post('/api/users')
       .send(userData);
-
-    console.log(
-      '[test] createUser status:',
-      createStatus,
-      '| body:',
-      createdUser,
-    );
 
     const authResponse = await request(app).post('/api/auth/login').send({
       email: createdUser.email,
       password: userData.password,
     });
-
-    if (!authResponse.body.tokens?.accessToken) {
-      throw new Error(
-        `Login failed: ${JSON.stringify(authResponse.body)} | user: ${JSON.stringify(createdUser)}`,
-      );
-    }
-
-    console.log(
-      '[test] auth status:',
-      authResponse.status,
-      '| body:',
-      authResponse.body,
-    );
 
     const response = await request(app)
       .patch('/api/users/me')

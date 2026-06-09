@@ -45,5 +45,12 @@ jobs:
       - name: Start test database
         run: docker compose up -d --wait postgres-test
 
+      - name: Run test migrations
+        run: pnpm prisma migrate deploy
+        env:
+          DATABASE_URL: 'postgresql://postgres:password@localhost:5433/reading_goals_test'
+
       - name: Test
-        run: DATABASE_URL="postgresql://postgres:password@localhost:5433" pnpm run test
+        run: pnpm run test
+        env:
+          DATABASE_URL: 'postgresql://postgres:password@localhost:5433/reading_goals_test'

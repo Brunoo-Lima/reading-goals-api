@@ -15,6 +15,7 @@ interface IBooksContext {
   completedBooks: IBook[];
   readingBooks: IBook[];
   toReadBooks: IBook[];
+  totalPagesRead: number;
 
   addBook: (book: Omit<IBook, 'id' | 'created_at'>) => IBook;
   updateBook: (id: string, updates: Partial<IBook>) => void;
@@ -68,12 +69,23 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const readingBooks = books.filter((book) => book.status === 'READING');
   const toReadBooks = books.filter((book) => book.status === 'WISHLIST');
 
+  const totalPagesRead = books.reduce((acc, book) => {
+    if (book.status === 'COMPLETED' && book.total_pages) {
+      return acc + book.total_pages;
+    }
+    if (book.status === 'READING' && book.currentPage) {
+      return acc + book.currentPage;
+    }
+    return acc;
+  }, 0);
+
   const contextValue = {
     streak,
     setStreak,
 
     books,
     goal,
+    totalPagesRead,
 
     addBook,
     updateBook,

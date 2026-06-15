@@ -6,7 +6,7 @@ export const DefaultLayout = () => {
     <div className="flex h-screen">
       <Sidebar />
 
-      <main className="w-full">
+      <main className="flex-1 p-4">
         <Outlet />
       </main>
     </div>

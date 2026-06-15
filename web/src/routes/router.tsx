@@ -3,7 +3,7 @@ import { AccountPage } from '@/pages/(protected)/account/account';
 import { BooksPage } from '@/pages/(protected)/books/books';
 import { GeneralPage } from '@/pages/(protected)/general/geral';
 import { GoalsPage } from '@/pages/(protected)/goals/goals';
-import LoginPage from '@/pages/login/login';
+import { LoginPage } from '@/pages/login/login';
 import { Route, Routes } from 'react-router-dom';
 
 export function AppRoutes() {

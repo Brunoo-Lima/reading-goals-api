@@ -14,12 +14,13 @@ export const ReadingStats = ({
 }: IReadingStatsProps) => {
   return (
     <Card className="p-6 bg-card border-border/50">
-      <h3 className="font-semibold text-foreground mb-4">
-        Estatisticas de Leitura
-      </h3>
+      <strong className="text-lg font-semibold text-foreground mb-2">
+        Estatísticas de Leitura
+      </strong>
+
       <div className="space-y-4">
         <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
-          <span className="text-muted-foreground">Avaliacao Media</span>
+          <span className="text-muted-foreground">Avaliação Média</span>
           <span className="font-semibold text-foreground">{avgRating} / 5</span>
         </div>
         <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
@@ -30,7 +31,7 @@ export const ReadingStats = ({
         </div>
         <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
           <span className="text-muted-foreground">
-            Media de paginas por livro
+            Média de páginas por livro
           </span>
           <span className="font-semibold text-foreground">
             {completedBooks.length > 0

@@ -39,7 +39,7 @@ export function StatisticsPage() {
       bg: 'bg-primary/10',
     },
     {
-      label: 'Livros Concluidos',
+      label: 'Livros Concluídos',
       value: completedBooks.length,
       icon: Target,
       color: 'text-green-600',
@@ -74,7 +74,7 @@ export function StatisticsPage() {
       bg: 'bg-purple-100',
     },
     {
-      label: 'Paginas Lidas',
+      label: 'Páginas Lidas',
       value: totalPagesRead,
       icon: FileText,
       color: 'text-blue-600',
@@ -116,7 +116,7 @@ export function StatisticsPage() {
           </div>
           <div>
             <h2 className="text-xl font-semibold text-foreground">Leitor</h2>
-            <p className="text-muted-foreground">Membro desde 2024</p>
+            <p className="text-muted-foreground">Membro desde 2026</p>
           </div>
         </div>
       </Card>

@@ -126,3 +126,11 @@
     @apply font-sans;
   }
 }
+
+.scrollArea {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

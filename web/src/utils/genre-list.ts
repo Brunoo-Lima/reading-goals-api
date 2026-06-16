@@ -1,0 +1,17 @@
+export const genres = [
+  { value: 'fantasy', label: 'Fantasia' },
+  { value: 'science-fiction', label: 'Ficção Científica' },
+  { value: 'romance', label: 'Romance' },
+  { value: 'mystery', label: 'Mistério' },
+  { value: 'thriller', label: 'Thriller' },
+  { value: 'horror', label: 'Terror' },
+  { value: 'historical-fiction', label: 'Ficção Histórica' },
+  { value: 'adventure', label: 'Aventura' },
+  { value: 'drama', label: 'Drama' },
+  { value: 'crime', label: 'Crime' },
+  { value: 'young-adult', label: 'Young Adult (YA)' },
+  { value: 'biography', label: 'Biografia' },
+  { value: 'self-help', label: 'Autoajuda' },
+  { value: 'history', label: 'História' },
+  { value: 'technology', label: 'Tecnologia' },
+];

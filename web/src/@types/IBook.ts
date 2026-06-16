@@ -8,8 +8,8 @@ export interface IBook {
   genre: string[];
   status: StatusReading;
   total_pages: number;
-  start_date?: Date | null;
-  end_date?: Date | null;
+  start_date: Date;
+  end_date?: Date;
   created_at: Date;
   updated_at?: Date;
 }

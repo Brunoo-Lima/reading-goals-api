@@ -5,28 +5,21 @@ import { CardBook } from './card-book/card-book';
 import { useBooks } from '@/hooks/use-books';
 import { useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
+import { ModalBookDetails } from './modal-book-details';
 
-export const TabsComponent = () => {
-  const { books, addBook, updateBook, deleteBook, getBooksByStatus } =
-    useBooks();
+interface ITabsComponentsProps {
+  onEditBook: (book: IBook) => void;
+  onAddBook: () => void;
+}
 
-  const [showForm, setShowForm] = useState(false);
-  const [editingBook, setEditingBook] = useState<IBook | null>(null);
+export const TabsComponent = ({
+  onEditBook,
+  onAddBook,
+}: ITabsComponentsProps) => {
+  const { books, deleteBook, getBooksByStatus } = useBooks();
+
   const [viewingBook, setViewingBook] = useState<IBook | null>(null);
   const [activeTab, setActiveTab] = useState<string>('all');
-
-  const handleSubmit = (bookData: Omit<IBook, 'id' | 'createdAt'>) => {
-    if (editingBook) {
-      updateBook(editingBook.id, bookData);
-    } else {
-      addBook(bookData);
-    }
-  };
-
-  const handleEdit = (book: IBook) => {
-    setEditingBook(book);
-    setShowForm(true);
-  };
 
   const handleView = (book: IBook) => {
     setViewingBook(book);
@@ -61,14 +54,7 @@ export const TabsComponent = () => {
               <p className="text-muted-foreground">
                 Nenhum livro encontrado nesta categoria.
               </p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                // onClick={() => {
-                //   setEditingBook(null);
-                //   setShowForm(true);
-                // }}
-              >
+              <Button variant="outline" className="mt-4" onClick={onAddBook}>
                 <PlusIcon className="h-4 w-4 mr-2" />
                 Adicionar Livro
               </Button>
@@ -79,7 +65,7 @@ export const TabsComponent = () => {
                 <CardBook
                   key={book.id}
                   book={book}
-                  onEdit={handleEdit}
+                  onEdit={onEditBook}
                   onDelete={handleDeleteBook}
                   onView={handleView}
                 />
@@ -88,6 +74,14 @@ export const TabsComponent = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <ModalBookDetails
+        book={viewingBook}
+        open={!!viewingBook}
+        onOpenChange={(open) => {
+          if (!open) setViewingBook(null);
+        }}
+      />
     </>
   );
 };

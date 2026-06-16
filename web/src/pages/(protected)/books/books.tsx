@@ -8,8 +8,24 @@ import {
   HeaderPage,
   TitlePage,
 } from '@/components/ui/title-page';
+import { useState } from 'react';
+import type { IBook } from '@/@types/IBook';
+import { FormBook } from './_components/forms/form-book';
 
 export function BooksPage() {
+  const [showForm, setShowForm] = useState(false);
+  const [editingBook, setEditingBook] = useState<IBook | null>(null);
+
+  const handleCreateBook = () => {
+    setEditingBook(null);
+    setShowForm(true);
+  };
+
+  const handleEditBook = (book: IBook) => {
+    setEditingBook(book);
+    setShowForm(true);
+  };
+
   return (
     <PageContainer>
       <HeaderPage>
@@ -18,40 +34,19 @@ export function BooksPage() {
           <DescriptionPage>Gerencie sua biblioteca pessoal</DescriptionPage>
         </ContentPage>
 
-        <Button
-          onClick={() => {
-            setEditingBook(null);
-            setShowForm(true);
-          }}
-          className="gap-2 cursor-pointer"
-        >
+        <Button onClick={handleCreateBook} className="gap-2 cursor-pointer">
           <PlusIcon className="size-5" />
           <p className="hidden sm:inline">Novo Livro</p>
         </Button>
       </HeaderPage>
 
-      {/* Books Section */}
-      <TabsComponent />
+      <TabsComponent onEditBook={handleEditBook} onAddBook={handleCreateBook} />
 
-      {/* Book Form Modal */}
-      {/* <BookForm
+      <FormBook
         open={showForm}
-        onOpenChange={(open) => {
-          setShowForm(open);
-          if (!open) setEditingBook(null);
-        }}
-        onSubmit={handleSubmit}
-        initialData={editingBook || undefined}
-      /> */}
-
-      {/* Book Details Modal */}
-      {/* <BookDetails
-        book={viewingBook}
-        open={!!viewingBook}
-        onOpenChange={(open) => {
-          if (!open) setViewingBook(null);
-        }}
-      /> */}
+        onOpenChange={setShowForm}
+        initialData={editingBook ?? null}
+      />
     </PageContainer>
   );
 }

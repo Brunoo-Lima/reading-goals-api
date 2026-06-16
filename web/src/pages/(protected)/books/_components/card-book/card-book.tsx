@@ -5,8 +5,8 @@ import { Dropdown } from './dropdown';
 
 interface ICardBookProps {
   book: IBook;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onEdit: (book: IBook) => void;
+  onDelete: (book: IBook) => void;
   onView: (book: IBook) => void;
 }
 

@@ -11,8 +11,8 @@ import type { IBook } from '@/@types/IBook';
 
 interface IDropdownProps {
   book: IBook;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onEdit: (book: IBook) => void;
+  onDelete: (book: IBook) => void;
   onView: (book: IBook) => void;
 }
 
@@ -38,12 +38,12 @@ export const Dropdown = ({
           <EyeIcon className="h-4 w-4 mr-2" />
           Detalhes
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onEdit(book.id)}>
+        <DropdownMenuItem onClick={() => onEdit(book)}>
           <EditIcon className="h-4 w-4 mr-2" />
           Editar
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => onDelete(book.id)}
+          onClick={() => onDelete(book)}
           className="text-destructive"
         >
           <Trash2Icon className="h-4 w-4 mr-2" />

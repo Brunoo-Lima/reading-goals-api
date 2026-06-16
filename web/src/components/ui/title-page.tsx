@@ -5,7 +5,9 @@ interface ITitlePageProps {
 
 export const HeaderPage = ({ children, className }: ITitlePageProps) => {
   return (
-    <div className={`flex justify-between gap-4 ${className}`}>{children}</div>
+    <div className={`flex justify-between gap-4 mb-6 ${className}`}>
+      {children}
+    </div>
   );
 };
 
@@ -15,7 +17,7 @@ interface ITitlePageProps {
 }
 
 export const TitlePage = ({ children, className }: ITitlePageProps) => {
-  return <h1 className={`text-2xl font-semibold ${className}`}>{children}</h1>;
+  return <h1 className={`text-2xl font-bold ${className}`}>{children}</h1>;
 };
 
 interface IDescriptionPageProps {
@@ -38,5 +40,5 @@ interface IContentPageProps {
 }
 
 export const ContentPage = ({ children, className }: IContentPageProps) => {
-  return <div className={`mt-4 ${className}`}>{children}</div>;
+  return <div className={`${className}`}>{children}</div>;
 };

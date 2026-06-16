@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   BookOpenIcon,
+  ChartNoAxesCombinedIcon,
   LayoutDashboardIcon,
   TargetIcon,
   UserIcon,
@@ -11,6 +12,11 @@ const navItems = [
   { href: '/geral', label: 'Geral', icon: LayoutDashboardIcon },
   { href: '/livros', label: 'Livros', icon: BookOpenIcon },
   { href: '/metas', label: 'Metas', icon: TargetIcon },
+  {
+    href: '/estatisticas',
+    label: 'Estatísticas',
+    icon: ChartNoAxesCombinedIcon,
+  },
   { href: '/conta', label: 'Conta', icon: UserIcon },
 ];
 

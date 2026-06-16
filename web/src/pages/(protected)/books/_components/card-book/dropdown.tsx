@@ -21,7 +21,6 @@ interface IDropdownProps {
   onEdit: (book: IBook) => void;
   onDelete: (book: IBook) => void;
   onView: (book: IBook) => void;
-  onAddNote: () => void;
 }
 
 export const Dropdown = ({
@@ -29,9 +28,9 @@ export const Dropdown = ({
   onEdit,
   onDelete,
   onView,
-  onAddNote,
 }: IDropdownProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
     <>
       <DropdownMenu>

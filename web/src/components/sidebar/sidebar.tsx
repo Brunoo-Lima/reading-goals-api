@@ -32,7 +32,6 @@ export function Sidebar() {
           // open ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        {/* Header */}
         <div className="p-4 border-b border-border/50">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-primary/10">
@@ -44,13 +43,10 @@ export function Sidebar() {
           </div>
         </div>
 
-        {/* Streak Card */}
         <StreakCard />
 
-        {/* Navigation */}
         <NavItems onClose={onClose} />
 
-        {/* Chat Button */}
         <div className="p-4 border-t border-border/50">
           <NavLink to="/chat">
             <Button

@@ -6,12 +6,13 @@ import {
 } from '@/components/ui/title-page';
 import { useBooks } from '@/hooks/use-books';
 import { useState } from 'react';
-import { MainCard } from './_components/main-card';
+import { MainCard } from './_components/main-card/main-card';
 import { BookDetails } from './_components/book-details';
 import { CardVisualizator } from './_components/card-visualizator';
+import { PageContainer } from '@/components/ui/page-container';
 
 export function GoalsPage() {
-  const { goal, updateGoal, completedBooks, books } = useBooks();
+  const { goal, updateGoal, completedBooks } = useBooks();
   const [editingGoal, setEditingGoal] = useState(false);
   const [newTarget, setNewTarget] = useState(goal.targetBooks.toString());
 
@@ -33,13 +34,11 @@ export function GoalsPage() {
   };
 
   return (
-    <section className="space-y-8">
+    <PageContainer>
       <HeaderPage>
         <ContentPage>
-          <TitlePage className="text-2xl font-bold text-foreground">
-            Metas de Leitura
-          </TitlePage>
-          <DescriptionPage className="text-muted-foreground">
+          <TitlePage>Metas de Leitura</TitlePage>
+          <DescriptionPage>
             Defina e acompanhe suas metas anuais
           </DescriptionPage>
         </ContentPage>
@@ -66,6 +65,6 @@ export function GoalsPage() {
       {completedBooks.length > 0 && (
         <BookDetails completedBooks={completedBooks} goal={goal} />
       )}
-    </section>
+    </PageContainer>
   );
 }

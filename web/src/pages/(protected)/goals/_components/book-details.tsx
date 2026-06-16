@@ -10,9 +10,10 @@ interface IBookDetailsProps {
 export const BookDetails = ({ completedBooks, goal }: IBookDetailsProps) => {
   return (
     <Card className="p-6 bg-card border-border/50">
-      <h3 className="font-semibold text-foreground mb-4">
+      <strong className="text-lg font-semibold text-foreground mb-2">
         Livros Concluidos em {goal.year}
-      </h3>
+      </strong>
+
       <div className="space-y-3">
         {completedBooks.map((book, index) => (
           <div

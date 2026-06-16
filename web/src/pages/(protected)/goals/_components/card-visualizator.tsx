@@ -14,7 +14,10 @@ export const CardVisualizator = ({
 }: ICardVisualizatorProps) => {
   return (
     <Card className="p-6 bg-card border-border/50">
-      <h3 className="font-semibold text-foreground mb-4">Visualizacao</h3>
+      <strong className="text-lg font-semibold text-foreground mb-2">
+        Visualização
+      </strong>
+
       <div className="grid grid-cols-6 sm:grid-cols-12 gap-2">
         {Array.from({ length: goal.targetBooks }).map((_, index) => (
           <div
@@ -25,14 +28,14 @@ export const CardVisualizator = ({
                 : 'bg-secondary'
             }`}
           >
-            <BookOpenIcon className="h-4 w-4" />
+            <BookOpenIcon className="size-6" />
           </div>
         ))}
       </div>
-      <p className="text-sm text-muted-foreground mt-4">
-        Cada icone representa um livro da sua meta. Os preenchidos sao os que
-        voce ja concluiu.
-      </p>
+      <small className="text-sm text-muted-foreground mt-2">
+        Cada ícone representa um livro da sua meta. Os preenchidos são os que
+        você já concluiu.
+      </small>
     </Card>
   );
 };

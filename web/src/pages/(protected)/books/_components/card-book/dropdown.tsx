@@ -5,9 +5,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-
-import { EditIcon, EyeIcon, MoreVerticalIcon, Trash2Icon } from 'lucide-react';
+import { EditIcon, EyeIcon, MoreVerticalIcon } from 'lucide-react';
 import type { IBook } from '@/@types/IBook';
+import { AlertDialogDeleteBook } from '../alert-dialog-delete-book';
 
 interface IDropdownProps {
   book: IBook;
@@ -42,13 +42,8 @@ export const Dropdown = ({
           <EditIcon className="h-4 w-4 mr-2" />
           Editar
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => onDelete(book)}
-          className="text-destructive"
-        >
-          <Trash2Icon className="h-4 w-4 mr-2" />
-          Excluir
-        </DropdownMenuItem>
+
+        <AlertDialogDeleteBook book={book} onDelete={onDelete} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

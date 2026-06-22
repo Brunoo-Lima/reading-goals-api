@@ -3,7 +3,7 @@ import {
   CreateNoteController,
   DeleteNoteController,
   GetNoteByIdController,
-  GetNotesByUserIdController,
+  GetNotesByBookIdController,
   UpdateNoteController,
 } from '../../controllers';
 import {
@@ -11,7 +11,7 @@ import {
   PostgresDeleteNoteRepository,
   PostgresGetBookByIdRepository,
   PostgresGetNoteByIdRepository,
-  PostgresGetNotesByUserIdRepository,
+  PostgresGetNotesByBookIdRepository,
   PostgresGetUserByIdRepository,
   PostgresUpdateNoteRepository,
 } from '../../repositories/postgres';
@@ -19,7 +19,7 @@ import {
   CreateNoteUseCase,
   DeleteNoteUseCase,
   GetNoteByIdUseCase,
-  GetNotesByUserIdUseCase,
+  GetNotesByBookIdUseCase,
   UpdateNoteUseCase,
 } from '../../use-cases';
 
@@ -39,20 +39,20 @@ export const makeCreateNoteController = () => {
   return createNoteController;
 };
 
-export const makeGetNotesByUserIdController = () => {
-  const getNotesByUserIdRepository = new PostgresGetNotesByUserIdRepository();
+export const makeGetNotesByBookIdController = () => {
+  const getNotesByBookIdRepository = new PostgresGetNotesByBookIdRepository();
   const getUserByIdRepository = new PostgresGetUserByIdRepository();
 
-  const getNotesByUserIdUseCase = new GetNotesByUserIdUseCase(
-    getNotesByUserIdRepository,
+  const getNotesByBookIdUseCase = new GetNotesByBookIdUseCase(
+    getNotesByBookIdRepository,
     getUserByIdRepository,
   );
 
-  const getNotesByUserIdController = new GetNotesByUserIdController(
-    getNotesByUserIdUseCase,
+  const getNotesByBookIdController = new GetNotesByBookIdController(
+    getNotesByBookIdUseCase,
   );
 
-  return getNotesByUserIdController;
+  return getNotesByBookIdController;
 };
 
 export const makeGetNoteByIdController = () => {

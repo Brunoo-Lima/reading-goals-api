@@ -2,14 +2,14 @@ import {
   CreateNoteController,
   DeleteNoteController,
   GetNoteByIdController,
-  GetNotesByUserIdController,
+  GetNotesByBookIdController,
   UpdateNoteController,
 } from '../../../controllers';
 import {
   makeCreateNoteController,
   makeDeleteNoteController,
   makeGetNoteByIdController,
-  makeGetNotesByUserIdController,
+  makeGetNotesByBookIdController,
   makeUpdateNoteController,
 } from '../note';
 
@@ -19,10 +19,10 @@ describe('Factory Note Controller', () => {
     expect(createNoteController).toBeInstanceOf(CreateNoteController);
   });
 
-  test('should return a GetNotesByUserIdController', () => {
-    const getNotesByUserIdController = makeGetNotesByUserIdController();
-    expect(getNotesByUserIdController).toBeInstanceOf(
-      GetNotesByUserIdController,
+  test('should return a GetNotesByBookIdController', () => {
+    const getNotesByBookIdController = makeGetNotesByBookIdController();
+    expect(getNotesByBookIdController).toBeInstanceOf(
+      GetNotesByBookIdController,
     );
   });
 

@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { notes } from '../../../tests';
-import { GetNotesByUserIdController } from '../get-notes-by-user-id';
 import type { Request } from 'express';
 import { BookNotFoundError, UserNotFoundError } from '../../../errors';
+import { GetNotesByBookIdController } from '../get-notes-by-book-id';
 
-describe('Get Notes By User Id Controller', () => {
+describe('Get Notes By Book Id Controller', () => {
   class GetNotesByUserIdUseCaseStub {
     async execute() {
       return notes;
@@ -12,12 +12,12 @@ describe('Get Notes By User Id Controller', () => {
   }
 
   const makeSut = () => {
-    const getNotesByUserIdUseCase = new GetNotesByUserIdUseCaseStub();
-    const sut = new GetNotesByUserIdController(getNotesByUserIdUseCase);
+    const getNotesByBookIdUseCase = new GetNotesByUserIdUseCaseStub();
+    const sut = new GetNotesByBookIdController(getNotesByBookIdUseCase);
 
     return {
       sut,
-      getNotesByUserIdUseCase,
+      getNotesByBookIdUseCase,
     };
   };
 
@@ -55,9 +55,9 @@ describe('Get Notes By User Id Controller', () => {
   });
 
   test('should return 404 if user is not found', async () => {
-    const { sut, getNotesByUserIdUseCase } = makeSut();
+    const { sut, getNotesByBookIdUseCase } = makeSut();
 
-    vi.spyOn(getNotesByUserIdUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(getNotesByBookIdUseCase, 'execute').mockRejectedValueOnce(
       new UserNotFoundError(),
     );
 
@@ -67,9 +67,9 @@ describe('Get Notes By User Id Controller', () => {
   });
 
   test('should return 404 if book is not found', async () => {
-    const { sut, getNotesByUserIdUseCase } = makeSut();
+    const { sut, getNotesByBookIdUseCase } = makeSut();
 
-    vi.spyOn(getNotesByUserIdUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(getNotesByBookIdUseCase, 'execute').mockRejectedValueOnce(
       new BookNotFoundError(),
     );
 
@@ -79,9 +79,9 @@ describe('Get Notes By User Id Controller', () => {
   });
 
   test('should return 500 if use case throws', async () => {
-    const { sut, getNotesByUserIdUseCase } = makeSut();
+    const { sut, getNotesByBookIdUseCase } = makeSut();
 
-    vi.spyOn(getNotesByUserIdUseCase, 'execute').mockRejectedValueOnce(
+    vi.spyOn(getNotesByBookIdUseCase, 'execute').mockRejectedValueOnce(
       new Error(),
     );
 

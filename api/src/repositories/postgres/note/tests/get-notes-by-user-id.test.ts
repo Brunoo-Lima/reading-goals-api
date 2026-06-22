@@ -5,7 +5,7 @@ import {
 } from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 import { StatusReading } from '../../../../../generated/prisma/enums';
-import { PostgresGetNotesByUserIdRepository } from '../get-notes-by-user-id';
+import { PostgresGetNotesByUserIdRepository } from '../get-notes-by-book-id';
 
 describe('Get Notes By User Id Repository', () => {
   const userOld = {

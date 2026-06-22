@@ -4,7 +4,7 @@ export interface ICreateNoteUseCase {
   execute(note: INote, bookId: string): Promise<INote>;
 }
 
-export interface IGetNotesByUserIdUseCase {
+export interface IGetNotesByBookIdUseCase {
   execute(userId: string, bookId?: string): Promise<INote[]>;
 }
 

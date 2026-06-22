@@ -1,18 +1,18 @@
 import { BookNotFoundError, UserNotFoundError } from '../../errors';
 import type {
-  IGetNotesByUserIdRepository,
+  IGetNotesByBookIdRepository,
   IGetUserByIdRepository,
 } from '../../interfaces/repositories';
 
-export class GetNotesByUserIdUseCase {
-  private getNotesByUserIdRepository: IGetNotesByUserIdRepository;
+export class GetNotesByBookIdUseCase {
+  private getNotesByBookIdRepository: IGetNotesByBookIdRepository;
   private getUserByIdRepository: IGetUserByIdRepository;
 
   constructor(
-    getNotesByUserIdRepository: IGetNotesByUserIdRepository,
+    getNotesByUserIdRepository: IGetNotesByBookIdRepository,
     getUserByIdRepository: IGetUserByIdRepository,
   ) {
-    this.getNotesByUserIdRepository = getNotesByUserIdRepository;
+    this.getNotesByBookIdRepository = getNotesByUserIdRepository;
     this.getUserByIdRepository = getUserByIdRepository;
   }
 
@@ -27,7 +27,7 @@ export class GetNotesByUserIdUseCase {
       throw new BookNotFoundError();
     }
 
-    const notes = await this.getNotesByUserIdRepository.execute(userId, bookId);
+    const notes = await this.getNotesByBookIdRepository.execute(userId, bookId);
 
     return notes;
   }

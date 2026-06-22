@@ -1,5 +1,4 @@
 import type { Request } from 'express';
-import type { IGetNotesByUserIdUseCase } from '../../interfaces/use-cases';
 import {
   bookNotFoundResponse,
   checkIfIdIsValid,
@@ -9,12 +8,13 @@ import {
   userNotFoundResponse,
 } from '../helpers';
 import { BookNotFoundError, UserNotFoundError } from '../../errors';
+import type { IGetNotesByBookIdUseCase } from '../../interfaces/use-cases';
 
-export class GetNotesByUserIdController {
-  private getNotesByUserIdUseCase: IGetNotesByUserIdUseCase;
+export class GetNotesByBookIdController {
+  private getNotesByBookIdUseCase: IGetNotesByBookIdUseCase;
 
-  constructor(getNotesByUserIdUseCase: IGetNotesByUserIdUseCase) {
-    this.getNotesByUserIdUseCase = getNotesByUserIdUseCase;
+  constructor(getNotesByBookIdUseCase: IGetNotesByBookIdUseCase) {
+    this.getNotesByBookIdUseCase = getNotesByBookIdUseCase;
   }
 
   async execute(request: Request) {
@@ -29,7 +29,7 @@ export class GetNotesByUserIdController {
         return invalidIdResponse();
       }
 
-      const notes = await this.getNotesByUserIdUseCase.execute(userId, bookId);
+      const notes = await this.getNotesByBookIdUseCase.execute(userId, bookId);
 
       return ok(notes);
     } catch (error) {

@@ -1,6 +1,6 @@
 import { prisma } from '../../../lib/prisma';
 
-export class PostgresGetNotesByUserIdRepository {
+export class PostgresGetNotesByBookIdRepository {
   async execute(userId: string, bookId?: string) {
     return await prisma.note.findMany({
       where: {

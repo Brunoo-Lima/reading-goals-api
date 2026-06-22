@@ -46,6 +46,7 @@ model Book {
 
   readingLogs ReadingLog[]
   notes       Note[]
+  goals       Goal[]
 
   @@index([user_id])
   @@map("books")
@@ -78,25 +79,49 @@ model ReadingLog {
 }
 
 model Goal {
-  id           String    @id @default(uuid())
-  type         GoalsType
-  target_value Int
-  start_date   DateTime  @default(now())
-  end_date     DateTime?
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
+  id            String    @id @default(uuid())
+  type          GoalsType
+  target_value  Int
+  current_value Int       @default(0)
+  start_date    DateTime  @default(now())
+  end_date      DateTime?
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
 
   user_id String
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  book_id String?
+  book    Book?   @relation(fields: [book_id], references: [id])
+
+  progress GoalProgress[]
+
   @@index([user_id])
+  @@index([user_id, is_active])
   @@map("goals")
+}
+
+model GoalProgress {
+  id        String   @id @default(uuid())
+  value     Int
+  note      String?
+  logged_at DateTime @default(now())
+
+  goal_id String
+  goal    Goal   @relation(fields: [goal_id], references: [id], onDelete: Cascade)
+
+  @@index([goal_id])
+  @@index([goal_id, logged_at])
+  @@map("goal_progress")
 }
 
 enum GoalsType {
   DAILY_PAGES
   BOOKS_PER_MONTH
   BOOKS_PER_YEAR
+  TOTAL_PAGES
+  SPECIFIC_BOOK
 }
 
 model Note {

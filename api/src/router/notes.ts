@@ -4,7 +4,7 @@ import {
   makeCreateNoteController,
   makeDeleteNoteController,
   makeGetNoteByIdController,
-  makeGetNotesByUserIdController,
+  makeGetNotesByBookIdController,
   makeUpdateNoteController,
 } from '../factories/controllers';
 
@@ -25,7 +25,7 @@ noteRoutes.post(
 );
 
 noteRoutes.get('/', auth, async (request: Request, response: Response) => {
-  const getNotesByUserIdController = makeGetNotesByUserIdController();
+  const getNotesByUserIdController = makeGetNotesByBookIdController();
 
   request.params.userId = request.userId as string;
 

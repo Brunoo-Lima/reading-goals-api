@@ -1,6 +1,7 @@
 import { IdGeneratorAdapter } from '../../adapters';
 import {
   CreateGoalController,
+  CreateGoalProgressController,
   GetGoalByIdController,
   GetGoalsController,
   UpdateGoalController,
@@ -8,6 +9,7 @@ import {
 import { DeleteGoalController } from '../../controllers/goal/delete-goal';
 import {
   PostgresCreateGoalRepository,
+  PostgresCreateGoalProgressRepository,
   PostgresDeleteGoalRepository,
   PostgresGetGoalByIdRepository,
   PostgresGetGoalsRepository,
@@ -16,6 +18,7 @@ import {
 } from '../../repositories/postgres';
 import {
   CreateGoalUseCase,
+  CreateGoalProgressUseCase,
   DeleteGoalUseCase,
   GetGoalByIdUseCase,
   GetGoalsUseCase,
@@ -87,4 +90,23 @@ export const makeDeleteGoalController = () => {
   const deleteGoalController = new DeleteGoalController(deleteGoalUseCase);
 
   return deleteGoalController;
+};
+
+export const makeCreateGoalProgressController = () => {
+  const createGoalProgressRepository =
+    new PostgresCreateGoalProgressRepository();
+  const getGoalByIdRepository = new PostgresGetGoalByIdRepository();
+  const idGeneratorAdapter = new IdGeneratorAdapter();
+
+  const createGoalProgressUseCase = new CreateGoalProgressUseCase(
+    createGoalProgressRepository,
+    getGoalByIdRepository,
+    idGeneratorAdapter,
+  );
+
+  const createGoalProgressController = new CreateGoalProgressController(
+    createGoalProgressUseCase,
+  );
+
+  return createGoalProgressController;
 };

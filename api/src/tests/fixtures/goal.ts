@@ -30,3 +30,11 @@ export const goals = [
     updated_at: faker.date.anytime(),
   },
 ];
+
+export const goalProgress = {
+  id: faker.string.uuid(),
+  goal_id: faker.string.uuid(),
+  value: faker.number.int({ min: 1 }),
+  note: faker.lorem.sentence(),
+  logged_at: faker.date.anytime(),
+};

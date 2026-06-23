@@ -6,6 +6,12 @@ export const createGoalSchema = z.strictObject(
     user_id: z.string('User id is required').min(1, {
       error: 'User id is required',
     }),
+    book_id: z
+      .string()
+      .min(1, {
+        error: 'Book id is required',
+      })
+      .optional(),
     type: z.enum(GoalsType, {
       error: 'Type is required',
     }),
@@ -14,6 +20,13 @@ export const createGoalSchema = z.strictObject(
         message: 'Target value is required',
       })
       .min(1, { error: 'Target value is required' }),
+    current_value: z
+      .number({
+        message: 'Current value is required',
+      })
+      .min(1, { error: 'Current value is required' })
+      .optional(),
+    is_active: z.boolean().optional(),
     start_date: z.iso.datetime({
       error: 'Date must be a valid date',
     }),

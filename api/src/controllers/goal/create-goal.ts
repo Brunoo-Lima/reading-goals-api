@@ -22,10 +22,12 @@ export class CreateGoalController {
   async execute(request: Request) {
     try {
       const userId = request.params.userId as string;
+      const bookId = request.query.bookId as string | undefined;
 
-      const isIdValid = checkIfIdIsValid(userId);
+      const isBookIdValid = checkIfIdIsValid(bookId || '');
+      const isUserIdValid = checkIfIdIsValid(userId);
 
-      if (!isIdValid) {
+      if (!isUserIdValid || !isBookIdValid) {
         return invalidIdResponse();
       }
 
@@ -34,6 +36,7 @@ export class CreateGoalController {
       const goalData = {
         ...params,
         user_id: userId,
+        book_id: bookId,
       };
 
       await createGoalSchema.parseAsync(goalData);

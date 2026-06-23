@@ -6,6 +6,9 @@ export class PostgresGetGoalByIdRepository {
       where: {
         id: goalId,
       },
+      include: {
+        progress: true,
+      },
     });
   }
 }

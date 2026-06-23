@@ -6,6 +6,9 @@ export class PostgresGetGoalsRepository {
       where: {
         user_id: userId,
       },
+      include: {
+        progress: true,
+      },
     });
   }
 }

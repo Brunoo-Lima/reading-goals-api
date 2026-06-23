@@ -24,7 +24,7 @@ export class CreateGoalController {
       const userId = request.params.userId as string;
       const bookId = request.query.bookId as string | undefined;
 
-      const isBookIdValid = checkIfIdIsValid(bookId || '');
+      const isBookIdValid = bookId ? checkIfIdIsValid(bookId) : true;
       const isUserIdValid = checkIfIdIsValid(userId);
 
       if (!isUserIdValid || !isBookIdValid) {

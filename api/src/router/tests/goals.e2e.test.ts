@@ -129,7 +129,7 @@ describe('Goals Routes E2E tests', () => {
     expect(response.body.id).toBe(createdGoal.id);
   });
 
-  test('PATCH /api/goals/:goalId should return 200 when goal is updated', async () => {
+  test('POST /api/goals/:goalId/progress should return 201 when progress is created', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/users')
       .send(userData);
@@ -139,13 +139,38 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
-    // const { body: createdBook } = await request(app)
-    //   .post('/api/books')
-    //   .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
-    //   .send({
-    //     ...bookData,
-    //     user_id: createdUser.id,
-    //   });
+    const { body: createdGoal } = await request(app)
+      .post(`/api/goals`)
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        ...goalData,
+        user_id: createdUser.id,
+      });
+
+    const response = await request(app)
+      .post(`/api/goals/${createdGoal.id}/progress`)
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        value: 5,
+        note: 'Read five pages',
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.progress.value).toBe(5);
+    expect(response.body.goal.current_value).toBe(
+      createdGoal.current_value + 5,
+    );
+  });
+
+  test('PATCH /api/goals/:goalId should return 200 when goal is updated', async () => {
+    const { body: createdUser } = await request(app)
+      .post('/api/users')
+      .send(userData);
+
+    const authResponse = await request(app).post('/api/auth/login').send({
+      email: createdUser.email,
+      password: user.password,
+    });
 
     const { body: createdGoal } = await request(app)
       .post(`/api/goals`)

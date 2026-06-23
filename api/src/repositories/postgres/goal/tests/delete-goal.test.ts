@@ -1,4 +1,8 @@
-import { user as fakeUser, goal as fakeGoal } from '../../../../tests';
+import {
+  user as fakeUser,
+  goal as fakeGoal,
+  book as fakeBook,
+} from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 import { PostgresDeleteGoalRepository } from '../delete-goal';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
@@ -9,6 +13,11 @@ describe('Delete Goal Repository', () => {
     id: undefined as any,
   };
 
+  const bookOld = {
+    ...fakeBook,
+    id: undefined as any,
+  };
+
   const sut = new PostgresDeleteGoalRepository();
 
   test('should delete a goal on db', async () => {
@@ -16,11 +25,19 @@ describe('Delete Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goal = await prisma.goal.create({
       data: {
         ...fakeGoal,
         target_value: 20,
         user_id: userData.id,
+        book_id: bookData.id,
       },
     });
 
@@ -34,11 +51,19 @@ describe('Delete Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goal = await prisma.goal.create({
       data: {
         ...fakeGoal,
         target_value: 20,
         user_id: userData.id,
+        book_id: bookData.id,
       },
     });
 

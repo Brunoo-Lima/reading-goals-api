@@ -1,10 +1,19 @@
-import { user as fakeUser, goal as fakeGoal } from '../../../../tests';
+import {
+  user as fakeUser,
+  goal as fakeGoal,
+  book as fakeBook,
+} from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 import { PostgresGetGoalByIdRepository } from '../get-goal-by-id';
 
 describe('Get Goal By Id Repository', () => {
   const userOld = {
     ...fakeUser,
+    id: undefined as any,
+  };
+
+  const bookOld = {
+    ...fakeBook,
     id: undefined as any,
   };
 
@@ -15,17 +24,29 @@ describe('Get Goal By Id Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goal = await prisma.goal.create({
       data: {
         ...fakeGoal,
         target_value: 20,
+        current_value: 10,
         user_id: userData.id,
+        book_id: bookData.id,
       },
     });
 
     const result = await sut.execute(goal.id);
 
-    expect(result).toEqual(goal);
+    expect(result).toEqual({
+      ...goal,
+      progress: [],
+    });
   });
 
   test('should call Prisma with correct params', async () => {
@@ -33,11 +54,19 @@ describe('Get Goal By Id Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goal = await prisma.goal.create({
       data: {
         ...fakeGoal,
         target_value: 20,
         user_id: userData.id,
+        book_id: bookData.id,
       },
     });
 
@@ -48,6 +77,9 @@ describe('Get Goal By Id Repository', () => {
     expect(prismaSpy).toHaveBeenCalledWith({
       where: {
         id: goal.id,
+      },
+      include: {
+        progress: true,
       },
     });
   });

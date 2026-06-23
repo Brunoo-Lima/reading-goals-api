@@ -1,4 +1,8 @@
-import { user as fakeUser, goal as fakeGoal } from '../../../../tests';
+import {
+  user as fakeUser,
+  goal as fakeGoal,
+  book as fakeBook,
+} from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 import { PostgresUpdateGoalRepository } from '../update-goal';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
@@ -9,6 +13,11 @@ describe('Update Goal Repository', () => {
     id: undefined as any,
   };
 
+  const bookOld = {
+    ...fakeBook,
+    id: undefined as any,
+  };
+
   const sut = new PostgresUpdateGoalRepository();
 
   test('should update a goal on db', async () => {
@@ -16,10 +25,20 @@ describe('Update Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goalData = {
       ...fakeGoal,
       target_value: 20,
+      current_value: 10,
+      is_active: true,
       user_id: userData.id,
+      book_id: bookData.id,
     };
 
     const goal = await prisma.goal.create({
@@ -36,12 +55,20 @@ describe('Update Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const prismaSpy = vi.spyOn(prisma.goal, 'update');
 
     const goalData = {
       ...fakeGoal,
       target_value: 20,
       user_id: userData.id,
+      book_id: bookData.id,
     };
 
     const goal = await prisma.goal.create({

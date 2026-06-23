@@ -1,10 +1,19 @@
 import { PostgresCreateGoalRepository } from '../create-goal';
-import { user as fakeUser, goal as fakeGoal } from '../../../../tests';
+import {
+  user as fakeUser,
+  goal as fakeGoal,
+  book as fakeBook,
+} from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 
 describe('Create Goal Repository', () => {
   const userOld = {
     ...fakeUser,
+    id: undefined as any,
+  };
+
+  const bookOld = {
+    ...fakeBook,
     id: undefined as any,
   };
 
@@ -15,10 +24,19 @@ describe('Create Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const goalData = {
       ...fakeGoal,
       target_value: 20,
       user_id: userData.id,
+      book_id: bookData.id,
+      progress: undefined,
     };
 
     const result = await sut.execute(goalData);
@@ -31,12 +49,20 @@ describe('Create Goal Repository', () => {
       data: userOld,
     });
 
+    const bookData = await prisma.book.create({
+      data: {
+        ...bookOld,
+        user_id: userData.id,
+      },
+    });
+
     const prismaSpy = vi.spyOn(prisma.goal, 'create');
 
     const goalData = {
       ...fakeGoal,
       target_value: 20,
       user_id: userData.id,
+      book_id: bookData.id,
     };
 
     await sut.execute(goalData);

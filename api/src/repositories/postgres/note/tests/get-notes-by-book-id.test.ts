@@ -5,15 +5,15 @@ import {
 } from '../../../../tests';
 import { prisma } from '../../../../lib/prisma';
 import { StatusReading } from '../../../../../generated/prisma/enums';
-import { PostgresGetNotesByUserIdRepository } from '../get-notes-by-book-id';
+import { PostgresGetNotesByBookIdRepository } from '../get-notes-by-book-id';
 
-describe('Get Notes By User Id Repository', () => {
+describe('Get Notes By Book Id Repository', () => {
   const userOld = {
     ...fakeUser,
     id: undefined as any,
   };
 
-  const sut = new PostgresGetNotesByUserIdRepository();
+  const sut = new PostgresGetNotesByBookIdRepository();
 
   test('should get a notes by user id on db', async () => {
     const userData = await prisma.user.create({

@@ -1,7 +1,11 @@
-import type { IGoal, IUpdateGoal } from '../../@types/IGoal';
+import type { ICreateGoal, IGoal, IUpdateGoal } from '../../@types/IGoal';
+import type {
+  ICreateGoalProgress,
+  IGoalProgress,
+} from '../../@types/IGoalProgress';
 
 export interface ICreateGoalRepository {
-  execute(goal: IGoal): Promise<IGoal>;
+  execute(goal: ICreateGoal): Promise<IGoal>;
 }
 
 export interface IGetGoalsRepository {
@@ -18,4 +22,11 @@ export interface IUpdateGoalRepository {
 
 export interface IDeleteGoalRepository {
   execute(goalId: string): Promise<IGoal | null>;
+}
+
+export interface ICreateGoalProgressRepository {
+  execute(goalProgressParams: ICreateGoalProgress): Promise<{
+    goal: IGoal;
+    progress: IGoalProgress;
+  }>;
 }

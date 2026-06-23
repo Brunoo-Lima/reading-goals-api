@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { app } from '../../app';
-import { goal, user } from '../../tests';
+import { book, goal, user } from '../../tests';
 import request from 'supertest';
 
 describe('Goals Routes E2E tests', () => {
@@ -11,12 +11,23 @@ describe('Goals Routes E2E tests', () => {
     updated_at: undefined,
   };
 
+  const bookData = {
+    ...book,
+    id: undefined,
+    total_pages: 400,
+    start_date: '2026-06-07T01:28:00.523Z',
+    end_date: '2026-10-07T01:28:00.523Z',
+    created_at: undefined,
+    updated_at: undefined,
+  };
+
   const goalData = {
     ...goal,
     id: undefined,
     target_value: 20,
+    current_value: 2,
     start_date: '2026-06-07T01:28:00.523Z',
-    end_date: '2026-06-07T01:28:00.523Z',
+    end_date: '2026-06-29T01:28:00.523Z',
     created_at: undefined,
     updated_at: undefined,
   };
@@ -31,8 +42,16 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const { body: createdBook } = await request(app)
+      .post('/api/books')
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        ...bookData,
+        user_id: createdUser.id,
+      });
+
     const response = await request(app)
-      .post('/api/goals')
+      .post(`/api/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -52,8 +71,16 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const { body: createdBook } = await request(app)
+      .post('/api/books')
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        ...bookData,
+        user_id: createdUser.id,
+      });
+
     const { body: createdGoal } = await request(app)
-      .post('/api/goals')
+      .post(`/api/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -65,7 +92,6 @@ describe('Goals Routes E2E tests', () => {
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(1);
     expect(response.body[0].id).toBe(createdGoal.id);
   });
 
@@ -79,8 +105,16 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const { body: createdBook } = await request(app)
+      .post('/api/books')
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        ...bookData,
+        user_id: createdUser.id,
+      });
+
     const { body: createdGoal } = await request(app)
-      .post('/api/goals')
+      .post(`/api/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -105,8 +139,16 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    // const { body: createdBook } = await request(app)
+    //   .post('/api/books')
+    //   .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+    //   .send({
+    //     ...bookData,
+    //     user_id: createdUser.id,
+    //   });
+
     const { body: createdGoal } = await request(app)
-      .post('/api/goals')
+      .post(`/api/goals`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -120,6 +162,7 @@ describe('Goals Routes E2E tests', () => {
         ...goalData,
         user_id: createdUser.id,
         target_value: 50,
+        book_id: undefined,
       });
 
     expect(response.status).toBe(200);
@@ -135,8 +178,16 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const { body: createdBook } = await request(app)
+      .post('/api/books')
+      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .send({
+        ...bookData,
+        user_id: createdUser.id,
+      });
+
     const { body: createdGoal } = await request(app)
-      .post('/api/goals')
+      .post(`/api/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,

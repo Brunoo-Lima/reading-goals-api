@@ -4,3 +4,10 @@ export class GoalNotFoundError extends Error {
     this.name = 'GoalNotFoundError';
   }
 }
+
+export class GoalProgressExceedsTargetError extends Error {
+  constructor() {
+    super('Goal progress cannot exceed target value');
+    this.name = 'GoalProgressExceedsTargetError';
+  }
+}

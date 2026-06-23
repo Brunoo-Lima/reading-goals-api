@@ -1,7 +1,11 @@
-import type { IGoal, IUpdateGoal } from '../../@types/IGoal';
+import type { ICreateGoalParams, IGoal, IUpdateGoal } from '../../@types/IGoal';
+import type {
+  ICreateGoalProgressParams,
+  IGoalProgress,
+} from '../../@types/IGoalProgress';
 
 export interface ICreateGoalUseCase {
-  execute(goal: IGoal): Promise<IGoal>;
+  execute(goal: ICreateGoalParams): Promise<IGoal>;
 }
 
 export interface IGetGoalsUseCase {
@@ -18,4 +22,11 @@ export interface IUpdateGoalUseCase {
 
 export interface IDeleteGoalUseCase {
   execute(goalId: string): Promise<IGoal | null>;
+}
+
+export interface ICreateGoalProgressUseCase {
+  execute(goalProgressParams: ICreateGoalProgressParams): Promise<{
+    goal: IGoal;
+    progress: IGoalProgress;
+  }>;
 }

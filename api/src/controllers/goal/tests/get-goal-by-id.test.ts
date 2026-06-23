@@ -26,6 +26,9 @@ describe('Get Goal By ID Controller', () => {
       goalId: faker.string.uuid(),
       userId: faker.string.uuid(),
     },
+    query: {
+      bookId: faker.string.uuid(),
+    },
   } as Partial<Request> as Request;
 
   test('should get a goal by ID successfully', async () => {

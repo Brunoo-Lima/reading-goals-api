@@ -26,9 +26,14 @@ describe('Create Goal Controller', () => {
     params: {
       userId: faker.string.uuid(),
     },
+    query: {
+      bookId: faker.string.uuid(),
+    },
     body: {
       type: GoalsType.DAILY_PAGES,
       target_value: goal.target_value,
+      current_value: 1,
+      is_active: true,
       start_date: goal.start_date.toISOString(),
     },
   } as Partial<Request> as Request;
@@ -51,6 +56,29 @@ describe('Create Goal Controller', () => {
       params: {
         userId,
       },
+      query: {
+        bookId: baseHttpRequest.query.bookId,
+      },
+      ...baseHttpRequest.body,
+    } as Partial<Request> as Request;
+
+    const result = await sut.execute(request);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('should return 400 if book ID is invalid', async () => {
+    const { sut } = makeSut();
+
+    const bookId = 'invalid_id';
+
+    const request = {
+      params: {
+        userId: baseHttpRequest.params.userId,
+      },
+      query: {
+        bookId,
+      },
       ...baseHttpRequest.body,
     } as Partial<Request> as Request;
 
@@ -65,6 +93,9 @@ describe('Create Goal Controller', () => {
     const request = {
       params: {
         userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: faker.string.uuid(),
       },
       body: {
         type: 'invalid_type',
@@ -85,9 +116,34 @@ describe('Create Goal Controller', () => {
       params: {
         userId: faker.string.uuid(),
       },
+      query: {
+        bookId: faker.string.uuid(),
+      },
       body: {
         type: GoalsType.DAILY_PAGES,
         target_value: -1,
+        start_date: goal.start_date.toISOString(),
+      },
+    } as Partial<Request> as Request;
+
+    const result = await sut.execute(request);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('should return 400 if current value is invalid', async () => {
+    const { sut } = makeSut();
+
+    const request = {
+      params: {
+        userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: faker.string.uuid(),
+      },
+      body: {
+        type: GoalsType.DAILY_PAGES,
+        current_value: -1,
         start_date: goal.start_date.toISOString(),
       },
     } as Partial<Request> as Request;
@@ -103,6 +159,9 @@ describe('Create Goal Controller', () => {
     const request = {
       params: {
         userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: faker.string.uuid(),
       },
       body: {
         type: GoalsType.DAILY_PAGES,

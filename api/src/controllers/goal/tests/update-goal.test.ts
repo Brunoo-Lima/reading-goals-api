@@ -23,9 +23,14 @@ describe('Update Goal Controller', () => {
       goalId: faker.string.uuid(),
       userId: faker.string.uuid(),
     },
+    query: {
+      bookId: faker.string.uuid(),
+    },
     body: {
       type: 'DAILY_PAGES',
       target_value: faker.number.int(),
+      current_value: 1,
+      is_active: true,
       start_date: faker.date.anytime().toISOString(),
     },
   } as Partial<Request> as Request;

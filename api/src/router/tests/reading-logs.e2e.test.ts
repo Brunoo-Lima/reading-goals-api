@@ -25,51 +25,51 @@ describe('Reading Logs Routes E2E tests', () => {
     date: '2026-06-10T01:28:00.523Z',
   };
 
-  test('POST /api/reading-logs should return 201 when reading log is created', async () => {
+  test('POST /api/v1/reading-logs should return 201 when reading log is created', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(bookData);
 
     const response = await request(app)
-      .post(`/api/reading-logs?bookId=${createdBook.id}`)
+      .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(readingLogData);
 
     expect(response.status).toBe(201);
   });
 
-  test('GET /api/reading-logs should return 200 when reading logs are found', async () => {
+  test('GET /api/v1/reading-logs should return 200 when reading logs are found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(bookData);
 
     const { body: createdReadingLog } = await request(app)
-      .post(`/api/reading-logs?bookId=${createdBook.id}`)
+      .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(readingLogData);
 
     const response = await request(app)
-      .get(`/api/reading-logs?bookId=${createdBook.id}`)
+      .get(`/api/v1/reading-logs?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
@@ -77,28 +77,28 @@ describe('Reading Logs Routes E2E tests', () => {
     expect(response.body[0].id).toBe(createdReadingLog.id);
   });
 
-  test('GET /api/reading-logs/book should return 200 when reading log is found', async () => {
+  test('GET /api/v1/reading-logs/book should return 200 when reading log is found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(bookData);
 
     const { body: createdReadingLog } = await request(app)
-      .post(`/api/reading-logs?bookId=${createdBook.id}`)
+      .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(readingLogData);
 
     const response = await request(app)
-      .get(`/api/reading-logs/book?bookId=${createdBook.id}`)
+      .get(`/api/v1/reading-logs/book?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);

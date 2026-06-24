@@ -10,42 +10,42 @@ describe('User Routes E2E tests', () => {
     updated_at: undefined,
   };
 
-  test('POST /api/users should return 201 when user is created', async () => {
-    const response = await request(app).post('/api/users').send(userData);
+  test('POST /api/v1/users should return 201 when user is created', async () => {
+    const response = await request(app).post('/api/v1/users').send(userData);
 
     expect(response.status).toBe(201);
   });
 
-  test('GET /api/users should return 200 when user is found', async () => {
+  test('GET /api/v1/users should return 200 when user is found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: userData.password,
     });
 
     const response = await request(app)
-      .get('/api/users/me')
+      .get('/api/v1/users/me')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdUser.id);
   });
 
-  test('PATCH /api/users/me should return 200 when user is updated', async () => {
+  test('PATCH /api/v1/users/me should return 200 when user is updated', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: userData.password,
     });
 
     const response = await request(app)
-      .patch('/api/users/me')
+      .patch('/api/v1/users/me')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({ name: 'John Doe' });
 
@@ -53,30 +53,30 @@ describe('User Routes E2E tests', () => {
     expect(response.body.name).toBe('John Doe');
   });
 
-  test('DELETE /api/users/me should return 200 when user is deleted', async () => {
+  test('DELETE /api/v1/users/me should return 200 when user is deleted', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: userData.password,
     });
 
     const response = await request(app)
-      .delete('/api/users/me')
+      .delete('/api/v1/users/me')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
   });
 
-  test('POST /api/users should return 400 when the provided email is already in use', async () => {
+  test('POST /api/v1/users should return 400 when the provided email is already in use', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
     const response = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send({
         ...userData,
         email: createdUser.email,
@@ -85,9 +85,9 @@ describe('User Routes E2E tests', () => {
     expect(response.status).toBe(400);
   });
 
-  test('POST /api/users should return 400 when the provided password is invalid', async () => {
+  test('POST /api/v1/users should return 400 when the provided password is invalid', async () => {
     const response = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send({
         ...userData,
         password: '123',

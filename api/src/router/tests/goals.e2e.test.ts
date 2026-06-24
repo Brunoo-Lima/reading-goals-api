@@ -32,18 +32,18 @@ describe('Goals Routes E2E tests', () => {
     updated_at: undefined,
   };
 
-  test('POST /api/goals should return 201 when goal is created', async () => {
+  test('POST /api/v1/goals should return 201 when goal is created', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -51,7 +51,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .post(`/api/goals?bookId=${createdBook.id}`)
+      .post(`/api/v1/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -61,18 +61,18 @@ describe('Goals Routes E2E tests', () => {
     expect(response.status).toBe(201);
   });
 
-  test('GET /api/goals should return 200 when goals are found', async () => {
+  test('GET /api/v1/goals should return 200 when goals are found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -80,7 +80,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const { body: createdGoal } = await request(app)
-      .post(`/api/goals?bookId=${createdBook.id}`)
+      .post(`/api/v1/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -88,25 +88,25 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .get('/api/goals')
+      .get('/api/v1/goals')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.body[0].id).toBe(createdGoal.id);
   });
 
-  test('GET /api/goals/:goalId should return 200 when goal is found', async () => {
+  test('GET /api/v1/goals/:goalId should return 200 when goal is found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -114,7 +114,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const { body: createdGoal } = await request(app)
-      .post(`/api/goals?bookId=${createdBook.id}`)
+      .post(`/api/v1/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -122,25 +122,25 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .get(`/api/goals/${createdGoal.id}`)
+      .get(`/api/v1/goals/${createdGoal.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdGoal.id);
   });
 
-  test('POST /api/goals/:goalId/progress should return 201 when progress is created', async () => {
+  test('POST /api/v1/goals/:goalId/progress should return 201 when progress is created', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdGoal } = await request(app)
-      .post(`/api/goals`)
+      .post(`/api/v1/goals`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -148,7 +148,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .post(`/api/goals/${createdGoal.id}/progress`)
+      .post(`/api/v1/goals/${createdGoal.id}/progress`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         value: 5,
@@ -162,18 +162,18 @@ describe('Goals Routes E2E tests', () => {
     );
   });
 
-  test('PATCH /api/goals/:goalId should return 200 when goal is updated', async () => {
+  test('PATCH /api/v1/goals/:goalId should return 200 when goal is updated', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdGoal } = await request(app)
-      .post(`/api/goals`)
+      .post(`/api/v1/goals`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -181,7 +181,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .patch(`/api/goals/${createdGoal.id}`)
+      .patch(`/api/v1/goals/${createdGoal.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -193,18 +193,18 @@ describe('Goals Routes E2E tests', () => {
     expect(response.status).toBe(200);
   });
 
-  test('DELETE /api/goals/:goalId should return 200 when goal is deleted', async () => {
+  test('DELETE /api/v1/goals/:goalId should return 200 when goal is deleted', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -212,7 +212,7 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const { body: createdGoal } = await request(app)
-      .post(`/api/goals?bookId=${createdBook.id}`)
+      .post(`/api/v1/goals?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -220,41 +220,41 @@ describe('Goals Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .delete(`/api/goals/${createdGoal.id}`)
+      .delete(`/api/v1/goals/${createdGoal.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
   });
 
-  test('DELETE /api/goals/:goalId should return 404 when goal is not found', async () => {
+  test('DELETE /api/v1/goals/:goalId should return 404 when goal is not found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .delete(`/api/goals/${faker.string.uuid()}`)
+      .delete(`/api/v1/goals/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(404);
   });
 
-  test('PATCH /api/goals/:goalId should return 404 when goal is not found', async () => {
+  test('PATCH /api/v1/goals/:goalId should return 404 when goal is not found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .patch(`/api/goals/${faker.string.uuid()}`)
+      .patch(`/api/v1/goals/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,
@@ -265,18 +265,18 @@ describe('Goals Routes E2E tests', () => {
     expect(response.status).toBe(404);
   });
 
-  test('POST /api/goals should return 400 when goal is invalid', async () => {
+  test('POST /api/v1/goals should return 400 when goal is invalid', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .post('/api/goals')
+      .post('/api/v1/goals')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...goalData,

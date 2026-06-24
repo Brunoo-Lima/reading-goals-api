@@ -27,18 +27,18 @@ describe('Notes Routes E2E tests', () => {
     page_number: 300,
   };
 
-  test('POST /api/notes should return 201 when note is created', async () => {
+  test('POST /api/v1/notes should return 201 when note is created', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -46,25 +46,25 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .post(`/api/notes/${createdBook.id}`)
+      .post(`/api/v1/notes/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
     expect(response.status).toBe(201);
   });
 
-  test('GET /api/notes should return 200 when notes are found', async () => {
+  test('GET /api/v1/notes should return 200 when notes are found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -72,12 +72,12 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/notes/${createdBook.id}`)
+      .post(`/api/v1/notes/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
     const response = await request(app)
-      .get(`/api/notes?bookId=${createdBook.id}`)
+      .get(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
@@ -85,18 +85,18 @@ describe('Notes Routes E2E tests', () => {
     expect(response.body[0].id).toBe(createdNote.id);
   });
 
-  test('GET /api/notes/:noteId should return 200 when note is found', async () => {
+  test('GET /api/v1/notes/:noteId should return 200 when note is found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -104,30 +104,30 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/notes/${createdBook.id}`)
+      .post(`/api/v1/notes/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
     const response = await request(app)
-      .get(`/api/notes/${createdNote.id}`)
+      .get(`/api/v1/notes/${createdNote.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdNote.id);
   });
 
-  test('PATCH /api/notes/:noteId should return 200 when note is updated', async () => {
+  test('PATCH /api/v1/notes/:noteId should return 200 when note is updated', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -135,12 +135,12 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/notes/${createdBook.id}`)
+      .post(`/api/v1/notes/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
     const response = await request(app)
-      .patch(`/api/notes/${createdNote.id}`)
+      .patch(`/api/v1/notes/${createdNote.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...noteData,
@@ -150,18 +150,18 @@ describe('Notes Routes E2E tests', () => {
     expect(response.status).toBe(200);
   });
 
-  test('DELETE /api/notes/:noteId should return 200 when note is deleted', async () => {
+  test('DELETE /api/v1/notes/:noteId should return 200 when note is deleted', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -169,46 +169,46 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/notes/${createdBook.id}`)
+      .post(`/api/v1/notes/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
     const response = await request(app)
-      .delete(`/api/notes/${createdNote.id}`)
+      .delete(`/api/v1/notes/${createdNote.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
   });
 
-  test("DELETE /api/notes/:noteId should return 404 when note doesn't exist", async () => {
+  test("DELETE /api/v1/notes/:noteId should return 404 when note doesn't exist", async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .delete(`/api/notes/${faker.string.uuid()}`)
+      .delete(`/api/v1/notes/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(404);
   });
 
-  test("PATCH /api/notes/:noteId should return 404 when note doesn't exist", async () => {
+  test("PATCH /api/v1/notes/:noteId should return 404 when note doesn't exist", async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .patch(`/api/notes/${faker.string.uuid()}`)
+      .patch(`/api/v1/notes/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...noteData,
@@ -218,18 +218,18 @@ describe('Notes Routes E2E tests', () => {
     expect(response.status).toBe(404);
   });
 
-  test('POST /api/notes/:bookId should return 400 when bookId is invalid', async () => {
+  test('POST /api/v1/notes/:bookId should return 400 when bookId is invalid', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .post(`/api/notes/${faker.string.uuid()}`)
+      .post(`/api/v1/notes/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 

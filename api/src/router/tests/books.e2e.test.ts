@@ -21,18 +21,18 @@ describe('Books Routes E2E tests', () => {
     updated_at: undefined,
   };
 
-  test('POST /api/books should return 201 when book is created', async () => {
+  test('POST /api/v1/books should return 201 when book is created', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -42,18 +42,18 @@ describe('Books Routes E2E tests', () => {
     expect(response.status).toBe(201);
   });
 
-  test('GET /api/books/:bookId should return 200 when book is found', async () => {
+  test('GET /api/v1/books/:bookId should return 200 when book is found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -61,25 +61,25 @@ describe('Books Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .get(`/api/books/${createdBook.id}`)
+      .get(`/api/v1/books/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdBook.id);
   });
 
-  test('GET /api/books should return 200 when books are found', async () => {
+  test('GET /api/v1/books should return 200 when books are found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -87,7 +87,7 @@ describe('Books Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .get('/api/books')
+      .get('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
@@ -95,18 +95,18 @@ describe('Books Routes E2E tests', () => {
     expect(response.body[0].id).toBe(createdBook.id);
   });
 
-  test('DELETE /api/books/:id should return 200 when book is deleted', async () => {
+  test('DELETE /api/v1/books/:id should return 200 when book is deleted', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -114,24 +114,24 @@ describe('Books Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .delete(`/api/books/${createdBook.id}`)
+      .delete(`/api/v1/books/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
   });
 
-  test('PATCH /api/books/:bookId should return 200 when book is updated', async () => {
+  test('PATCH /api/v1/books/:bookId should return 200 when book is updated', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const { body: createdBook } = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -139,7 +139,7 @@ describe('Books Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .patch(`/api/books/${createdBook.id}`)
+      .patch(`/api/v1/books/${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -150,35 +150,35 @@ describe('Books Routes E2E tests', () => {
     expect(response.status).toBe(200);
   });
 
-  test('DELETE /api/books/:bookId should return 404 when book is not found', async () => {
+  test('DELETE /api/v1/books/:bookId should return 404 when book is not found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .delete(`/api/books/${faker.string.uuid()}`)
+      .delete(`/api/v1/books/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(404);
   });
 
-  test('PATCH /api/books/:bookId should return 404 when book is not found', async () => {
+  test('PATCH /api/v1/books/:bookId should return 404 when book is not found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .patch(`/api/books/${faker.string.uuid()}`)
+      .patch(`/api/v1/books/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,
@@ -189,35 +189,35 @@ describe('Books Routes E2E tests', () => {
     expect(response.status).toBe(404);
   });
 
-  test('GET /api/books/:bookId should return 404 when book is not found', async () => {
+  test('GET /api/v1/books/:bookId should return 404 when book is not found', async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .get(`/api/books/${faker.string.uuid()}`)
+      .get(`/api/v1/books/${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
 
     expect(response.status).toBe(404);
   });
 
-  test("POST /api/books should return 400 when book's start_date is invalid", async () => {
+  test("POST /api/v1/books should return 400 when book's start_date is invalid", async () => {
     const { body: createdUser } = await request(app)
-      .post('/api/users')
+      .post('/api/v1/users')
       .send(userData);
 
-    const authResponse = await request(app).post('/api/auth/login').send({
+    const authResponse = await request(app).post('/api/v1/auth/login').send({
       email: createdUser.email,
       password: user.password,
     });
 
     const response = await request(app)
-      .post('/api/books')
+      .post('/api/v1/books')
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send({
         ...bookData,

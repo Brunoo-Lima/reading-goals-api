@@ -9,9 +9,11 @@ export const bookFormSchema = z
       error: 'Autor é obrigatório',
     }),
     genre: z.array(z.string()),
-    status: z.string('Status é obrigatório').trim().min(1, {
-      error: 'Status é obrigatório',
-    }),
+    status: z
+      .enum(['READING', 'COMPLETED', 'WISHLIST', 'ABANDONED'], {
+        error: 'Status é obrigatório',
+      })
+      .default('READING'),
     total_pages: z.coerce.number('Páginas é obrigatório').min(1, {
       error: 'Páginas é obrigatório',
     }),

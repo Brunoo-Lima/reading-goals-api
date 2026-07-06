@@ -40,6 +40,7 @@ import {
 import { genres } from '@/utils/genre-list';
 import { useEffect } from 'react';
 import { useBooks } from '@/hooks/use-books';
+import { toast } from 'sonner';
 
 interface IFormBookProps {
   open: boolean;
@@ -59,12 +60,12 @@ export const FormBook = ({
     control,
     reset,
   } = useForm<IBookFormSchema>({
-    resolver: zodResolver(bookFormSchema),
+    resolver: zodResolver(bookFormSchema as any),
     defaultValues: {
       title: initialData?.title || '',
       author: initialData?.author || '',
       genre: initialData?.genre || [],
-      status: initialData?.status || '',
+      status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
@@ -78,24 +79,21 @@ export const FormBook = ({
       title: initialData?.title || '',
       author: initialData?.author || '',
       genre: initialData?.genre.map((genre) => genre) || [],
-      status: initialData?.status || '',
+      status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
     });
   }, [initialData, reset]);
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-
+  const onSubmit = async (data: IBookFormSchema) => {
     try {
       addBook(data);
-
-      console.log(data);
       onOpenChange(false);
       reset();
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error('Erro ao criar livro.');
     }
   };
 

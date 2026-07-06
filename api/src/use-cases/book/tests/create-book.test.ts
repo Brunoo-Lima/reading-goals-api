@@ -1,5 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { BookAlreadyExistsError, InvalidBookDatesError } from '../../../errors';
+import {
+  BookAlreadyExistsError,
+  InvalidBookDatesError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+} from '../../../errors';
 import { book } from '../../../tests';
 import { CreateBookUseCase } from '../create-book';
 
@@ -71,6 +75,19 @@ describe('Create Book Use Case', () => {
     });
 
     await expect(promise).rejects.toThrow(new InvalidBookDatesError());
+  });
+
+  test('should current_page be less than or equal to total_pages', async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.execute({
+      ...book,
+      current_page: book.total_pages + 1,
+    });
+
+    await expect(promise).rejects.toThrow(
+      new InvalidCurrentPageNotExceedTotalPagesError(),
+    );
   });
 
   test('should throw if GetBookByTitleRepository throws', async () => {

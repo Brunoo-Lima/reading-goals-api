@@ -7,8 +7,9 @@ export interface IUser {
   updated_at: Date;
 }
 
-export interface IUserRequest {
-  name: string;
-  email: string;
-  password: string;
-}
+export type IUserRequest = IUser & {
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};

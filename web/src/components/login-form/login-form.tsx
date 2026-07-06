@@ -7,6 +7,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 import {
   loginFormSchema,
   type ILoginFormSchema,
@@ -26,9 +27,10 @@ export function LoginForm() {
       password: '',
     },
   });
+  const { loginService } = useAuth();
 
   const onSubmit = (data: ILoginFormSchema) => {
-    console.log(data);
+    loginService(data.email, data.password);
   };
 
   return (

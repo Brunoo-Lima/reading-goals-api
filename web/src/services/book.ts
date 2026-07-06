@@ -35,3 +35,15 @@ export const useGetBooks = () => {
     mutationFn: getBooks,
   });
 };
+
+export const getBookById = async (id: string) => {
+  const { data } = await api.get(`/books/${id}`);
+  return data;
+};
+
+export const useGetBookById = () => {
+  return useMutation({
+    mutationKey: ['getBookById'],
+    mutationFn: getBookById,
+  });
+};

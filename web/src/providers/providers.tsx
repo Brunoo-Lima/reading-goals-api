@@ -1,5 +1,5 @@
+import { AuthProvider } from '@/context/auth-context';
 import { BooksProvider } from '@/context/books-context';
-import { AuthProvider } from '../context/auth-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const Providers = ({ children }: React.PropsWithChildren) => {

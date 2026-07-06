@@ -3,7 +3,11 @@ import { book } from '../../../tests';
 import { CreateBookController } from '../create-book';
 import type { Request } from 'express';
 import { StatusReading } from '../../../../generated/prisma/enums';
-import { BookAlreadyExistsError, InvalidBookDatesError } from '../../../errors';
+import {
+  BookAlreadyExistsError,
+  InvalidBookDatesError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+} from '../../../errors';
 
 describe('Create Book Controller', () => {
   class CreateBookUseCaseStub {
@@ -190,6 +194,17 @@ describe('Create Book Controller', () => {
     const { sut, createBookUseCaseStub } = makeSut();
     vi.spyOn(createBookUseCaseStub, 'execute').mockRejectedValueOnce(
       new InvalidBookDatesError(),
+    );
+
+    const result = await sut.execute(baseHttpRequest);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('should return 400 if InvalidCurrentPageNotExceedTotalPagesError throws', async () => {
+    const { sut, createBookUseCaseStub } = makeSut();
+    vi.spyOn(createBookUseCaseStub, 'execute').mockRejectedValueOnce(
+      new InvalidCurrentPageNotExceedTotalPagesError(),
     );
 
     const result = await sut.execute(baseHttpRequest);

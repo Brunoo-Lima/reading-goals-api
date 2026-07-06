@@ -30,6 +30,12 @@ const createBookSchema = z.strictObject(
       .min(1, {
         error: 'Total pages is required',
       }),
+    current_page: z
+      .number({
+        message: 'Current page must be a number',
+      })
+      .positive()
+      .optional(),
     start_date: z.iso.datetime({
       error: 'Date must be a valid date',
     }),
@@ -43,7 +49,6 @@ const createBookSchema = z.strictObject(
     error: 'Some provided field is not allowed.',
   },
 );
-
 export { createBookSchema };
 
 export const updateBookSchema = createBookSchema.partial().refine(

@@ -40,6 +40,13 @@ export class InvalidBookTitleError extends Error {
   }
 }
 
+export class InvalidCurrentPageNotExceedTotalPagesError extends Error {
+  constructor(message?: string) {
+    super(message || 'Current page cannot be greater than total pages');
+    this.name = 'InvalidCurrentPageNotExceedTotalPagesError';
+  }
+}
+
 // export class BookGenreNotFoundError extends Error {
 //   constructor(genre?: string) {
 //     super(`Book genre not found: ${genre ?? 'unknown'}`);

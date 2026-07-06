@@ -3,7 +3,11 @@ import type { ICreateBookUseCase } from '../../interfaces/use-cases';
 import { badRequest, created, serverError } from '../helpers';
 import { createBookSchema } from '../../schemas';
 import { ZodError } from 'zod';
-import { BookAlreadyExistsError, InvalidBookDatesError } from '../../errors';
+import {
+  BookAlreadyExistsError,
+  InvalidBookDatesError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+} from '../../errors';
 
 export class CreateBookController {
   private createBookUseCase: ICreateBookUseCase;
@@ -29,6 +33,10 @@ export class CreateBookController {
       }
 
       if (error instanceof InvalidBookDatesError) {
+        return badRequest({ message: error.message });
+      }
+
+      if (error instanceof InvalidCurrentPageNotExceedTotalPagesError) {
         return badRequest({ message: error.message });
       }
 

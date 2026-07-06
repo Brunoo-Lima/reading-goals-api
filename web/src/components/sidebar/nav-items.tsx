@@ -3,10 +3,13 @@ import {
   BookOpenIcon,
   ChartNoAxesCombinedIcon,
   LayoutDashboardIcon,
+  LogOutIcon,
   TargetIcon,
   UserIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import { useAuth } from '@/hooks/use-auth';
 
 const navItems = [
   { href: '/geral', label: 'Geral', icon: LayoutDashboardIcon },
@@ -26,6 +29,7 @@ interface INavItemsProps {
 
 export const NavItems = ({ onClose }: INavItemsProps) => {
   const location = useLocation();
+  const { logOut } = useAuth();
 
   return (
     <nav className="flex-1 p-4 space-y-1">
@@ -48,6 +52,15 @@ export const NavItems = ({ onClose }: INavItemsProps) => {
           </NavLink>
         );
       })}
+
+      <Button
+        variant="ghost"
+        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:bg-secondary hover:text-foreground w-full h-full justify-start cursor-pointer hover:bg-primary hover:text-primary-foreground"
+        onClick={logOut}
+      >
+        <LogOutIcon className="h-5 w-5" />
+        Sair
+      </Button>
     </nav>
   );
 };

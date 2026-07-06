@@ -29,14 +29,15 @@ model User {
 }
 
 model Book {
-  id          String        @id @default(uuid())
-  title       String        @db.VarChar(100)
-  author      String        @db.VarChar(100)
-  genre       String[]
-  status      StatusReading @default(WISHLIST)
-  total_pages Int
-  start_date  DateTime?
-  end_date    DateTime?
+  id           String        @id @default(uuid())
+  title        String        @db.VarChar(100)
+  author       String        @db.VarChar(100)
+  genre        String[]
+  status       StatusReading @default(WISHLIST)
+  total_pages  Int
+  current_page Int           @default(0)
+  start_date   DateTime?
+  end_date     DateTime?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

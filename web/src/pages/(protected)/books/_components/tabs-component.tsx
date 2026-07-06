@@ -3,9 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpenIcon, PlusIcon } from 'lucide-react';
 import { CardBook } from './card-book/card-book';
 import { useBooks } from '@/hooks/use-books';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
 import { ModalBookDetails } from './modal-book-details';
+import { getBooks } from '@/services/book';
+import { toast } from 'sonner';
 
 interface ITabsComponentsProps {
   onEditBook: (book: IBook) => void;
@@ -16,10 +18,26 @@ export const TabsComponent = ({
   onEditBook,
   onAddBook,
 }: ITabsComponentsProps) => {
-  const { books, deleteBook, getBooksByStatus } = useBooks();
+  const { books, deleteBook, getBooksByStatus, setBooks } = useBooks();
 
   const [viewingBook, setViewingBook] = useState<IBook | null>(null);
   const [activeTab, setActiveTab] = useState<string>('all');
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await getBooks();
+        setBooks(response);
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
+        );
+      }
+    };
+
+    fetchBooks();
+  }, [setBooks]);
 
   const handleView = (book: IBook) => {
     setViewingBook(book);

@@ -1,7 +1,7 @@
 export type StatusReading = 'READING' | 'COMPLETED' | 'WISHLIST' | 'ABANDONED';
 
 export interface IBook {
-  id?: string;
+  id: string;
   user_id?: string;
   title: string;
   author: string;

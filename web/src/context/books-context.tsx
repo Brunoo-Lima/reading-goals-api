@@ -1,16 +1,21 @@
 import type { IBook, ICreateBook, StatusReading } from '@/@types/IBook';
 import type { IStreak } from '@/@types/IStreak';
-import { createContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
 import type { IReadingGoal } from '@/@types/IGoal';
 import { initialGoal } from '@/__mocks__/initial-goals';
-import { getBooks, useCreateBook } from '@/services/book';
-import { toast } from 'sonner';
+import { useCreateBook } from '@/services/book';
 
 interface IBooksContext {
   streak: IStreak;
   setStreak: (streak: IStreak) => void;
 
   books: IBook[];
+  setBooks: Dispatch<SetStateAction<IBook[]>>;
 
   goal: IReadingGoal;
   completedBooks: IBook[];
@@ -39,22 +44,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   });
 
   const bookService = useCreateBook();
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await getBooks();
-        setBooks(response);
-      } catch (error) {
-        console.error(error);
-        toast.error(
-          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
-        );
-      }
-    };
-
-    fetchBooks();
-  }, []);
 
   const addBook = async (book: Omit<ICreateBook, 'id' | 'created_at'>) => {
     const newBook: ICreateBook = {
@@ -104,6 +93,7 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     setStreak,
 
     books,
+    setBooks,
     goal,
     totalPagesRead,
 

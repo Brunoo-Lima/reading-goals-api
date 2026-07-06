@@ -36,8 +36,8 @@ export function ModalBookDetails({
   if (!book) return null;
 
   const progress =
-    book.currentPage && book.total_pages
-      ? Math.round((book.currentPage / book.total_pages) * 100)
+    book.current_page && book.total_pages
+      ? Math.round((book.current_page / book.total_pages) * 100)
       : 0;
 
   const statusLabels = {
@@ -64,7 +64,7 @@ export function ModalBookDetails({
             <TabsContent value="details" className="space-y-4 mt-4">
               <div className="space-y-6">
                 <div>
-                  <p className="text-muted-foreground">{book.author}</p>
+                  <p className="text-muted-foreground">Autor: {book.author}</p>
                   <span className="inline-block mt-2 text-xs px-2.5 py-1 rounded-full font-medium bg-secondary text-secondary-foreground">
                     {statusLabels[book.status]}
                   </span>
@@ -90,7 +90,7 @@ export function ModalBookDetails({
                       />
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Página {book.currentPage} de {book.total_pages}
+                      Página {book.current_page} de {book.total_pages}
                     </p>
                   </div>
                 )}

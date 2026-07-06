@@ -25,8 +25,8 @@ export const CardReadingCurrently = ({
       <div className="space-y-4">
         {readingBooks.slice(0, 3).map((book) => {
           const progress =
-            book.total_pages && book.currentPage
-              ? Math.round((book.currentPage / book.total_pages) * 100)
+            book.total_pages && book.current_page
+              ? Math.round((book.current_page / book.total_pages) * 100)
               : 0;
 
           return (

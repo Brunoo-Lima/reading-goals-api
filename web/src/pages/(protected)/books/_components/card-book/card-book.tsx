@@ -21,7 +21,8 @@ export const CardBook = ({
   //     ? Math.round((book.currentPage / book.totalPages) * 100)
   //     : 0;
 
-  const currentPage = 100;
+  const currentPage = book.current_page ?? 0;
+
   const progress = book.total_pages
     ? Math.round((currentPage / book.total_pages) * 100)
     : 0;

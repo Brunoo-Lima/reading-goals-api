@@ -6,7 +6,7 @@ import { useBooks } from '@/hooks/use-books';
 import { useEffect, useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
 import { ModalBookDetails } from './modal-book-details';
-import { getBooks } from '@/services/book';
+import { getBooks, useGetBookById } from '@/services/book';
 import { toast } from 'sonner';
 
 interface ITabsComponentsProps {
@@ -22,6 +22,7 @@ export const TabsComponent = ({
 
   const [viewingBook, setViewingBook] = useState<IBook | null>(null);
   const [activeTab, setActiveTab] = useState<string>('all');
+  const getBookById = useGetBookById();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -39,8 +40,9 @@ export const TabsComponent = ({
     fetchBooks();
   }, [setBooks]);
 
-  const handleView = (book: IBook) => {
-    setViewingBook(book);
+  const handleView = async (book: IBook) => {
+    const bookData = await getBookById.mutateAsync(book.id);
+    setViewingBook(bookData);
   };
 
   const handleDeleteBook = (book: IBook) => {

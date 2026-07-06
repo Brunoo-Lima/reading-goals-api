@@ -1,5 +1,9 @@
 import type { IBook } from '../../@types/IBook';
-import { BookAlreadyExistsError, InvalidBookDatesError } from '../../errors';
+import {
+  BookAlreadyExistsError,
+  InvalidBookDatesError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+} from '../../errors';
 import type { IIdGeneratorAdapter } from '../../interfaces/adapters';
 import type {
   ICreateBookRepository,
@@ -32,6 +36,10 @@ export class CreateBookUseCase {
 
     if (book.start_date && book.end_date && book.end_date < book.start_date) {
       throw new InvalidBookDatesError();
+    }
+
+    if (book.current_page && book.current_page > book.total_pages) {
+      throw new InvalidCurrentPageNotExceedTotalPagesError();
     }
 
     const bookId = this.idGeneratorAdapter.execute();

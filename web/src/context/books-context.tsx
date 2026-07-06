@@ -1,9 +1,10 @@
-import type { IBook, StatusReading } from '@/@types/IBook';
+import type { IBook, ICreateBook, StatusReading } from '@/@types/IBook';
 import type { IStreak } from '@/@types/IStreak';
-import { createContext, useState } from 'react';
-import { initialBooks } from '../__mocks__/initial-books';
+import { createContext, useEffect, useState } from 'react';
 import type { IReadingGoal } from '@/@types/IGoal';
 import { initialGoal } from '@/__mocks__/initial-goals';
+import { getBooks, useCreateBook } from '@/services/book';
+import { toast } from 'sonner';
 
 interface IBooksContext {
   streak: IStreak;
@@ -17,7 +18,7 @@ interface IBooksContext {
   toReadBooks: IBook[];
   totalPagesRead: number;
 
-  addBook: (book: Omit<IBook, 'id' | 'created_at'>) => IBook;
+  addBook: (book: ICreateBook) => Promise<ICreateBook>;
   updateBook: (id: string, updates: Partial<IBook>) => void;
   deleteBook: (id: string) => void;
   getBooksByStatus: (status: StatusReading) => IBook[];
@@ -28,7 +29,7 @@ interface IBooksContext {
 export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
-  const [books, setBooks] = useState<IBook[]>(initialBooks);
+  const [books, setBooks] = useState<IBook[]>([]);
   const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
 
   const [streak, setStreak] = useState<IStreak>({
@@ -37,14 +38,33 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     longestStreak: 0,
   });
 
-  const addBook = (book: Omit<IBook, 'id' | 'created_at'>) => {
-    const newBook: IBook = {
-      ...book,
-      id: Date.now().toString(),
-      created_at: new Date().toISOString().split('T')[0],
+  const bookService = useCreateBook();
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await getBooks();
+        setBooks(response);
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
+        );
+      }
     };
-    setBooks((prev) => [...prev, newBook]);
-    return newBook;
+
+    fetchBooks();
+  }, []);
+
+  const addBook = async (book: Omit<ICreateBook, 'id' | 'created_at'>) => {
+    const newBook: ICreateBook = {
+      ...book,
+      start_date: new Date(),
+    };
+
+    const createdBook = await bookService.mutateAsync(newBook);
+    setBooks((prev) => [...prev, createdBook]);
+    return createdBook;
   };
 
   const updateBook = (id: string, updates: Partial<IBook>) => {

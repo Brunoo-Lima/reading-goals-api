@@ -39,6 +39,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { genres } from '@/utils/genre-list';
 import { useEffect } from 'react';
+import { useBooks } from '@/hooks/use-books';
 
 interface IFormBookProps {
   open: boolean;
@@ -70,6 +71,8 @@ export const FormBook = ({
     },
   });
 
+  const { addBook } = useBooks();
+
   useEffect(() => {
     reset({
       title: initialData?.title || '',
@@ -86,7 +89,9 @@ export const FormBook = ({
     console.log(data);
 
     try {
-      alert('Livro salvo com sucesso!');
+      addBook(data);
+
+      console.log(data);
       onOpenChange(false);
       reset();
     } catch (error) {

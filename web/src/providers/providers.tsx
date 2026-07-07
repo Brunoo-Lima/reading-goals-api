@@ -1,6 +1,7 @@
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/context/auth-context';
 import { BooksProvider } from '@/context/books-context';
+import { StreakProvider } from '@/context/streak-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const Providers = ({ children }: React.PropsWithChildren) => {
@@ -9,7 +10,9 @@ export const Providers = ({ children }: React.PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BooksProvider>{children}</BooksProvider>
+        <StreakProvider>
+          <BooksProvider>{children}</BooksProvider>
+        </StreakProvider>
       </AuthProvider>
       <Toaster />
     </QueryClientProvider>

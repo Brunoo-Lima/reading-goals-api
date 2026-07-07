@@ -74,7 +74,7 @@ export const FormBook = ({
     },
   });
 
-  const { addBook } = useBooks();
+  const { addBook, updateBook } = useBooks();
 
   const statusWatching = watch('status');
 
@@ -86,14 +86,22 @@ export const FormBook = ({
       status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
       current_page: initialData?.current_page || 0,
-      start_date: initialData?.start_date || new Date(),
-      end_date: initialData?.end_date || undefined,
+      start_date: initialData?.start_date
+        ? new Date(initialData.start_date)
+        : new Date(),
+      end_date: initialData?.end_date
+        ? new Date(initialData.end_date)
+        : undefined,
     });
   }, [initialData, reset]);
 
   const onSubmit = async (data: IBookFormSchema) => {
     try {
-      addBook(data);
+      if (initialData) {
+        await updateBook(initialData.id, data);
+      } else {
+        await addBook(data);
+      }
       onOpenChange(false);
       reset();
     } catch (error) {

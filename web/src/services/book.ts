@@ -59,3 +59,22 @@ export const useDeleteBook = () => {
     mutationFn: deleteBook,
   });
 };
+
+export const updateBook = async (id: string, book: ICreateBook) => {
+  const { data } = await api.patch(`/books/${id}`, book);
+  return data;
+};
+
+export const useUpdateBook = () => {
+  return useMutation({
+    mutationKey: ['updateBook'],
+    mutationFn: (book: { id: string; book: ICreateBook }) => {
+      return updateBook(book.id, book.book);
+    },
+
+    onError: (error: AxiosError) => {
+      const message = error.message || 'Erro ao atualizar livro.';
+      toast.error(message);
+    },
+  });
+};

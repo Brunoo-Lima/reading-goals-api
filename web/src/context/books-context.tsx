@@ -7,7 +7,7 @@ import {
 } from 'react';
 import type { IReadingGoal } from '@/@types/IGoal';
 import { initialGoal } from '@/__mocks__/initial-goals';
-import { useCreateBook, useDeleteBook } from '@/services/book';
+import { useCreateBook, useDeleteBook, useUpdateBook } from '@/services/book';
 import { toast } from 'sonner';
 
 interface IBooksContext {
@@ -21,8 +21,8 @@ interface IBooksContext {
   totalPagesRead: number;
 
   addBook: (book: ICreateBook) => Promise<ICreateBook>;
-  updateBook: (id: string, updates: Partial<IBook>) => void;
-  deleteBook: (id: string) => void;
+  updateBook: (id: string, updates: ICreateBook) => Promise<void>;
+  deleteBook: (id: string) => Promise<void>;
   getBooksByStatus: (status: StatusReading) => IBook[];
 
   updateGoal: (updates: Partial<IReadingGoal>) => void;
@@ -34,8 +34,9 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
 
-  const bookService = useCreateBook();
-  const deleteService = useDeleteBook();
+  const createBookService = useCreateBook();
+  const deleteBookService = useDeleteBook();
+  const updateBookService = useUpdateBook();
 
   const addBook = async (book: ICreateBook) => {
     const newBook: ICreateBook = {
@@ -47,21 +48,31 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
           : (book.current_page ?? 0),
     };
 
-    const createdBook = await bookService.mutateAsync(newBook);
+    const createdBook = await createBookService.mutateAsync(newBook);
     setBooks((prev) => [...prev, createdBook]);
 
     return createdBook;
   };
 
-  const updateBook = (id: string, updates: Partial<IBook>) => {
-    setBooks((prev) =>
-      prev.map((book) => (book.id === id ? { ...book, ...updates } : book)),
+  const updateBook = async (id: string, updates: ICreateBook) => {
+    await updateBookService.mutateAsync(
+      { id, book: updates },
+      {
+        onSuccess: () => {
+          setBooks((prev) =>
+            prev.map((book) =>
+              book.id === id ? { ...book, ...updates } : book,
+            ),
+          );
+          toast.success('Livro atualizado com sucesso!');
+        },
+      },
     );
   };
 
   const deleteBook = async (id: string) => {
     try {
-      await deleteService.mutateAsync(id, {
+      await deleteBookService.mutateAsync(id, {
         onSuccess: () => {
           setBooks((prev) => prev.filter((book) => book.id !== id));
 

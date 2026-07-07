@@ -8,7 +8,8 @@ import {
 } from 'react';
 import type { IReadingGoal } from '@/@types/IGoal';
 import { initialGoal } from '@/__mocks__/initial-goals';
-import { useCreateBook } from '@/services/book';
+import { useCreateBook, useDeleteBook } from '@/services/book';
+import { toast } from 'sonner';
 
 interface IBooksContext {
   streak: IStreak;
@@ -44,6 +45,7 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   });
 
   const bookService = useCreateBook();
+  const deleteService = useDeleteBook();
 
   const addBook = async (book: ICreateBook) => {
     const newBook: ICreateBook = {
@@ -57,6 +59,7 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
 
     const createdBook = await bookService.mutateAsync(newBook);
     setBooks((prev) => [...prev, createdBook]);
+
     return createdBook;
   };
 
@@ -66,8 +69,21 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     );
   };
 
-  const deleteBook = (id: string) => {
-    setBooks((prev) => prev.filter((book) => book.id !== id));
+  const deleteBook = async (id: string) => {
+    try {
+      await deleteService.mutateAsync(id, {
+        onSuccess: () => {
+          setBooks((prev) => prev.filter((book) => book.id !== id));
+
+          setTimeout(() => {
+            toast.success('Livro deletado com sucesso!');
+          }, 100);
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      toast.error('Erro ao deletar o livro. Tente novamente.');
+    }
   };
 
   const updateGoal = (updates: Partial<IReadingGoal>) => {

@@ -47,3 +47,15 @@ export const useGetBookById = () => {
     mutationFn: getBookById,
   });
 };
+
+export const deleteBook = async (id: string) => {
+  const { data } = await api.delete(`/books/${id}`);
+  return data;
+};
+
+export const useDeleteBook = () => {
+  return useMutation({
+    mutationKey: ['deleteBook'],
+    mutationFn: deleteBook,
+  });
+};

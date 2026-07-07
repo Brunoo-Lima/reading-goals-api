@@ -2,7 +2,7 @@
 CREATE TYPE "StatusReading" AS ENUM ('READING', 'COMPLETED', 'WISHLIST', 'ABANDONED');
 
 -- CreateEnum
-CREATE TYPE "GoalsType" AS ENUM ('DAILY_PAGES', 'BOOKS_PER_MONTH', 'BOOKS_PER_YEAR');
+CREATE TYPE "GoalsType" AS ENUM ('DAILY_PAGES', 'BOOKS_PER_MONTH', 'BOOKS_PER_YEAR', 'TOTAL_PAGES', 'SPECIFIC_BOOK');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -24,6 +24,7 @@ CREATE TABLE "books" (
     "genre" TEXT[],
     "status" "StatusReading" NOT NULL DEFAULT 'WISHLIST',
     "total_pages" INTEGER NOT NULL,
+    "current_page" INTEGER NOT NULL DEFAULT 0,
     "start_date" TIMESTAMP(3),
     "end_date" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,13 +53,27 @@ CREATE TABLE "goals" (
     "id" TEXT NOT NULL,
     "type" "GoalsType" NOT NULL,
     "target_value" INTEGER NOT NULL,
+    "current_value" INTEGER NOT NULL DEFAULT 0,
     "start_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "end_date" TIMESTAMP(3),
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
+    "book_id" TEXT,
 
     CONSTRAINT "goals_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "goal_progress" (
+    "id" TEXT NOT NULL,
+    "value" INTEGER NOT NULL,
+    "note" TEXT,
+    "logged_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "goal_id" TEXT NOT NULL,
+
+    CONSTRAINT "goal_progress_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -94,25 +109,40 @@ CREATE INDEX "readingLogs_date_idx" ON "readingLogs"("date");
 CREATE INDEX "goals_user_id_idx" ON "goals"("user_id");
 
 -- CreateIndex
+CREATE INDEX "goals_user_id_is_active_idx" ON "goals"("user_id", "is_active");
+
+-- CreateIndex
+CREATE INDEX "goal_progress_goal_id_idx" ON "goal_progress"("goal_id");
+
+-- CreateIndex
+CREATE INDEX "goal_progress_goal_id_logged_at_idx" ON "goal_progress"("goal_id", "logged_at");
+
+-- CreateIndex
 CREATE INDEX "notes_book_id_idx" ON "notes"("book_id");
 
 -- CreateIndex
 CREATE INDEX "notes_user_id_idx" ON "notes"("user_id");
 
 -- AddForeignKey
-ALTER TABLE "books" ADD CONSTRAINT "books_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "books" ADD CONSTRAINT "books_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "readingLogs" ADD CONSTRAINT "readingLogs_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "readingLogs" ADD CONSTRAINT "readingLogs_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "readingLogs" ADD CONSTRAINT "readingLogs_book_id_fkey" FOREIGN KEY ("book_id") REFERENCES "books"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "readingLogs" ADD CONSTRAINT "readingLogs_book_id_fkey" FOREIGN KEY ("book_id") REFERENCES "books"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "goals" ADD CONSTRAINT "goals_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "goals" ADD CONSTRAINT "goals_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "notes" ADD CONSTRAINT "notes_book_id_fkey" FOREIGN KEY ("book_id") REFERENCES "books"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "goals" ADD CONSTRAINT "goals_book_id_fkey" FOREIGN KEY ("book_id") REFERENCES "books"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "notes" ADD CONSTRAINT "notes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "goal_progress" ADD CONSTRAINT "goal_progress_goal_id_fkey" FOREIGN KEY ("goal_id") REFERENCES "goals"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "notes" ADD CONSTRAINT "notes_book_id_fkey" FOREIGN KEY ("book_id") REFERENCES "books"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "notes" ADD CONSTRAINT "notes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

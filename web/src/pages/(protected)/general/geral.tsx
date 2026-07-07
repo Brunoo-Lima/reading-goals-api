@@ -4,16 +4,18 @@ import { CardProgressDaily } from './_components/card-progress-daily';
 import { CardReadingCurrently } from './_components/card-reading-currently';
 import { QuickStats } from './_components/quick-stats';
 import { ReadingGoalCard } from './_components/reading-goal-card';
+import { useStreak } from '@/hooks/use-streak';
 
 export function GeneralPage() {
-  const { books, goal, streak, completedBooks, readingBooks, totalPagesRead } =
+  const { books, goal, completedBooks, readingBooks, totalPagesRead } =
     useBooks();
+  const { streak } = useStreak();
 
   return (
     <section className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Visao Geral</h1>
+        <h1 className="text-2xl font-bold text-foreground">Visão Geral</h1>
         <p className="text-muted-foreground">
           Acompanhe seu progresso de leitura
         </p>

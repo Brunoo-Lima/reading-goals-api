@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { StatsCard } from './_components/stats-card';
 import { ReadingStats } from './_components/reading-stats';
+import { useStreak } from '@/hooks/use-streak';
 
 export function StatisticsPage() {
   const {
@@ -25,10 +26,10 @@ export function StatisticsPage() {
     completedBooks,
     readingBooks,
     toReadBooks,
-    streak,
     totalPagesRead,
     goal,
   } = useBooks();
+  const { streak } = useStreak();
 
   const stats = [
     {

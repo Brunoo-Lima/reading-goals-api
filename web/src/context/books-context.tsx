@@ -1,5 +1,4 @@
 import type { IBook, ICreateBook, StatusReading } from '@/@types/IBook';
-import type { IStreak } from '@/@types/IStreak';
 import {
   createContext,
   useState,
@@ -12,9 +11,6 @@ import { useCreateBook, useDeleteBook } from '@/services/book';
 import { toast } from 'sonner';
 
 interface IBooksContext {
-  streak: IStreak;
-  setStreak: (streak: IStreak) => void;
-
   books: IBook[];
   setBooks: Dispatch<SetStateAction<IBook[]>>;
 
@@ -37,12 +33,6 @@ export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
-
-  const [streak, setStreak] = useState<IStreak>({
-    currentStreak: 0,
-    lastReadDate: null,
-    longestStreak: 0,
-  });
 
   const bookService = useCreateBook();
   const deleteService = useDeleteBook();
@@ -109,9 +99,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   }, 0);
 
   const contextValue = {
-    streak,
-    setStreak,
-
     books,
     setBooks,
     goal,

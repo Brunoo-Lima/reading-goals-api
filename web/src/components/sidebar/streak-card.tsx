@@ -1,9 +1,9 @@
-import { useBooks } from '@/hooks/use-books';
+import { useStreak } from '@/hooks/use-streak';
 import { cn } from '@/lib/utils';
 import { FlameIcon } from 'lucide-react';
 
 export const StreakCard = () => {
-  const { streak } = useBooks();
+  const { streak } = useStreak();
 
   return (
     <div className="p-4">

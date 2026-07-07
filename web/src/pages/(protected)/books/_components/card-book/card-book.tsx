@@ -1,7 +1,8 @@
-import type { IBook, StatusReading } from '@/@types/IBook';
+import type { IBook } from '@/@types/IBook';
 import { Card } from '@/components/ui/card';
 import { BookOpenIcon, StarIcon } from 'lucide-react';
 import { Dropdown } from './dropdown';
+import { statusColors, statusLabels } from '@/utils/status-labels';
 
 interface ICardBookProps {
   book: IBook;
@@ -16,31 +17,13 @@ export const CardBook = ({
   onDelete,
   onView,
 }: ICardBookProps) => {
-  // const progress =
-  //   book.currentPage && book.totalPages
-  //     ? Math.round((book.currentPage / book.totalPages) * 100)
-  //     : 0;
-
   const currentPage = book.current_page ?? 0;
 
-  const progress = book.total_pages
-    ? Math.round((currentPage / book.total_pages) * 100)
-    : 0;
+  const progress =
+    currentPage && book.total_pages
+      ? Math.round((currentPage / book.total_pages) * 100)
+      : 0;
   const rating = Math.round(Math.random() * 5);
-
-  const statusLabels: Record<StatusReading, string> = {
-    WISHLIST: 'Quero Ler',
-    READING: 'Lendo',
-    COMPLETED: 'Concluído',
-    ABANDONED: 'Abandonado',
-  };
-
-  const statusColors: Record<StatusReading, string> = {
-    WISHLIST: 'bg-secondary text-secondary-foreground',
-    READING: 'bg-accent text-accent-foreground',
-    COMPLETED: 'bg-primary text-primary-foreground',
-    ABANDONED: 'bg-destructive text-destructive-foreground',
-  };
 
   return (
     <Card className="group relative h-[250px] overflow-hidden border-border/50 bg-card hover:shadow-md transition-all duration-300">
@@ -82,7 +65,6 @@ export const CardBook = ({
               />
             </div>
             <p className="text-xs text-muted-foreground mt-1.5">
-              {/* Página {book.currentPage} de {book.totalPages} */}
               Página {currentPage} de {book.total_pages}
             </p>
           </div>

@@ -59,6 +59,7 @@ export const FormBook = ({
     formState: { errors },
     control,
     reset,
+    watch,
   } = useForm<IBookFormSchema>({
     resolver: zodResolver(bookFormSchema as any),
     defaultValues: {
@@ -67,12 +68,15 @@ export const FormBook = ({
       genre: initialData?.genre || [],
       status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
+      current_page: initialData?.current_page || 0,
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
     },
   });
 
   const { addBook } = useBooks();
+
+  const statusWatching = watch('status');
 
   useEffect(() => {
     reset({
@@ -81,6 +85,7 @@ export const FormBook = ({
       genre: initialData?.genre.map((genre) => genre) || [],
       status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
+      current_page: initialData?.current_page || 0,
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
     });
@@ -232,6 +237,22 @@ export const FormBook = ({
               </FieldError>
             )}
           </Field>
+
+          {statusWatching === 'READING' && (
+            <Field className="gap-2">
+              <FieldLabel>Página atual (opcional)</FieldLabel>
+              <Input
+                type="number"
+                placeholder="Página atual"
+                {...register('current_page', { valueAsNumber: true })}
+              />
+              {errors.current_page && (
+                <FieldError className="text-red-500">
+                  {errors.current_page.message}
+                </FieldError>
+              )}
+            </Field>
+          )}
 
           <Field className="gap-2">
             <FieldLabel>Data de início</FieldLabel>

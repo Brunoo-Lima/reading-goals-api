@@ -17,6 +17,12 @@ export const bookFormSchema = z
     total_pages: z.coerce.number('Páginas é obrigatório').min(1, {
       error: 'Páginas é obrigatório',
     }),
+    current_page: z.coerce
+      .number('Página atual é obrigatório')
+      .min(0, {
+        error: 'Página atual é obrigatório',
+      })
+      .optional(),
     start_date: z.date({
       error: 'Deve ser uma data válida',
     }),

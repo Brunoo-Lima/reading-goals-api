@@ -45,10 +45,14 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
 
   const bookService = useCreateBook();
 
-  const addBook = async (book: Omit<ICreateBook, 'id' | 'created_at'>) => {
+  const addBook = async (book: ICreateBook) => {
     const newBook: ICreateBook = {
       ...book,
       start_date: new Date(),
+      current_page:
+        book.status === 'COMPLETED'
+          ? book.total_pages
+          : (book.current_page ?? 0),
     };
 
     const createdBook = await bookService.mutateAsync(newBook);
@@ -82,8 +86,8 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     if (book.status === 'COMPLETED' && book.total_pages) {
       return acc + book.total_pages;
     }
-    if (book.status === 'READING' && book.currentPage) {
-      return acc + book.currentPage;
+    if (book.status === 'READING' && book.current_page) {
+      return acc + book.current_page;
     }
     return acc;
   }, 0);

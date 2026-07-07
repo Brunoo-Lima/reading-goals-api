@@ -1,7 +1,8 @@
 import type { IUserRequest } from '@/@types/IUser';
 import { useUserLogin } from '@/services/auth';
 import { getUser } from '@/services/user';
-import { createContext, useEffect, useState } from 'react';
+import { refreshAuthSession } from '@/services/api';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -30,11 +31,22 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const navigate = useNavigate();
   const login = useUserLogin();
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (!refreshToken) {
       setUser(null);
+      return;
+    }
+
+    try {
+      await refreshAuthSession(refreshToken);
+    } catch (error) {
+      console.error(error);
+      setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      navigate('/');
       return;
     }
 
@@ -52,7 +64,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         };
       });
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -66,7 +78,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     };
 
     getUserData();
-  }, []);
+  }, [refreshUser]);
 
   async function loginService(email: string, password: string) {
     setIsLoading(true);

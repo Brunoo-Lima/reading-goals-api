@@ -3,6 +3,11 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 
+export interface RefreshAuthSessionResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
 // ── Tipo para os itens da fila ────────────────────────────────
 interface QueueItem {
   resolve: (token: string) => void;
@@ -13,6 +18,19 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL + '/api/v1',
   timeout: 10000,
 });
+
+export const refreshAuthSession = async (refreshToken: string) => {
+  const { data } = await axios.post<RefreshAuthSessionResponse>(
+    `${import.meta.env.VITE_API_URL}/api/v1/auth/refresh-token`,
+    { refreshToken },
+  );
+
+  localStorage.setItem('accessToken', data.accessToken);
+  localStorage.setItem('refreshToken', data.refreshToken);
+  api.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
+
+  return data;
+};
 
 // ─── REQUEST: injeta o token em toda requisição ───────────────
 api.interceptors.request.use(
@@ -81,13 +99,12 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post<{ accessToken: string }>(
-          `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-          { refreshToken },
-        );
+        const data = await refreshAuthSession(refreshToken);
 
-        localStorage.setItem('accessToken', data.accessToken);
-        api.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${data.accessToken}`,
+        };
 
         processQueue(null, data.accessToken);
         return api(originalRequest);

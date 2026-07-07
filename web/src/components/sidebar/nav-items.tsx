@@ -8,8 +8,8 @@ import {
   UserIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/use-auth';
+import { Button } from '../ui/button';
 
 const navItems = [
   { href: '/geral', label: 'Geral', icon: LayoutDashboardIcon },

@@ -34,7 +34,9 @@ const createBookSchema = z.strictObject(
       .number({
         message: 'Current page must be a number',
       })
-      .positive()
+      .nonnegative({
+        message: 'Current page must be greater than or equal to 0',
+      })
       .optional(),
     start_date: z.iso.datetime({
       error: 'Date must be a valid date',

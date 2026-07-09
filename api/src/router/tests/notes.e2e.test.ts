@@ -15,6 +15,7 @@ describe('Notes Routes E2E tests', () => {
     ...book,
     id: undefined,
     total_pages: 400,
+    rating: 5,
     start_date: '2026-06-08T01:28:00.523Z',
     end_date: '2026-06-19T01:28:00.523Z',
     created_at: undefined,
@@ -23,11 +24,10 @@ describe('Notes Routes E2E tests', () => {
 
   const noteData = {
     content: 'create note content',
-    rating: 5,
     page_number: 300,
   };
 
-  test('POST /api/v1/notes should return 201 when note is created', async () => {
+  test('POST /api/v1/notes?bookId should return 201 when note is created', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/v1/users')
       .send(userData);
@@ -46,7 +46,7 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const response = await request(app)
-      .post(`/api/v1/notes/${createdBook.id}`)
+      .post(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
@@ -72,7 +72,7 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/v1/notes/${createdBook.id}`)
+      .post(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
@@ -104,7 +104,7 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/v1/notes/${createdBook.id}`)
+      .post(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
@@ -135,7 +135,7 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/v1/notes/${createdBook.id}`)
+      .post(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
@@ -169,7 +169,7 @@ describe('Notes Routes E2E tests', () => {
       });
 
     const { body: createdNote } = await request(app)
-      .post(`/api/v1/notes/${createdBook.id}`)
+      .post(`/api/v1/notes?bookId=${createdBook.id}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 
@@ -218,7 +218,7 @@ describe('Notes Routes E2E tests', () => {
     expect(response.status).toBe(404);
   });
 
-  test('POST /api/v1/notes/:bookId should return 400 when bookId is invalid', async () => {
+  test('POST /api/v1/notes?bookId should return 400 when bookId is invalid', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/v1/users')
       .send(userData);
@@ -229,7 +229,7 @@ describe('Notes Routes E2E tests', () => {
     });
 
     const response = await request(app)
-      .post(`/api/v1/notes/${faker.string.uuid()}`)
+      .post(`/api/v1/notes?bookId=${faker.string.uuid()}`)
       .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
       .send(noteData);
 

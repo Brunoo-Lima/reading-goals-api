@@ -15,6 +15,7 @@ describe('Books Routes E2E tests', () => {
     ...book,
     id: undefined,
     total_pages: 400,
+    rating: 5,
     start_date: '2026-06-07T01:28:00.523Z',
     end_date: '2026-06-07T01:28:00.523Z',
     created_at: undefined,

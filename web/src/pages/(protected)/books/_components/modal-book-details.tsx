@@ -57,7 +57,7 @@ export function ModalBookDetails({
             </TabsList>
 
             <TabsContent value="details" className="space-y-4 mt-4">
-              <DetailBook book={book} note={note} />
+              <DetailBook book={book} />
             </TabsContent>
 
             <TabsContent value="notes" className="mt-4 space-y-4">

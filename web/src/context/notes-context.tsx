@@ -5,7 +5,8 @@ import {
   type SetStateAction,
 } from 'react';
 import type { ICreateNote, INote } from '@/@types/INote';
-import { useCreateNote } from '@/services/notes';
+import { useCreateNote, useUpdateNote } from '@/services/notes';
+import { toast } from 'sonner';
 
 interface INotesContext {
   notes: INote[];
@@ -15,7 +16,11 @@ interface INotesContext {
   setNote: Dispatch<SetStateAction<INote | null>>;
 
   addNote: (note: ICreateNote, bookId: string) => Promise<ICreateNote>;
-  // updateBook: (id: string, updates: ICreateBook) => Promise<void>;
+  updateNote: (
+    id: string,
+    updates: ICreateNote,
+    bookId: string,
+  ) => Promise<void>;
   // deleteBook: (id: string) => Promise<void>;
   // getBooksByStatus: (status: StatusReading) => IBook[];
 }
@@ -27,6 +32,7 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
   const [note, setNote] = useState<INote | null>(null);
 
   const createNoteService = useCreateNote();
+  const updateNoteService = useUpdateNote();
 
   const addNote = async (note: ICreateNote, bookId: string) => {
     // const newNote: ICreateNote = {
@@ -43,31 +49,25 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
     return createdNote;
   };
 
-  // const updateBook = async (id: string, updates: ICreateBook) => {
-  //         : (book.current_page ?? 0),
-  //   };
-
-  //   const createdBook = await createBookService.mutateAsync(newBook);
-  //   setBooks((prev) => [...prev, createdBook]);
-
-  //   return createdBook;
-  // };
-
-  // const updateBook = async (id: string, updates: ICreateBook) => {
-  //   await updateBookService.mutateAsync(
-  //     { id, book: updates },
-  //     {
-  //       onSuccess: () => {
-  //         setBooks((prev) =>
-  //           prev.map((book) =>
-  //             book.id === id ? { ...book, ...updates } : book,
-  //           ),
-  //         );
-  //         toast.success('Livro atualizado com sucesso!');
-  //       },
-  //     },
-  //   );
-  // };
+  const updateNote = async (
+    noteId: string,
+    updates: ICreateNote,
+    bookId: string,
+  ) => {
+    await updateNoteService.mutateAsync(
+      { noteId, note: updates, bookId },
+      {
+        onSuccess: () => {
+          setNotes((prev) =>
+            prev.map((note) =>
+              note.id === noteId ? { ...note, ...updates } : note,
+            ),
+          );
+          toast.success('Nota atualizada com sucesso!');
+        },
+      },
+    );
+  };
 
   // const deleteBook = async (id: string) => {
   //   try {
@@ -92,6 +92,7 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
     note,
     setNote,
     addNote,
+    updateNote,
   };
 
   return (

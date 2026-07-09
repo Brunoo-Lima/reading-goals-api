@@ -1,18 +1,18 @@
 import type { IBook } from '@/@types/IBook';
-import type { INote } from '@/@types/INote';
 import { statusLabels } from '@/utils/status-labels';
 import { BookOpenIcon, CalendarIcon, StarIcon } from 'lucide-react';
 
 interface IDetailBookProps {
   book: IBook;
-  note: INote | null;
 }
 
-export const DetailBook = ({ book, note }: IDetailBookProps) => {
+export const DetailBook = ({ book }: IDetailBookProps) => {
   const progress =
     book.current_page && book.total_pages
       ? Math.round((book.current_page / book.total_pages) * 100)
       : 0;
+
+  const rating = book.rating ?? 0;
 
   return (
     <div className="space-y-6">
@@ -48,7 +48,7 @@ export const DetailBook = ({ book, note }: IDetailBookProps) => {
         </div>
       )}
 
-      {book.status === 'COMPLETED' && note?.rating && (
+      {book.status === 'COMPLETED' && rating && (
         <div>
           <p className="text-sm font-medium mb-2">Sua Avaliação</p>
           <div className="flex items-center gap-1">
@@ -56,7 +56,7 @@ export const DetailBook = ({ book, note }: IDetailBookProps) => {
               <StarIcon
                 key={i}
                 className={`h-5 w-5 ${
-                  i < note.rating! ? 'fill-accent text-accent' : 'text-border'
+                  i < rating ? 'fill-accent text-accent' : 'text-border'
                 }`}
               />
             ))}
@@ -83,27 +83,6 @@ export const DetailBook = ({ book, note }: IDetailBookProps) => {
           </div>
         </div>
       )}
-
-      {/* {notes && (
-        <div>
-          <div className="flex items-center gap-2 text-sm font-medium mb-2">
-            <FileTextIcon className="h-4 w-4" />
-            <span>Notas</span>
-          </div>
-          <p className="text-sm text-muted-foreground bg-secondary/30 rounded-lg p-3">
-            {notes.length > 0
-              ? notes.map((note) => (
-                  <div key={note.id} className="mb-2">
-                    <p>{note.content}</p>
-                    <span className="text-xs text-muted-foreground">
-                      Página: {note.page_number}
-                    </span>
-                  </div>
-                ))
-              : 'Nenhuma nota cadastrada.'}
-          </p>
-        </div>
-      )} */}
     </div>
   );
 };

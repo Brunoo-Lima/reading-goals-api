@@ -69,6 +69,7 @@ export const FormBook = ({
       status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
       current_page: initialData?.current_page || 0,
+      rating: '0',
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
     },
@@ -86,6 +87,7 @@ export const FormBook = ({
       status: initialData?.status || 'READING',
       total_pages: initialData?.total_pages || 0,
       current_page: initialData?.current_page || 0,
+      rating: initialData?.rating?.toString() || '0',
       start_date: initialData?.start_date
         ? new Date(initialData.start_date)
         : new Date(),
@@ -96,11 +98,16 @@ export const FormBook = ({
   }, [initialData, reset]);
 
   const onSubmit = async (data: IBookFormSchema) => {
+    const bookData = {
+      ...data,
+      rating: Number(data.rating) || 0,
+    };
+
     try {
       if (initialData) {
-        await updateBook(initialData.id, data);
+        await updateBook(initialData.id, bookData);
       } else {
-        await addBook(data);
+        await addBook(bookData);
       }
       onOpenChange(false);
       reset();
@@ -257,6 +264,39 @@ export const FormBook = ({
               {errors.current_page && (
                 <FieldError className="text-red-500">
                   {errors.current_page.message}
+                </FieldError>
+              )}
+            </Field>
+          )}
+
+          {statusWatching === 'COMPLETED' && (
+            <Field className="gap-2">
+              <FieldLabel>Avaliação</FieldLabel>
+              <Controller
+                control={control}
+                name="rating"
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma opção" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
+              {errors.rating && (
+                <FieldError className="text-red-500">
+                  {errors.rating.message}
                 </FieldError>
               )}
             </Field>

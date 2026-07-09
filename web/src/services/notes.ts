@@ -5,7 +5,7 @@ import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 export const createNote = async (note: ICreateNote, bookId: string) => {
-  const { data } = await api.post(`/notes/${bookId}`, note);
+  const { data } = await api.post(`/notes?bookId=${bookId}`, note);
 
   return data;
 };
@@ -29,4 +29,34 @@ export const useCreateNote = () => {
 export const getNotesByBookId = async (bookId: string) => {
   const { data } = await api.get(`/notes?bookId=${bookId}`);
   return data;
+};
+
+export const updateNote = async (
+  note: ICreateNote,
+  noteId: string,
+  bookId: string,
+) => {
+  const { data } = await api.patch(`/notes/${noteId}?bookId=${bookId}`, note);
+  return data;
+};
+
+export const useUpdateNote = () => {
+  return useMutation({
+    mutationKey: ['updateNote'],
+    mutationFn: ({
+      note,
+      noteId,
+      bookId,
+    }: {
+      note: ICreateNote;
+      noteId: string;
+      bookId: string;
+    }) => {
+      return updateNote(note, noteId, bookId);
+    },
+    onError: (error: AxiosError) => {
+      const message = error.message || 'Erro ao atualizar nota.';
+      toast.error(message);
+    },
+  });
 };

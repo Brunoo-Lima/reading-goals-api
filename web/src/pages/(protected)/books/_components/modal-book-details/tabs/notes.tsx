@@ -18,11 +18,6 @@ export const Notes = ({ note, setShowFormNote, setNote }: INotesProps) => {
         <strong>Número da página: {note?.page_number}</strong>
       </div>
 
-      <div className="flex items-center gap-2 mt-4">
-        <p>Avaliação:</p>
-        <span>{note?.rating} / 5</span>
-      </div>
-
       <p className="mt-4 text-muted-foreground">
         Nota cadastrada em{' '}
         {note && new Date(note.updated_at).toLocaleDateString('pt-BR')}

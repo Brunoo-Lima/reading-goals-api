@@ -23,7 +23,7 @@ export const CardBook = ({
     currentPage && book.total_pages
       ? Math.round((currentPage / book.total_pages) * 100)
       : 0;
-  const rating = Math.round(Math.random() * 5);
+  const rating = book.rating ?? 0;
 
   return (
     <Card className="group relative h-[250px] overflow-hidden border-border/50 bg-card hover:shadow-md transition-all duration-300">

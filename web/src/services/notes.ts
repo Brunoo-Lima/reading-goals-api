@@ -25,3 +25,8 @@ export const useCreateNote = () => {
     },
   });
 };
+
+export const getNotesByBookId = async (bookId: string) => {
+  const { data } = await api.get(`/notes?bookId=${bookId}`);
+  return data;
+};

@@ -14,6 +14,9 @@ interface IBooksContext {
   books: IBook[];
   setBooks: Dispatch<SetStateAction<IBook[]>>;
 
+  book: IBook | null;
+  setBook: Dispatch<SetStateAction<IBook | null>>;
+
   goal: IReadingGoal;
   completedBooks: IBook[];
   readingBooks: IBook[];
@@ -32,6 +35,7 @@ export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const [books, setBooks] = useState<IBook[]>([]);
+  const [book, setBook] = useState<IBook | null>(null);
   const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
 
   const createBookService = useCreateBook();
@@ -112,6 +116,8 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const contextValue = {
     books,
     setBooks,
+    book,
+    setBook,
     goal,
     totalPagesRead,
 

@@ -62,7 +62,12 @@ export const Dropdown = ({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <FormNote initialData={null} open={open} onOpenChange={setOpen} />
+      <FormNote
+        initialData={null}
+        bookId={book.id}
+        open={open}
+        onOpenChange={setOpen}
+      />
     </>
   );
 };

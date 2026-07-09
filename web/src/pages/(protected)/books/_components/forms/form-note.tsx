@@ -58,8 +58,6 @@ export const FormNote = ({
 
   const { addNote } = useNotes();
 
-  console.log('bookId', bookId);
-
   useEffect(() => {
     reset({
       content: initialData?.content || '',

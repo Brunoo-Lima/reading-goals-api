@@ -9,7 +9,7 @@ import { useCreateNote } from '@/services/notes';
 
 interface INotesContext {
   notes: INote[];
-  // setNotes: Dispatch<SetStateAction<INote[]>>;
+  setNotes: Dispatch<SetStateAction<INote[]>>;
 
   note: INote | null;
   setNote: Dispatch<SetStateAction<INote | null>>;
@@ -88,6 +88,7 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
 
   const contextValue = {
     notes,
+    setNotes,
     note,
     setNote,
     addNote,

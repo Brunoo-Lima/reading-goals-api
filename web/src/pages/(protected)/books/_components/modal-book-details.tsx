@@ -9,10 +9,11 @@ import {
 import { FileTextIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FormNote } from './forms/form-note';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNotes } from '@/hooks/use-notes';
 import { DetailBook } from './modal-book-details/tabs/detail-book';
 import { Notes } from './modal-book-details/tabs/notes';
+import { getNotesByBookId } from '@/services/notes';
 
 interface IModalBookDetailsProps {
   book: IBook | null;
@@ -26,7 +27,18 @@ export function ModalBookDetails({
   onOpenChange,
 }: IModalBookDetailsProps) {
   const [showFormNote, setShowFormNote] = useState<boolean>(false);
-  const { note, notes, setNote } = useNotes();
+  const { note, notes, setNote, setNotes } = useNotes();
+
+  useEffect(() => {
+    const fetchNotesByBookId = async () => {
+      if (book && book.id) {
+        const notes = await getNotesByBookId(book.id);
+        setNotes(notes);
+      }
+    };
+
+    fetchNotesByBookId();
+  }, [book, setNotes]);
 
   if (!book) return null;
 
@@ -48,13 +60,18 @@ export function ModalBookDetails({
               <DetailBook book={book} note={note} />
             </TabsContent>
 
-            <TabsContent value="notes" className="mt-4">
+            <TabsContent value="notes" className="mt-4 space-y-4">
               {notes.length > 0 ? (
-                <Notes
-                  note={note}
-                  setShowFormNote={setShowFormNote}
-                  setNote={setNote}
-                />
+                <div className="flex flex-col gap-4 h-[300px] overflow-y-auto pr-2 ">
+                  {notes.map((note) => (
+                    <Notes
+                      key={note.id}
+                      note={note}
+                      setNote={setNote}
+                      setShowFormNote={setShowFormNote}
+                    />
+                  ))}
+                </div>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-4 py-8">
                   <FileTextIcon className="size-8 text-muted-foreground" />

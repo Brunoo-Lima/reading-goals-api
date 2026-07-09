@@ -18,9 +18,9 @@ export const TabsComponent = ({
   onEditBook,
   onAddBook,
 }: ITabsComponentsProps) => {
-  const { books, deleteBook, getBooksByStatus, setBooks } = useBooks();
+  const { books, deleteBook, getBooksByStatus, setBooks, book, setBook } =
+    useBooks();
 
-  const [viewingBook, setViewingBook] = useState<IBook | null>(null);
   const [activeTab, setActiveTab] = useState<string>('all');
   const getBookById = useGetBookById();
 
@@ -42,7 +42,7 @@ export const TabsComponent = ({
 
   const handleView = async (book: IBook) => {
     const bookData = await getBookById.mutateAsync(book.id);
-    setViewingBook(bookData);
+    setBook(bookData);
   };
 
   const handleDeleteBook = (book: IBook) => {
@@ -51,6 +51,8 @@ export const TabsComponent = ({
 
   const filteredBooks =
     activeTab === 'all' ? books : getBooksByStatus(activeTab as StatusReading);
+
+  // console.log('book', book);
 
   return (
     <>
@@ -96,10 +98,10 @@ export const TabsComponent = ({
       </Tabs>
 
       <ModalBookDetails
-        book={viewingBook}
-        open={!!viewingBook}
+        book={book}
+        open={!!book}
         onOpenChange={(open) => {
-          if (!open) setViewingBook(null);
+          if (!open) setBook(null);
         }}
       />
     </>

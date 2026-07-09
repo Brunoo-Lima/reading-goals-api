@@ -30,6 +30,7 @@ describe('Create Book Controller', () => {
       genre: ['Fiction', 'Mystery', 'Thriller'],
       status: StatusReading.WISHLIST,
       total_pages: faker.number.int(),
+      rating: faker.number.int({ min: 1, max: 5 }),
       start_date: '2026-04-04T01:28:00.523Z',
       user_id: faker.string.uuid(),
     },
@@ -133,6 +134,25 @@ describe('Create Book Controller', () => {
         total_pages: -1,
         start_date: '2026-04-04T01:28:00.523Z',
         user_id: faker.string.uuid(),
+      },
+    } as Partial<Request> as Request;
+
+    const result = await sut.execute(request);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('should return 400 if rating is invalid', async () => {
+    const { sut } = makeSut();
+
+    const request = {
+      params: {
+        bookId: faker.string.uuid(),
+        userId: faker.string.uuid(),
+      },
+      body: {
+        ...baseHttpRequest.body,
+        rating: 6,
       },
     } as Partial<Request> as Request;
 

@@ -24,7 +24,7 @@ export class CreateNoteController {
 
   async execute(request: Request) {
     try {
-      const bookId = request.params.bookId as string;
+      const bookId = request.query.bookId as string;
       const userId = request.params.userId as string;
 
       const isBookIdValid = checkIfIdIsValid(bookId);

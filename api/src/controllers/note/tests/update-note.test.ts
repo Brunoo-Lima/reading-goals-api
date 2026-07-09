@@ -33,7 +33,6 @@ describe('Update Note Controller', () => {
     },
     body: {
       content: faker.lorem.sentence(),
-      rating: faker.number.int({ min: 1, max: 5 }),
       page_number: 300,
     },
   } as Partial<Request> as Request;
@@ -125,14 +124,14 @@ describe('Update Note Controller', () => {
     expect(response.statusCode).toBe(404);
   });
 
-  test('should return 400 if rating is invalid', async () => {
+  test('should return 400 if body is invalid', async () => {
     const { sut } = makeSut();
 
     const httpRequest = {
       ...baseHttpRequest,
       body: {
         ...baseHttpRequest.body,
-        rating: 6,
+        content: '',
       },
     } as Partial<Request> as Request;
 

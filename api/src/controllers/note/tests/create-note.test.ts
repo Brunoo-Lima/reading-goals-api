@@ -26,13 +26,14 @@ describe('Create Note Controller', () => {
 
   const baseHttpRequest = {
     params: {
-      bookId: faker.string.uuid(),
       userId: faker.string.uuid(),
+    },
+    query: {
+      bookId: faker.string.uuid(),
     },
     body: {
       content: faker.lorem.sentence(),
-      rating: faker.number.int({ min: 1, max: 5 }),
-      page_number: 300,
+      page_number: 100,
     },
   } as Partial<Request> as Request;
 
@@ -50,8 +51,10 @@ describe('Create Note Controller', () => {
 
     const request = {
       params: {
-        bookId: 'invalid_id',
         userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: 'invalid_id',
       },
       body: {
         ...baseHttpRequest.body,
@@ -68,8 +71,10 @@ describe('Create Note Controller', () => {
 
     const request = {
       params: {
-        bookId: faker.string.uuid(),
         userId: 'invalid_id',
+      },
+      query: {
+        bookId: faker.string.uuid(),
       },
       body: {
         ...baseHttpRequest.body,
@@ -86,31 +91,14 @@ describe('Create Note Controller', () => {
 
     const request = {
       params: {
-        bookId: faker.string.uuid(),
         userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: faker.string.uuid(),
       },
       body: {
         ...baseHttpRequest.body,
         content: ' ',
-      },
-    } as Partial<Request> as Request;
-
-    const result = await sut.execute(request);
-
-    expect(result.statusCode).toBe(400);
-  });
-
-  test('should return 400 if rating is invalid', async () => {
-    const { sut } = makeSut();
-
-    const request = {
-      params: {
-        bookId: faker.string.uuid(),
-        userId: faker.string.uuid(),
-      },
-      body: {
-        ...baseHttpRequest.body,
-        rating: 6,
       },
     } as Partial<Request> as Request;
 
@@ -124,8 +112,10 @@ describe('Create Note Controller', () => {
 
     const request = {
       params: {
-        bookId: faker.string.uuid(),
         userId: faker.string.uuid(),
+      },
+      query: {
+        bookId: faker.string.uuid(),
       },
       body: {
         ...baseHttpRequest.body,

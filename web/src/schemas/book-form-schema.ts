@@ -23,6 +23,7 @@ export const bookFormSchema = z
         error: 'Página atual é obrigatório',
       })
       .optional(),
+    rating: z.coerce.string('Avaliação é obrigatória').optional(),
     start_date: z.date({
       error: 'Deve ser uma data válida',
     }),

@@ -11,8 +11,8 @@
     "eslint:check": "eslint src --ext .ts",
     "prettier:check": "prettier --check src",
     "test": "dotenv -e .env.test vitest --silent --passWithNoTests",
-    "test:run": "dotenv -e .env.test vitest run",
-    "test:coverage": "dotenv -e .env.test vitest run --coverage",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "dotenv -e .env.test vitest run e2e"
   },
   "keywords": [],

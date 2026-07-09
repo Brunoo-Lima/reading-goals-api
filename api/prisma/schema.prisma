@@ -36,8 +36,10 @@ model Book {
   status       StatusReading @default(WISHLIST)
   total_pages  Int
   current_page Int           @default(0)
-  start_date   DateTime?
-  end_date     DateTime?
+  rating       Int?
+
+  start_date DateTime?
+  end_date   DateTime?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -128,7 +130,6 @@ enum GoalsType {
 model Note {
   id          String   @id @default(uuid())
   content     String
-  rating      Int?
   page_number Int?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt

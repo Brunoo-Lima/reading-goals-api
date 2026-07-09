@@ -25,17 +25,21 @@ import {
 } from '@/schemas/note-form-schema';
 import type { INote } from '@/@types/INote';
 import { Textarea } from '@/components/ui/textarea';
+import { useNotes } from '@/hooks/use-notes';
+import { toast } from 'sonner';
 
 interface IFormNoteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialData: INote | null;
+  bookId: string;
 }
 
 export const FormNote = ({
   open,
   onOpenChange,
   initialData,
+  bookId,
 }: IFormNoteProps) => {
   const {
     register,
@@ -44,31 +48,41 @@ export const FormNote = ({
     control,
     reset,
   } = useForm<INoteFormSchema>({
-    resolver: zodResolver(noteFormSchema),
+    resolver: zodResolver(noteFormSchema as any),
     defaultValues: {
       content: '',
-      rating: 0,
+      rating: '0',
       page_number: 0,
     },
   });
 
+  const { addNote } = useNotes();
+
+  console.log('bookId', bookId);
+
   useEffect(() => {
     reset({
       content: initialData?.content || '',
-      rating: initialData?.rating || 0,
+      rating: initialData?.rating.toString() || '0',
       page_number: initialData?.page_number || 0,
     });
   }, [initialData, reset]);
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-
+  const onSubmit = async (data: INoteFormSchema) => {
     try {
-      alert('Nota salva com sucesso!');
+      addNote(
+        {
+          content: data.content,
+          rating: Number(data.rating) || 0,
+          page_number: data.page_number || 0,
+        },
+        bookId,
+      );
       onOpenChange(false);
       reset();
     } catch (error) {
       console.log(error);
+      toast.error('Erro ao criar nota.');
     }
   };
 
@@ -129,7 +143,7 @@ export const FormNote = ({
           </Field>
 
           <Field className="gap-2">
-            <FieldLabel>Total de páginas</FieldLabel>
+            <FieldLabel>Número da página</FieldLabel>
             <Input
               type="number"
               placeholder="Número da página"

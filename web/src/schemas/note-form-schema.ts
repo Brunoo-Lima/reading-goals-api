@@ -4,13 +4,7 @@ export const noteFormSchema = z.object({
   content: z.string('Conteúdo é obrigatório').trim().min(1, {
     error: 'Conteúdo é obrigatório',
   }),
-  rating: z
-    .number({
-      message: 'Avaliação é obrigatória',
-    })
-    .min(1, { error: 'Avaliação é obrigatória' })
-    .max(5, { error: 'Avaliação deve estar entre 1 e 5' })
-    .optional(),
+  rating: z.coerce.string('Avaliação é obrigatória').optional(),
   page_number: z
     .number({
       message: 'Número da página é obrigatório',

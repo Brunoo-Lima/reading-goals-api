@@ -5,7 +5,7 @@ import { CardBook } from './card-book/card-book';
 import { useBooks } from '@/hooks/use-books';
 import { useEffect, useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
-import { ModalBookDetails } from './modal-book-details';
+import { ModalBookDetails } from './modal-book-details/modal-book-details';
 import { getBooks, useGetBookById } from '@/services/book';
 import { toast } from 'sonner';
 
@@ -51,8 +51,6 @@ export const TabsComponent = ({
 
   const filteredBooks =
     activeTab === 'all' ? books : getBooksByStatus(activeTab as StatusReading);
-
-  // console.log('book', book);
 
   return (
     <>

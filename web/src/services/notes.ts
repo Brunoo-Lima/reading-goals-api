@@ -60,3 +60,21 @@ export const useUpdateNote = () => {
     },
   });
 };
+
+export const deleteNote = async (noteId: string) => {
+  const { data } = await api.delete(`/notes/${noteId}`);
+  return data;
+};
+
+export const useDeleteNote = () => {
+  return useMutation({
+    mutationKey: ['deleteNote'],
+    mutationFn: (noteId: string) => {
+      return deleteNote(noteId);
+    },
+    onError: (error: AxiosError) => {
+      const message = error.message || 'Erro ao deletar nota.';
+      toast.error(message);
+    },
+  });
+};

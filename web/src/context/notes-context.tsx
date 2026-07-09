@@ -5,7 +5,7 @@ import {
   type SetStateAction,
 } from 'react';
 import type { ICreateNote, INote } from '@/@types/INote';
-import { useCreateNote, useUpdateNote } from '@/services/notes';
+import { useCreateNote, useDeleteNote, useUpdateNote } from '@/services/notes';
 import { toast } from 'sonner';
 
 interface INotesContext {
@@ -21,7 +21,7 @@ interface INotesContext {
     updates: ICreateNote,
     bookId: string,
   ) => Promise<void>;
-  // deleteBook: (id: string) => Promise<void>;
+  deleteNote: (id: string) => Promise<void>;
   // getBooksByStatus: (status: StatusReading) => IBook[];
 }
 
@@ -33,13 +33,9 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
 
   const createNoteService = useCreateNote();
   const updateNoteService = useUpdateNote();
+  const deleteBookService = useDeleteNote();
 
   const addNote = async (note: ICreateNote, bookId: string) => {
-    // const newNote: ICreateNote = {
-    //   ...note,
-    //   book_id: bookId,
-    // };
-
     const createdNote = await createNoteService.mutateAsync({
       note,
       bookId,
@@ -69,22 +65,21 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
     );
   };
 
-  // const deleteBook = async (id: string) => {
-  //   try {
-  //     await deleteBookService.mutateAsync(id, {
-  //       onSuccess: () => {
-  //         setBooks((prev) => prev.filter((book) => book.id !== id));
+  const deleteNote = async (id: string) => {
+    try {
+      await deleteBookService.mutateAsync(id, {
+        onSuccess: () => {
+          setNotes((prev) => prev.filter((note) => note.id !== id));
 
-  //         setTimeout(() => {
-  //           toast.success('Livro deletado com sucesso!');
-  //         }, 100);
-  //       },
-  //     });
-  //   } catch (e) {
-  //     console.error(e);
-  //     toast.error('Erro ao deletar o livro. Tente novamente.');
-  //   }
-  // };
+          setTimeout(() => {
+            toast.success('Nota deletado com sucesso!');
+          }, 100);
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const contextValue = {
     notes,
@@ -93,6 +88,7 @@ export const NotesProvider = ({ children }: React.PropsWithChildren) => {
     setNote,
     addNote,
     updateNote,
+    deleteNote,
   };
 
   return (

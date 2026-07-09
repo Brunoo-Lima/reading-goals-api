@@ -8,12 +8,13 @@ import {
 } from '@/components/ui/dialog';
 import { FileTextIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FormNote } from './forms/form-note';
+import { FormNote } from '../forms/form-note';
 import { useEffect, useState } from 'react';
 import { useNotes } from '@/hooks/use-notes';
-import { DetailBook } from './modal-book-details/tabs/detail-book';
-import { Notes } from './modal-book-details/tabs/notes';
+import { DetailBook } from './tabs/detail-book';
+import { Notes } from './tabs/notes';
 import { getNotesByBookId } from '@/services/notes';
+import { AlertDialogDeleteNote } from '../alert-dialog-delete-note';
 
 interface IModalBookDetailsProps {
   book: IBook | null;
@@ -27,7 +28,8 @@ export function ModalBookDetails({
   onOpenChange,
 }: IModalBookDetailsProps) {
   const [showFormNote, setShowFormNote] = useState<boolean>(false);
-  const { note, notes, setNote, setNotes } = useNotes();
+  const [showDeleteNote, setShowDeleteNote] = useState<boolean>(false);
+  const { note, notes, setNote, setNotes, deleteNote } = useNotes();
 
   useEffect(() => {
     const fetchNotesByBookId = async () => {
@@ -40,7 +42,12 @@ export function ModalBookDetails({
     fetchNotesByBookId();
   }, [book, setNotes]);
 
-  if (!book) return null;
+  const handleDeleteNote = (id: string) => {
+    deleteNote(id);
+    setShowDeleteNote(false);
+  };
+
+  if (!book) return;
 
   return (
     <>
@@ -69,6 +76,7 @@ export function ModalBookDetails({
                       note={note}
                       setNote={setNote}
                       setShowFormNote={setShowFormNote}
+                      setShowDeleteNote={setShowDeleteNote}
                     />
                   ))}
                 </div>
@@ -109,6 +117,14 @@ export function ModalBookDetails({
         initialData={note ?? null}
         onOpenChange={setShowFormNote}
       />
+
+      {showDeleteNote && (
+        <AlertDialogDeleteNote
+          open={showDeleteNote}
+          onOpenChange={setShowDeleteNote}
+          onDelete={() => handleDeleteNote(note?.id ?? '')}
+        />
+      )}
     </>
   );
 }

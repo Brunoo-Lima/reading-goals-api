@@ -6,9 +6,15 @@ interface INotesProps {
   note: INote | null;
   setShowFormNote: (show: boolean) => void;
   setNote: React.Dispatch<React.SetStateAction<INote | null>>;
+  setShowDeleteNote: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Notes = ({ note, setShowFormNote, setNote }: INotesProps) => {
+export const Notes = ({
+  note,
+  setShowFormNote,
+  setNote,
+  setShowDeleteNote,
+}: INotesProps) => {
   return (
     <div className="rounded-lg border p-4">
       <div className="flex flex-col gap-2">
@@ -35,7 +41,7 @@ export const Notes = ({ note, setShowFormNote, setNote }: INotesProps) => {
           Editar
         </Button>
 
-        <Button variant="destructive">
+        <Button variant="destructive" onClick={() => setShowDeleteNote(true)}>
           <Trash2Icon className="h-4 w-4 mr-2" />
           Excluir
         </Button>

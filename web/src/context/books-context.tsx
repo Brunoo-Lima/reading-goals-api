@@ -87,7 +87,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
       });
     } catch (e) {
       console.error(e);
-      toast.error('Erro ao deletar o livro. Tente novamente.');
     }
   };
 

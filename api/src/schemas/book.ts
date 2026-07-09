@@ -38,6 +38,13 @@ const createBookSchema = z.strictObject(
         message: 'Current page must be greater than or equal to 0',
       })
       .optional(),
+    rating: z
+      .number({
+        message: 'Rating is required',
+      })
+      .min(1, { error: 'Rating is required' })
+      .max(5, { error: 'Rating must be between 1 and 5' })
+      .optional(),
     start_date: z.iso.datetime({
       error: 'Date must be a valid date',
     }),

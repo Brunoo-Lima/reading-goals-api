@@ -1,18 +1,24 @@
 import type { IBook, ICreateBook, StatusReading } from '@/@types/IBook';
 import {
   createContext,
+  useEffect,
   useState,
   type Dispatch,
   type SetStateAction,
 } from 'react';
 import type { IReadingGoal } from '@/@types/IGoal';
 import { initialGoal } from '@/__mocks__/initial-goals';
-import { useCreateBook, useDeleteBook, useUpdateBook } from '@/services/book';
+import {
+  getBooks,
+  useCreateBook,
+  useDeleteBook,
+  useUpdateBook,
+} from '@/services/book';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/use-auth';
 
 interface IBooksContext {
   books: IBook[];
-  setBooks: Dispatch<SetStateAction<IBook[]>>;
 
   book: IBook | null;
   setBook: Dispatch<SetStateAction<IBook | null>>;
@@ -38,9 +44,29 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const [book, setBook] = useState<IBook | null>(null);
   const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
 
+  const { isAuthenticated } = useAuth();
+
   const createBookService = useCreateBook();
   const deleteBookService = useDeleteBook();
   const updateBookService = useUpdateBook();
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await getBooks();
+        setBooks(response);
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
+        );
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchBooks();
+    }
+  }, [setBooks, isAuthenticated]);
 
   const addBook = async (book: ICreateBook) => {
     const newBook: ICreateBook = {
@@ -114,7 +140,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
 
   const contextValue = {
     books,
-    setBooks,
     book,
     setBook,
     goal,

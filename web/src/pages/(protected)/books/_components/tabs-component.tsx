@@ -3,11 +3,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpenIcon, PlusIcon } from 'lucide-react';
 import { CardBook } from './card-book/card-book';
 import { useBooks } from '@/hooks/use-books';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
 import { ModalBookDetails } from './modal-book-details/modal-book-details';
-import { getBooks, useGetBookById } from '@/services/book';
-import { toast } from 'sonner';
+import { useGetBookById } from '@/services/book';
 
 interface ITabsComponentsProps {
   onEditBook: (book: IBook) => void;
@@ -18,27 +17,10 @@ export const TabsComponent = ({
   onEditBook,
   onAddBook,
 }: ITabsComponentsProps) => {
-  const { books, deleteBook, getBooksByStatus, setBooks, book, setBook } =
-    useBooks();
+  const { books, deleteBook, getBooksByStatus, book, setBook } = useBooks();
 
   const [activeTab, setActiveTab] = useState<string>('all');
   const getBookById = useGetBookById();
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await getBooks();
-        setBooks(response);
-      } catch (error) {
-        console.error(error);
-        toast.error(
-          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
-        );
-      }
-    };
-
-    fetchBooks();
-  }, [setBooks]);
 
   const handleView = async (book: IBook) => {
     const bookData = await getBookById.mutateAsync(book.id);

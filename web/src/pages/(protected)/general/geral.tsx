@@ -12,6 +12,7 @@ import {
   TitlePage,
 } from '@/components/ui/title-page';
 import { PageContainer } from '@/components/ui/page-container';
+import { PageMeta } from '@/components/page-meta';
 
 export function GeneralPage() {
   const { books, goal, completedBooks, readingBooks, totalPagesRead } =
@@ -19,36 +20,46 @@ export function GeneralPage() {
   const { streak } = useStreak();
 
   return (
-    <PageContainer>
-      <HeaderPage>
-        <ContentPage>
-          <TitlePage>Visão Geral</TitlePage>
-          <DescriptionPage> Acompanhe seu progresso de leitura</DescriptionPage>
-        </ContentPage>
-      </HeaderPage>
+    <>
+      <PageMeta
+        title="Visão Geral"
+        description="Acompanhe seu progresso de leitura"
+      />
 
-      {/* Stats Cards */}
-      <StatsCards books={books} />
+      <PageContainer>
+        <HeaderPage>
+          <ContentPage>
+            <TitlePage>Visão Geral</TitlePage>
+            <DescriptionPage>
+              {' '}
+              Acompanhe seu progresso de leitura
+            </DescriptionPage>
+          </ContentPage>
+        </HeaderPage>
 
-      {/* Main Grid */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Reading Goal */}
-        <ReadingGoalCard
-          goal={goal}
-          completedThisYear={completedBooks.length}
-        />
+        {/* Stats Cards */}
+        <StatsCards books={books} />
 
-        {/* Daily Progress Card */}
-        <CardProgressDaily />
-      </div>
+        {/* Main Grid */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Reading Goal */}
+          <ReadingGoalCard
+            goal={goal}
+            completedThisYear={completedBooks.length}
+          />
 
-      {/* Currently Reading */}
-      {readingBooks.length > 0 && (
-        <CardReadingCurrently readingBooks={readingBooks} />
-      )}
+          {/* Daily Progress Card */}
+          <CardProgressDaily />
+        </div>
 
-      {/* Quick Stats */}
-      <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
-    </PageContainer>
+        {/* Currently Reading */}
+        {readingBooks.length > 0 && (
+          <CardReadingCurrently readingBooks={readingBooks} />
+        )}
+
+        {/* Quick Stats */}
+        <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
+      </PageContainer>
+    </>
   );
 }

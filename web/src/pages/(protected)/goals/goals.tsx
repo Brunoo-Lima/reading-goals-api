@@ -10,6 +10,7 @@ import { MainCard } from './_components/main-card/main-card';
 import { BookDetails } from './_components/book-details';
 import { CardVisualizator } from './_components/card-visualizator';
 import { PageContainer } from '@/components/ui/page-container';
+import { PageMeta } from '@/components/page-meta';
 
 export function GoalsPage() {
   const { goal, updateGoal, completedBooks } = useBooks();
@@ -34,37 +35,44 @@ export function GoalsPage() {
   };
 
   return (
-    <PageContainer>
-      <HeaderPage>
-        <ContentPage>
-          <TitlePage>Metas de Leitura</TitlePage>
-          <DescriptionPage>
-            Defina e acompanhe suas metas anuais
-          </DescriptionPage>
-        </ContentPage>
-      </HeaderPage>
-
-      {/* Main Goal Card */}
-      <MainCard
-        goal={goal}
-        editingGoal={editingGoal}
-        setEditingGoal={setEditingGoal}
-        progress={progress}
-        booksPerMonth={booksPerMonth}
-        newTarget={newTarget}
-        setNewTarget={setNewTarget}
-        remaining={remaining}
-        completedBooks={completedBooks}
-        onSaveGoal={handleSaveGoal}
+    <>
+      <PageMeta
+        title="Metas de Leitura"
+        description="Defina e acompanhe suas metas anuais"
       />
 
-      {/* Progress Visualization */}
-      <CardVisualizator completedBooks={completedBooks} goal={goal} />
+      <PageContainer>
+        <HeaderPage>
+          <ContentPage>
+            <TitlePage>Metas de Leitura</TitlePage>
+            <DescriptionPage>
+              Defina e acompanhe suas metas anuais
+            </DescriptionPage>
+          </ContentPage>
+        </HeaderPage>
 
-      {/* Completed Books List */}
-      {completedBooks.length > 0 && (
-        <BookDetails completedBooks={completedBooks} goal={goal} />
-      )}
-    </PageContainer>
+        {/* Main Goal Card */}
+        <MainCard
+          goal={goal}
+          editingGoal={editingGoal}
+          setEditingGoal={setEditingGoal}
+          progress={progress}
+          booksPerMonth={booksPerMonth}
+          newTarget={newTarget}
+          setNewTarget={setNewTarget}
+          remaining={remaining}
+          completedBooks={completedBooks}
+          onSaveGoal={handleSaveGoal}
+        />
+
+        {/* Progress Visualization */}
+        <CardVisualizator completedBooks={completedBooks} goal={goal} />
+
+        {/* Completed Books List */}
+        {completedBooks.length > 0 && (
+          <BookDetails completedBooks={completedBooks} goal={goal} />
+        )}
+      </PageContainer>
+    </>
   );
 }

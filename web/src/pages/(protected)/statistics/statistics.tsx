@@ -19,6 +19,7 @@ import {
 import { StatsCard } from './_components/stats-card';
 import { ReadingStats } from './_components/reading-stats';
 import { useStreak } from '@/hooks/use-streak';
+import { PageMeta } from '@/components/page-meta';
 
 export function StatisticsPage() {
   const {
@@ -101,36 +102,43 @@ export function StatisticsPage() {
       : 'N/A';
 
   return (
-    <PageContainer>
-      <HeaderPage>
-        <ContentPage>
-          <TitlePage>Minhas Estatísticas</TitlePage>
-          <DescriptionPage>Suas estatísticas de uso</DescriptionPage>
-        </ContentPage>
-      </HeaderPage>
-
-      {/* Profile Card */}
-      <Card className="p-6 bg-card border-border/50">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-            <User className="h-8 w-8 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">Leitor</h2>
-            <p className="text-muted-foreground">Membro desde 2026</p>
-          </div>
-        </div>
-      </Card>
-
-      {/* Stats Grid */}
-      <StatsCard stats={stats} />
-
-      {/* Reading Stats Card */}
-      <ReadingStats
-        avgRating={avgRating}
-        completedBooks={completedBooks}
-        totalPagesRead={totalPagesRead}
+    <>
+      <PageMeta
+        title="Minhas Estatísticas"
+        description="Suas estatísticas de uso"
       />
-    </PageContainer>
+
+      <PageContainer>
+        <HeaderPage>
+          <ContentPage>
+            <TitlePage>Minhas Estatísticas</TitlePage>
+            <DescriptionPage>Suas estatísticas de uso</DescriptionPage>
+          </ContentPage>
+        </HeaderPage>
+
+        {/* Profile Card */}
+        <Card className="p-6 bg-card border-border/50">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-foreground">Leitor</h2>
+              <p className="text-muted-foreground">Membro desde 2026</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Stats Grid */}
+        <StatsCard stats={stats} />
+
+        {/* Reading Stats Card */}
+        <ReadingStats
+          avgRating={avgRating}
+          completedBooks={completedBooks}
+          totalPagesRead={totalPagesRead}
+        />
+      </PageContainer>
+    </>
   );
 }

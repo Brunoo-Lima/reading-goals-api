@@ -12,4 +12,5 @@ export type IAuth = IUserSafe & {
 
 export type IDecodedToken = JwtPayload & {
   userId: string;
+  rememberMe?: boolean;
 };

@@ -70,10 +70,11 @@ export function ModalBookDetails({
             <TabsContent value="notes" className="mt-4 space-y-4">
               {notes.length > 0 ? (
                 <div className="flex flex-col gap-4 h-[300px] overflow-y-auto pr-2 ">
-                  {notes.map((note) => (
+                  {notes.map((note, index) => (
                     <Notes
                       key={note.id}
                       note={note}
+                      index={index}
                       setNote={setNote}
                       setShowFormNote={setShowFormNote}
                       setShowDeleteNote={setShowDeleteNote}

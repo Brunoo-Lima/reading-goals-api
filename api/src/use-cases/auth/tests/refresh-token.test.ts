@@ -15,6 +15,7 @@ describe('Refresh Token Use Case', () => {
     execute() {
       return {
         userId: 'any_user_id',
+        rememberMe: true,
       };
     }
   }
@@ -44,6 +45,15 @@ describe('Refresh Token Use Case', () => {
       accessToken: 'any_access_token',
       refreshToken: 'any_refresh_token',
     });
+  });
+
+  test('should preserve rememberMe when refreshing tokens', async () => {
+    const { sut, tokensGeneratorAdapterStub } = makeSut();
+    const executeSpy = vi.spyOn(tokensGeneratorAdapterStub, 'execute');
+
+    await sut.execute('any_refresh_token');
+
+    expect(executeSpy).toHaveBeenCalledWith('any_user_id', true);
   });
 
   test('should throw if TokensVerifierAdapter throws', async () => {

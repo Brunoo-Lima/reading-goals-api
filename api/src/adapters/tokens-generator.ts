@@ -10,7 +10,7 @@ export class TokensGeneratorAdapter {
         { expiresIn: '15m' },
       ),
       refreshToken: jwt.sign(
-        { userId },
+        { userId, rememberMe },
         process.env.JWT_REFRESH_TOKEN_SECRET as string,
         {
           expiresIn: rememberMe ? REFRESH_TOKEN_EXPIRY_MS / 1000 : '7d',

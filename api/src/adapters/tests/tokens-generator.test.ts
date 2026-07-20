@@ -35,7 +35,7 @@ describe('TokensGeneratorAdapter', () => {
     );
     expect(jwt.sign).toHaveBeenNthCalledWith(
       2,
-      { userId: 'any_user_id' },
+      { userId: 'any_user_id', rememberMe: false },
       'refresh_secret',
       { expiresIn: '7d' },
     );
@@ -50,7 +50,7 @@ describe('TokensGeneratorAdapter', () => {
 
     expect(jwt.sign).toHaveBeenNthCalledWith(
       2,
-      { userId: 'any_user_id' },
+      { userId: 'any_user_id', rememberMe: true },
       'refresh_secret',
       { expiresIn: REFRESH_TOKEN_EXPIRY_MS / 1000 },
     );

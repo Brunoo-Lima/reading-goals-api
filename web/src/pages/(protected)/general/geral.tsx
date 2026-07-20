@@ -5,6 +5,13 @@ import { CardReadingCurrently } from './_components/card-reading-currently';
 import { QuickStats } from './_components/quick-stats';
 import { ReadingGoalCard } from './_components/reading-goal-card';
 import { useStreak } from '@/hooks/use-streak';
+import {
+  ContentPage,
+  DescriptionPage,
+  HeaderPage,
+  TitlePage,
+} from '@/components/ui/title-page';
+import { PageContainer } from '@/components/ui/page-container';
 
 export function GeneralPage() {
   const { books, goal, completedBooks, readingBooks, totalPagesRead } =
@@ -12,14 +19,13 @@ export function GeneralPage() {
   const { streak } = useStreak();
 
   return (
-    <section className="space-y-8">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Visão Geral</h1>
-        <p className="text-muted-foreground">
-          Acompanhe seu progresso de leitura
-        </p>
-      </div>
+    <PageContainer>
+      <HeaderPage>
+        <ContentPage>
+          <TitlePage>Visão Geral</TitlePage>
+          <DescriptionPage> Acompanhe seu progresso de leitura</DescriptionPage>
+        </ContentPage>
+      </HeaderPage>
 
       {/* Stats Cards */}
       <StatsCards books={books} />
@@ -42,12 +48,7 @@ export function GeneralPage() {
       )}
 
       {/* Quick Stats */}
-      <QuickStats
-        totalPagesRead={totalPagesRead}
-        completedBooks={completedBooks}
-        readingBooks={readingBooks}
-        streak={streak}
-      />
-    </section>
+      <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
+    </PageContainer>
   );
 }

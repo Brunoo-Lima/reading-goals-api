@@ -7,7 +7,7 @@ export const auth = (
   next: NextFunction,
 ) => {
   try {
-    const accessToken = request.headers?.authorization?.split('Bearer ')[1];
+    const accessToken = request.cookies?.accessToken;
 
     if (!accessToken) {
       return response.status(401).send({ message: 'Unauthorized' });

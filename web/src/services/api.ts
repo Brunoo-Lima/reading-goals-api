@@ -1,59 +1,26 @@
-import axios, {
-  type AxiosRequestConfig,
-  type InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { type AxiosRequestConfig } from 'axios';
 
-export interface RefreshAuthSessionResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-// ── Tipo para os itens da fila ────────────────────────────────
 interface QueueItem {
-  resolve: (token: string) => void;
+  resolve: () => void;
   reject: (error: unknown) => void;
 }
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL + '/api/v1',
   timeout: 10000,
+  withCredentials: true, // continua essencial: manda e recebe cookies
 });
 
-export const refreshAuthSession = async (refreshToken: string) => {
-  const { data } = await axios.post<RefreshAuthSessionResponse>(
-    `${import.meta.env.VITE_API_URL}/api/v1/auth/refresh-token`,
-    { refreshToken },
-  );
-
-  localStorage.setItem('accessToken', data.accessToken);
-  localStorage.setItem('refreshToken', data.refreshToken);
-  api.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
-
-  return data;
-};
-
-// ─── REQUEST: injeta o token em toda requisição ───────────────
-api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
-
-// ─── RESPONSE: trata erros globalmente ───────────────────────
 let isRefreshing = false;
 let failedQueue: QueueItem[] = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+const processQueue = (error: unknown) => {
   failedQueue.forEach((prom) => {
-    error ? prom.reject(error) : prom.resolve(token!);
+    error ? prom.reject(error) : prom.resolve();
   });
   failedQueue = [];
 };
 
-// Extende o tipo de config para incluir o flag _retry
 interface RetryConfig extends AxiosRequestConfig {
   _retry?: boolean;
 }
@@ -72,26 +39,11 @@ api.interceptors.response.use(
       !originalRequest?._retry &&
       !isAuthRoute
     ) {
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      if (!refreshToken) {
-        localStorage.clear();
-        return Promise.reject(
-          new Error('Sessão expirada. Faça login novamente.'),
-        );
-      }
-
       if (isRefreshing) {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
-            originalRequest.headers = {
-              ...originalRequest.headers,
-              Authorization: `Bearer ${token}`,
-            };
-            return api(originalRequest);
-          })
+          .then(() => api(originalRequest)) // cookie novo já está no navegador
           .catch((err) => Promise.reject(err));
       }
 
@@ -99,19 +51,15 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const data = await refreshAuthSession(refreshToken);
+        await api.post('/auth/refresh-token');
 
-        originalRequest.headers = {
-          ...originalRequest.headers,
-          Authorization: `Bearer ${data.accessToken}`,
-        };
-
-        processQueue(null, data.accessToken);
+        processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {
-        processQueue(refreshError, null);
-        localStorage.clear();
-        return Promise.reject(refreshError);
+        processQueue(refreshError);
+        return Promise.reject(
+          new Error('Sessão expirada. Faça login novamente.'),
+        );
       } finally {
         isRefreshing = false;
       }

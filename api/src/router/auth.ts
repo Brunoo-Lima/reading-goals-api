@@ -8,7 +8,7 @@ const authRoutes: IRouter = Router();
 
 authRoutes.post('/login', async (request: Request, response: Response) => {
   const loginController = makeLoginController();
-  const { statusCode, body } = await loginController.execute(request);
+  const { statusCode, body } = await loginController.execute(request, response);
 
   return response.status(statusCode).send(body);
 });

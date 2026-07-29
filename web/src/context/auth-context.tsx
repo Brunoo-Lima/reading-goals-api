@@ -1,7 +1,6 @@
 import type { IUserRequest } from '@/@types/IUser';
 import { useUserLogin } from '@/services/auth';
 import { getUser } from '@/services/user';
-import { refreshAuthSession } from '@/services/api';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -32,39 +31,40 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const login = useUserLogin();
 
   const refreshUser = useCallback(async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    // const refreshToken = localStorage.getItem('refreshToken');
 
-    if (!refreshToken) {
-      setUser(null);
-      return;
-    }
+    // if (!refreshToken) {
+    //   setUser(null);
+    //   return;
+    // }
 
     try {
-      await refreshAuthSession(refreshToken);
+      // await refreshAuthSession(refreshToken);
+
+      const userData = await getUser();
+      setUser(userData);
     } catch (error) {
       console.error(error);
       setUser(null);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       navigate('/');
       return;
     }
 
-    const userData = await getUser();
+    // const userData = await getUser();
 
-    if (userData) {
-      setUser((previousUser) => {
-        if (!previousUser) {
-          return userData;
-        }
+    // if (userData) {
+    //   setUser((previousUser) => {
+    //     if (!previousUser) {
+    //       return userData;
+    //     }
 
-        return {
-          ...previousUser,
-          ...userData,
-        };
-      });
-    }
-  }, [navigate]);
+    //     return {
+    //       ...previousUser,
+    //       ...userData,
+    //     };
+    //   });
+    // }
+  }, []);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -88,8 +88,8 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         { email, password },
         {
           onSuccess: (user) => {
-            localStorage.setItem('accessToken', user.tokens.accessToken);
-            localStorage.setItem('refreshToken', user.tokens.refreshToken);
+            // localStorage.setItem('accessToken', user.tokens.accessToken);
+            // localStorage.setItem('refreshToken', user.tokens.refreshToken);
 
             setUser(user);
             toast.success('Login realizado com sucesso!');
@@ -107,8 +107,8 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
 
   const logOut = () => {
     setUser(null);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    // localStorage.removeItem('accessToken');
+    // localStorage.removeItem('refreshToken');
 
     navigate('/');
   };

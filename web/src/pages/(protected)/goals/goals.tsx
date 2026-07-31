@@ -30,14 +30,6 @@ export function GoalsPage() {
   const activeGoals = goals.filter((g) => g.is_active);
   const inactiveGoals = goals.filter((g) => !g.is_active);
 
-  // const handleLogProgress = (goalId: string) => {
-  //   // const value = parseInt(progressValue[goalId] || '');
-  //   // if (!value || value <= 0) return;
-  //   // addGoalProgress(goalId, value, progressNote[goalId]);
-  //   // setProgressValue((prev) => ({ ...prev, [goalId]: '' }));
-  //   // setProgressNote((prev) => ({ ...prev, [goalId]: '' }));
-  // };
-
   const handleDeleteGoal = (goalId: string) => {
     if (selectedGoalId) {
       deleteGoal(goalId);

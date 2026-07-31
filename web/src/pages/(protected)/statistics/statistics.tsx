@@ -20,16 +20,12 @@ import { StatsCard } from './_components/stats-card';
 import { ReadingStats } from './_components/reading-stats';
 import { useStreak } from '@/hooks/use-streak';
 import { PageMeta } from '@/components/page-meta';
+import { useGoals } from '@/hooks/use-goals';
 
 export function StatisticsPage() {
-  const {
-    books,
-    completedBooks,
-    readingBooks,
-    toReadBooks,
-    totalPagesRead,
-    goal,
-  } = useBooks();
+  const { books, completedBooks, readingBooks, toReadBooks, totalPagesRead } =
+    useBooks();
+  const { goals } = useGoals();
   const { streak } = useStreak();
 
   const stats = [
@@ -83,15 +79,14 @@ export function StatisticsPage() {
       bg: 'bg-blue-100',
     },
     {
-      label: 'Meta do Ano',
-      value: `${completedBooks.length}/${goal.targetBooks}`,
+      label: 'Metas',
+      value: `${goals.filter((g) => g.current_value! >= g.target_value).length}/${goals.length}`,
       icon: Calendar,
       color: 'text-primary',
       bg: 'bg-primary/10',
     },
   ];
 
-  // Calculate average rating
   const ratedBooks = completedBooks.filter((b) => b.rating);
   const avgRating =
     ratedBooks.length > 0

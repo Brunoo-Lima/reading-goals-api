@@ -31,7 +31,7 @@ export const CardReadingCurrently = ({
 
           return (
             <div key={book.id} className="flex items-center gap-4">
-              <div className="w-12 h-16 rounded bg-secondary flex items-center justify-center flex-shrink-0">
+              <div className="size-16 rounded bg-secondary flex items-center justify-center flex-shrink-0">
                 <BookOpenIcon className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">

@@ -3,7 +3,6 @@ import { StatsCards } from './_components/stats-cards';
 import { CardProgressDaily } from './_components/card-progress-daily';
 import { CardReadingCurrently } from './_components/card-reading-currently';
 import { QuickStats } from './_components/quick-stats';
-import { ReadingGoalCard } from './_components/reading-goal-card';
 import { useStreak } from '@/hooks/use-streak';
 import {
   ContentPage,
@@ -15,8 +14,7 @@ import { PageContainer } from '@/components/ui/page-container';
 import { PageMeta } from '@/components/page-meta';
 
 export function GeneralPage() {
-  const { books, goal, completedBooks, readingBooks, totalPagesRead } =
-    useBooks();
+  const { books, readingBooks, totalPagesRead } = useBooks();
   const { streak } = useStreak();
 
   return (
@@ -31,7 +29,6 @@ export function GeneralPage() {
           <ContentPage>
             <TitlePage>Visão Geral</TitlePage>
             <DescriptionPage>
-              {' '}
               Acompanhe seu progresso de leitura
             </DescriptionPage>
           </ContentPage>
@@ -40,25 +37,27 @@ export function GeneralPage() {
         {/* Stats Cards */}
         <StatsCards books={books} />
 
+        {/* Quick Stats */}
+        <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
+
         {/* Main Grid */}
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Reading Goal */}
-          <ReadingGoalCard
+          {/* <ReadingGoalCard
             goal={goal}
             completedThisYear={completedBooks.length}
-          />
-
-          {/* Daily Progress Card */}
-          <CardProgressDaily />
+          /> */}
         </div>
 
         {/* Currently Reading */}
-        {readingBooks.length > 0 && (
-          <CardReadingCurrently readingBooks={readingBooks} />
-        )}
+        <div className="grid lg:grid-cols-[400px_1fr] gap-6">
+          {/* Daily Progress Card */}
+          <CardProgressDaily hasReadToday={totalPagesRead > 0} />
 
-        {/* Quick Stats */}
-        <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
+          {readingBooks.length > 0 && (
+            <CardReadingCurrently readingBooks={readingBooks} />
+          )}
+        </div>
       </PageContainer>
     </>
   );

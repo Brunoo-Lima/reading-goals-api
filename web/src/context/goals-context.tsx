@@ -1,8 +1,13 @@
 import { createContext, useEffect, useState } from 'react';
-import type { ICreateGoal, IGoal } from '@/@types/IGoal';
+import type { ICreateGoal, ICreateGoalProgress, IGoal } from '@/@types/IGoal';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/use-auth';
-import { getGoals, useCreateGoal, useDeleteGoal } from '@/services/goal';
+import {
+  getGoals,
+  useCreateGoal,
+  useDeleteGoal,
+  useRegisterProgressGoal,
+} from '@/services/goal';
 
 interface IGoalsContext {
   goals: IGoal[];
@@ -15,6 +20,10 @@ interface IGoalsContext {
   // updateGoal: (id: string, updates: ICreateGoal) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   toggleGoalActive: () => void;
+  registerProgressGoal: (
+    goalId: string,
+    goalProgressData: ICreateGoalProgress,
+  ) => Promise<void>;
 }
 
 export const GoalsContext = createContext<IGoalsContext | undefined>(undefined);
@@ -28,6 +37,7 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
 
   const createGoalService = useCreateGoal();
   const deleteGoalService = useDeleteGoal();
+  const registerProgressGoalService = useRegisterProgressGoal();
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -95,6 +105,40 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const registerProgressGoal = async (
+    goalId: string,
+    goalProgressData: ICreateGoalProgress,
+  ) => {
+    const response = await registerProgressGoalService.mutateAsync(
+      {
+        goalId,
+        goalProgressData,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Progresso registrado com sucesso!');
+        },
+      },
+    );
+
+    const createdGoalProgress = response.progress;
+
+    setGoals((prev) => {
+      return prev.map((goal) => {
+        if (goal.id === goalId) {
+          return {
+            ...goal,
+            current_value: response.goal.current_value,
+            progress: [...(goal.progress ?? []), createdGoalProgress],
+          };
+        }
+        return goal;
+      });
+    });
+
+    return createdGoalProgress;
+  };
+
   const toggleGoalActive = () => {};
 
   const contextValue = {
@@ -102,10 +146,12 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
     goal,
     selectedGoalId,
     setSelectedGoalId,
+
     addGoal,
     // updateGoal,
     deleteGoal,
     toggleGoalActive,
+    registerProgressGoal,
   };
 
   return (

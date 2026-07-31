@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { PlusIcon } from 'lucide-react';
-import { FormGoal } from './form-goal';
+import { FormGoal } from './forms/form-goal';
 import { useState } from 'react';
 
 export const AddGoalButton = () => {

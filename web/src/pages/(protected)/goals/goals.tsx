@@ -26,22 +26,17 @@ export function GoalsPage() {
   } = useGoals();
   const { books } = useBooks();
   const [showDialogDelete, setShowDialogDelete] = useState<boolean>(false);
-  // Estado do registro de progresso por meta
-  const [progressValue, setProgressValue] = useState<Record<string, string>>(
-    {},
-  );
-  const [progressNote, setProgressNote] = useState<Record<string, string>>({});
 
   const activeGoals = goals.filter((g) => g.is_active);
   const inactiveGoals = goals.filter((g) => !g.is_active);
 
-  const handleLogProgress = (goalId: string) => {
-    // const value = parseInt(progressValue[goalId] || '');
-    // if (!value || value <= 0) return;
-    // addGoalProgress(goalId, value, progressNote[goalId]);
-    // setProgressValue((prev) => ({ ...prev, [goalId]: '' }));
-    // setProgressNote((prev) => ({ ...prev, [goalId]: '' }));
-  };
+  // const handleLogProgress = (goalId: string) => {
+  //   // const value = parseInt(progressValue[goalId] || '');
+  //   // if (!value || value <= 0) return;
+  //   // addGoalProgress(goalId, value, progressNote[goalId]);
+  //   // setProgressValue((prev) => ({ ...prev, [goalId]: '' }));
+  //   // setProgressNote((prev) => ({ ...prev, [goalId]: '' }));
+  // };
 
   const handleDeleteGoal = (goalId: string) => {
     if (selectedGoalId) {
@@ -91,24 +86,15 @@ export function GoalsPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {activeGoals.map((goal) => (
+            {activeGoals.map((goal, index) => (
               <CardGoal
-                key={goal.id}
+                key={index + goal.id}
                 goal={goal}
                 bookTitle={
                   goal.book_id
                     ? books.find((b) => b.id === goal.book_id)?.title
                     : undefined
                 }
-                progressValue={progressValue[goal.id] || ''}
-                progressNote={progressNote[goal.id] || ''}
-                onProgressValueChange={(v) =>
-                  setProgressValue((prev) => ({ ...prev, [goal.id]: v }))
-                }
-                onProgressNoteChange={(v) =>
-                  setProgressNote((prev) => ({ ...prev, [goal.id]: v }))
-                }
-                onLogProgress={() => handleLogProgress(goal.id)}
                 onToggleActive={() => toggleGoalActive(goal.id)}
                 onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />
@@ -122,24 +108,15 @@ export function GoalsPage() {
             <h2 className="text-lg font-semibold text-foreground">
               Metas Inativas
             </h2>
-            {inactiveGoals.map((goal) => (
+            {inactiveGoals.map((goal, index) => (
               <CardGoal
-                key={goal.id}
+                key={index + goal.id}
                 goal={goal}
                 bookTitle={
                   goal.book_id
                     ? books.find((b) => b.id === goal.book_id)?.title
                     : undefined
                 }
-                progressValue={progressValue[goal.id] || ''}
-                progressNote={progressNote[goal.id] || ''}
-                onProgressValueChange={(v) =>
-                  setProgressValue((prev) => ({ ...prev, [goal.id]: v }))
-                }
-                onProgressNoteChange={(v) =>
-                  setProgressNote((prev) => ({ ...prev, [goal.id]: v }))
-                }
-                onLogProgress={() => handleLogProgress(goal.id)}
                 onToggleActive={() => toggleGoalActive(goal.id)}
                 onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />

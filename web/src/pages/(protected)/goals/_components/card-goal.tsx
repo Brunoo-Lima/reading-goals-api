@@ -2,35 +2,20 @@ import { GOAL_TYPE_LABELS, GOAL_TYPE_UNITS, type IGoal } from '@/@types/IGoal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-// import { formatDate } from 'date-fns';
+import { formatDate } from '@/utils/format-date';
 import {
   BookMarkedIcon,
   PowerIcon,
   TargetIcon,
   Trash2Icon,
-  TrendingUpIcon,
   TrophyIcon,
 } from 'lucide-react';
-
-function formatDate(iso?: string | null) {
-  if (!iso) return null;
-  return new Date(iso).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-}
+import { FormRegisterProgressGoal } from './forms/form-register-progress-goal';
 
 interface ICardGoalProps {
   goal: IGoal;
   bookTitle?: string;
-  progressValue: string;
-  progressNote: string;
-  onProgressValueChange: (v: string) => void;
-  onProgressNoteChange: (v: string) => void;
-  onLogProgress: () => void;
   onToggleActive: () => void;
   onDelete: () => void;
 }
@@ -38,19 +23,16 @@ interface ICardGoalProps {
 export const CardGoal = ({
   goal,
   bookTitle,
-  progressValue,
-  progressNote,
-  onProgressValueChange,
-  onProgressNoteChange,
-  onLogProgress,
   onToggleActive,
   onDelete,
 }: ICardGoalProps) => {
+  const currentValue = goal.current_value || 0;
+
   const percent = Math.min(
     100,
-    Math.round((goal.current_value / goal.target_value) * 100),
+    Math.round((currentValue / goal.target_value) * 100),
   );
-  const isComplete = goal.current_value >= goal.target_value;
+  const isComplete = currentValue >= goal.target_value;
   const unit = GOAL_TYPE_UNITS[goal.type];
 
   return (
@@ -125,46 +107,24 @@ export const CardGoal = ({
 
       {/* Log Progress */}
       {goal.is_active && !isComplete && (
-        <div className="rounded-lg bg-secondary p-4 space-y-3">
-          <p className="text-sm font-medium text-foreground flex items-center gap-2">
-            <TrendingUpIcon className="h-4 w-4 text-primary" />
-            Registrar progresso
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Input
-              type="number"
-              min="1"
-              placeholder={`Valor (${unit})`}
-              value={progressValue}
-              onChange={(e) => onProgressValueChange(e.target.value)}
-              className="sm:w-40 bg-card"
-            />
-            <Input
-              placeholder="Nota (opcional)"
-              value={progressNote}
-              onChange={(e) => onProgressNoteChange(e.target.value)}
-              className="flex-1 bg-card"
-            />
-            <Button onClick={onLogProgress}>Registrar</Button>
-          </div>
-        </div>
+        <FormRegisterProgressGoal unit={unit} goalId={goal.id} />
       )}
 
       {/* Progress History */}
-      {/* {goal.progress.length > 0 && (
+      {goal.progress && goal.progress.length > 0 && (
         <div>
           <p className="text-sm font-medium text-foreground mb-3">
             Histórico de progresso
           </p>
           <div className="space-y-2">
-            {/* {goal.progress.map((entry) => (
+            {goal.progress.map((entry) => (
               <div
                 key={entry.id}
                 className="flex items-center justify-between gap-4 text-sm py-2 border-b border-border/50 last:border-0"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="font-medium text-foreground shrink-0">
-                    +{entry.value} {unit}
+                    + {entry.value} {unit}
                   </span>
                   {entry.note && (
                     <span className="text-muted-foreground truncate">
@@ -176,10 +136,10 @@ export const CardGoal = ({
                   {formatDate(entry.logged_at)}
                 </span>
               </div>
-            ))} 
+            ))}
           </div>
         </div>
-      )} */}
+      )}
     </Card>
   );
 };

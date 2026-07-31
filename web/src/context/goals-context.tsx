@@ -1,14 +1,16 @@
 import { createContext, useEffect, useState } from 'react';
 import type { ICreateGoal, IGoal } from '@/@types/IGoal';
-import { useDeleteBook, useUpdateBook } from '@/services/book';
+import { useUpdateBook } from '@/services/book';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/use-auth';
-import { getGoals, useCreateGoal } from '@/services/goal';
+import { getGoals, useCreateGoal, useDeleteGoal } from '@/services/goal';
 
 interface IGoalsContext {
   goals: IGoal[];
 
   goal: IGoal | null;
+  selectedGoalId: string | null;
+  setSelectedGoalId: React.Dispatch<React.SetStateAction<string | null>>;
 
   addGoal: (goal: ICreateGoal, bookId?: string) => Promise<ICreateGoal>;
   updateGoal: (id: string, updates: ICreateGoal) => Promise<void>;
@@ -21,11 +23,12 @@ export const GoalsContext = createContext<IGoalsContext | undefined>(undefined);
 export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
   const [goals, setGoals] = useState<IGoal[]>([]);
   const [goal, setGoal] = useState<IGoal | null>(null);
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
 
   const { isAuthenticated } = useAuth();
 
   const createGoalService = useCreateGoal();
-  const deleteBookService = useDeleteBook();
+  const deleteGoalService = useDeleteGoal();
   const updateBookService = useUpdateBook();
 
   useEffect(() => {
@@ -63,24 +66,24 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   const updateGoal = async (id: string, updates: ICreateGoal) => {
-    // await updateBookService.mutateAsync(
-    //   { id, book: updates },
-    //   {
-    //     onSuccess: () => {
-    //       setGoals((prev) =>
-    //         prev.map((book) =>
-    //           book.id === id ? { ...book, ...updates } : book,
-    //         ),
-    //       );
-    //       toast.success('Meta atualizada com sucesso!');
-    //     },
-    //   },
-    // );
+    await updateBookService.mutateAsync(
+      { id, book: updates },
+      {
+        onSuccess: () => {
+          setGoals((prev) =>
+            prev.map((book) =>
+              book.id === id ? { ...book, ...updates } : book,
+            ),
+          );
+          toast.success('Meta atualizada com sucesso!');
+        },
+      },
+    );
   };
 
   const deleteGoal = async (id: string) => {
     try {
-      await deleteBookService.mutateAsync(id, {
+      await deleteGoalService.mutateAsync(id, {
         onSuccess: () => {
           setGoals((prev) => prev.filter((book) => book.id !== id));
 
@@ -103,7 +106,8 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
   const contextValue = {
     goals,
     goal,
-
+    selectedGoalId,
+    setSelectedGoalId,
     addGoal,
     updateGoal,
     deleteGoal,

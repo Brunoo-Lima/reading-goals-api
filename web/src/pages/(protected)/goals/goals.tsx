@@ -14,11 +14,18 @@ import { PageContainer } from '@/components/ui/page-container';
 import { AddGoalButton } from './_components/add-goal-button';
 import { CardGoal } from './_components/card-goal';
 import { useBooks } from '@/hooks/use-books';
+import { AlertDialogDeleteGoal } from './_components/alert-dialog-delete-goal';
 
 export function GoalsPage() {
-  const { goals, deleteGoal, toggleGoalActive } = useGoals();
+  const {
+    goals,
+    deleteGoal,
+    toggleGoalActive,
+    selectedGoalId,
+    setSelectedGoalId,
+  } = useGoals();
   const { books } = useBooks();
-
+  const [showDialogDelete, setShowDialogDelete] = useState<boolean>(false);
   // Estado do registro de progresso por meta
   const [progressValue, setProgressValue] = useState<Record<string, string>>(
     {},
@@ -34,6 +41,18 @@ export function GoalsPage() {
     // addGoalProgress(goalId, value, progressNote[goalId]);
     // setProgressValue((prev) => ({ ...prev, [goalId]: '' }));
     // setProgressNote((prev) => ({ ...prev, [goalId]: '' }));
+  };
+
+  const handleDeleteGoal = (goalId: string) => {
+    if (selectedGoalId) {
+      deleteGoal(goalId);
+      setShowDialogDelete(false);
+    }
+  };
+
+  const handleOpenDialogDeleteGoal = (goalId: string) => {
+    setSelectedGoalId(goalId);
+    setShowDialogDelete(true);
   };
 
   return (
@@ -91,7 +110,7 @@ export function GoalsPage() {
                 }
                 onLogProgress={() => handleLogProgress(goal.id)}
                 onToggleActive={() => toggleGoalActive(goal.id)}
-                onDelete={() => deleteGoal(goal.id)}
+                onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />
             ))}
           </div>
@@ -122,10 +141,18 @@ export function GoalsPage() {
                 }
                 onLogProgress={() => handleLogProgress(goal.id)}
                 onToggleActive={() => toggleGoalActive(goal.id)}
-                onDelete={() => deleteGoal(goal.id)}
+                onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />
             ))}
           </div>
+        )}
+
+        {showDialogDelete && (
+          <AlertDialogDeleteGoal
+            open={showDialogDelete}
+            onOpenChange={setShowDialogDelete}
+            onDelete={() => handleDeleteGoal(selectedGoalId || '')}
+          />
         )}
       </PageContainer>
     </>

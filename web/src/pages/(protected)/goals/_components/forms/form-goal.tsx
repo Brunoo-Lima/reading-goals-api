@@ -2,6 +2,7 @@ import {
   GOAL_TYPE_LABELS,
   GOAL_TYPE_UNITS,
   GOAL_TYPES,
+  type GoalsType,
   type IGoal,
 } from '@/@types/IGoal';
 import { Button } from '@/components/ui/button';
@@ -88,8 +89,6 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
       current_value: Number(data.current_value) || 0,
     };
 
-    console.log(`goal `, goalData);
-
     try {
       if (initialData) {
         // await updateGoal(initialData.id, goalData);
@@ -125,7 +124,7 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
                 <SelectContent>
                   {GOAL_TYPES.map((t) => (
                     <SelectItem key={t} value={t}>
-                      {GOAL_TYPE_LABELS[t]}
+                      {GOAL_TYPE_LABELS[t as GoalsType]}
                     </SelectItem>
                   ))}
                 </SelectContent>

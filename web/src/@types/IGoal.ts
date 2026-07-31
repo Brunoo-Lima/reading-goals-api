@@ -11,21 +11,18 @@ export interface IGoal {
   book_id?: string | null;
   type: GoalsType;
   target_value: number;
-  current_value: number;
+  current_value?: number;
   start_date: Date;
-  end_date: Date | null;
+  end_date?: Date;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }
 
-export interface ICreateGoal {
-  type: GoalsType;
-  target_value: number;
-  start_date: Date;
-  end_date: Date | null;
-  book_id: string | null;
-}
+export type ICreateGoal = Omit<
+  IGoal,
+  'id' | 'created_at' | 'user_id' | 'updated_at' | 'is_active'
+>;
 
 export interface IReadingGoal {
   id: string;

@@ -36,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface IFormGoalProps {
@@ -56,6 +57,7 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
     defaultValues: {
       type: initialData?.type || 'BOOKS_PER_YEAR',
       target_value: initialData?.target_value || 0,
+      current_value: initialData?.current_value || 0,
       start_date: initialData?.start_date || new Date(),
       end_date: initialData?.end_date || undefined,
       book_id: initialData?.book_id || undefined,
@@ -68,12 +70,22 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
   const typeGoal = watch('type');
   const selectedBookId = watch('book_id');
 
+  useEffect(() => {
+    reset({
+      type: initialData?.type || 'BOOKS_PER_YEAR',
+      target_value: initialData?.target_value || 0,
+      current_value: initialData?.current_value || 0,
+      start_date: initialData?.start_date || new Date(),
+      end_date: initialData?.end_date || undefined,
+      book_id: initialData?.book_id || undefined,
+    });
+  }, [initialData, reset]);
+
   const onSubmit = async (data: IGoalFormSchema) => {
     const goalData = {
       ...data,
       target_value: Number(data.target_value) || 0,
-      end_date: data.end_date || null,
-      book_id: selectedBookId || null,
+      current_value: Number(data.current_value) || 0,
     };
 
     console.log(`goal `, goalData);
@@ -134,6 +146,16 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
           {errors.target_value && (
             <FieldError className="text-red-500">
               {errors.target_value.message}
+            </FieldError>
+          )}
+        </Field>
+
+        <Field className="gap-2">
+          <FieldLabel>Valor atual (opcional)</FieldLabel>
+          <Input placeholder="Valor atual" {...register('current_value')} />
+          {errors.current_value && (
+            <FieldError className="text-red-500">
+              {errors.current_value.message}
             </FieldError>
           )}
         </Field>

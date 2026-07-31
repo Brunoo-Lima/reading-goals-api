@@ -65,7 +65,7 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
   });
 
   const { books } = useBooks();
-  const { addGoal, updateGoal } = useGoals();
+  const { addGoal } = useGoals();
 
   const typeGoal = watch('type');
   const selectedBookId = watch('book_id');
@@ -92,7 +92,7 @@ export const FormGoal = ({ setDialogOpen, initialData }: IFormGoalProps) => {
 
     try {
       if (initialData) {
-        await updateGoal(initialData.id, goalData);
+        // await updateGoal(initialData.id, goalData);
       } else {
         await addGoal(goalData, selectedBookId);
       }

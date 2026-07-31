@@ -30,10 +30,10 @@ export const useCreateGoal = () => {
   });
 };
 
-export const updateGoal = async (id: string, data: ICreateGoal) => {
-  const { data: goal } = await api.put(`/goals/${id}`, data);
-  return goal;
-};
+// export const updateGoal = async (id: string, data: ICreateGoal) => {
+//   const { data: goal } = await api.put(`/goals/${id}`, data);
+//   return goal;
+// };
 
 export const deleteGoal = async (id: string) => {
   await api.delete(`/goals/${id}`);

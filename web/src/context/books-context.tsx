@@ -6,8 +6,6 @@ import {
   type Dispatch,
   type SetStateAction,
 } from 'react';
-import type { IReadingGoal } from '@/@types/IGoal';
-import { initialGoal } from '@/__mocks__/initial-goals';
 import {
   getBooks,
   useCreateBook,
@@ -23,7 +21,6 @@ interface IBooksContext {
   book: IBook | null;
   setBook: Dispatch<SetStateAction<IBook | null>>;
 
-  goal: IReadingGoal;
   completedBooks: IBook[];
   readingBooks: IBook[];
   toReadBooks: IBook[];
@@ -33,8 +30,6 @@ interface IBooksContext {
   updateBook: (id: string, updates: ICreateBook) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
   getBooksByStatus: (status: StatusReading) => IBook[];
-
-  updateGoal: (updates: Partial<IReadingGoal>) => void;
 }
 
 export const BooksContext = createContext<IBooksContext | undefined>(undefined);
@@ -42,7 +37,6 @@ export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [book, setBook] = useState<IBook | null>(null);
-  const [goal, setGoal] = useState<IReadingGoal>(initialGoal);
 
   const { isAuthenticated } = useAuth();
 
@@ -116,10 +110,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  const updateGoal = (updates: Partial<IReadingGoal>) => {
-    setGoal((prev) => ({ ...prev, ...updates }));
-  };
-
   const getBooksByStatus = (status: StatusReading) => {
     return books.filter((book) => book.status === status);
   };
@@ -142,7 +132,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     books,
     book,
     setBook,
-    goal,
     totalPagesRead,
 
     addBook,
@@ -153,7 +142,6 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     completedBooks,
     readingBooks,
     toReadBooks,
-    updateGoal,
   };
 
   return (

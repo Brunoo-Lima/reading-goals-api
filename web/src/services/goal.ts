@@ -23,11 +23,30 @@ export const useCreateGoal = () => {
     mutationFn: ({ data, bookId }: { data: ICreateGoal; bookId?: string }) => {
       return createGoal(data, bookId);
     },
-    onSuccess: () => {
-      toast.success('Meta criada com sucesso!');
-    },
     onError: (error: AxiosError) => {
       const message = error.message || 'Erro ao criar meta.';
+      toast.error(message);
+    },
+  });
+};
+
+export const updateGoal = async (id: string, data: ICreateGoal) => {
+  const { data: goal } = await api.put(`/goals/${id}`, data);
+  return goal;
+};
+
+export const deleteGoal = async (id: string) => {
+  await api.delete(`/goals/${id}`);
+};
+
+export const useDeleteGoal = () => {
+  return useMutation({
+    mutationKey: ['deleteGoal'],
+    mutationFn: (id: string) => {
+      return deleteGoal(id);
+    },
+    onError: (error: AxiosError) => {
+      const message = error.message || 'Erro ao deletar meta.';
       toast.error(message);
     },
   });

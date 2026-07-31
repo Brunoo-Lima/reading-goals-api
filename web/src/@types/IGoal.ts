@@ -12,6 +12,7 @@ export interface IGoal {
   type: GoalsType;
   target_value: number;
   current_value?: number;
+  progress?: IGoalProgress[];
   start_date: Date;
   end_date?: Date;
   is_active: boolean;
@@ -21,7 +22,7 @@ export interface IGoal {
 
 export type ICreateGoal = Omit<
   IGoal,
-  'id' | 'created_at' | 'user_id' | 'updated_at' | 'is_active'
+  'id' | 'created_at' | 'user_id' | 'updated_at' | 'is_active' | 'progress'
 >;
 
 export interface IReadingGoal {
@@ -30,6 +31,16 @@ export interface IReadingGoal {
   targetBooks: number;
   completedBooks: number;
 }
+
+export interface IGoalProgress {
+  id: string;
+  goal_id: string;
+  value: number;
+  note?: string | null;
+  logged_at?: Date;
+}
+
+export type ICreateGoalProgress = Omit<IGoalProgress, 'id' | 'goal_id'>;
 
 export const GOAL_TYPES = [
   'DAILY_PAGES',

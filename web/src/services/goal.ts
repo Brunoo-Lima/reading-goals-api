@@ -1,4 +1,4 @@
-import type { ICreateGoal } from '@/@types/IGoal';
+import type { ICreateGoal, ICreateGoalProgress } from '@/@types/IGoal';
 import api from './api';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -47,6 +47,36 @@ export const useDeleteGoal = () => {
     },
     onError: (error: AxiosError) => {
       const message = error.message || 'Erro ao deletar meta.';
+      toast.error(message);
+    },
+  });
+};
+
+export const registerProgressGoal = async (
+  goalId: string,
+  goalProgressData: ICreateGoalProgress,
+) => {
+  const { data } = await api.post(
+    `/goals/${goalId}/progress`,
+    goalProgressData,
+  );
+  return data;
+};
+
+export const useRegisterProgressGoal = () => {
+  return useMutation({
+    mutationKey: ['registerProgressGoal'],
+    mutationFn: ({
+      goalId,
+      goalProgressData,
+    }: {
+      goalId: string;
+      goalProgressData: ICreateGoalProgress;
+    }) => {
+      return registerProgressGoal(goalId, goalProgressData);
+    },
+    onError: (error: AxiosError) => {
+      const message = error.message || 'Erro ao registrar progresso da meta.';
       toast.error(message);
     },
   });

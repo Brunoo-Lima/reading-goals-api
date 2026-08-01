@@ -14,3 +14,10 @@ export type IDecodedToken = JwtPayload & {
   userId: string;
   rememberMe?: boolean;
 };
+
+export interface IForgotPassword {
+  token: string;
+  expires_at: Date;
+  used_at?: Date | null;
+  user_id: string;
+}

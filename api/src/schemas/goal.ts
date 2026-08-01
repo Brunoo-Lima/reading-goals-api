@@ -27,7 +27,11 @@ export const createGoalSchema = z.strictObject(
         error: 'Date must be a valid date',
       })
       .optional(),
-    end_date: z.iso.datetime().optional(),
+    end_date: z.iso
+      .datetime({
+        error: 'Date must be a valid date',
+      })
+      .optional(),
   },
   {
     error: 'Some provided field is not allowed.',

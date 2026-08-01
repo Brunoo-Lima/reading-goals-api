@@ -39,10 +39,7 @@ const createBookSchema = z.strictObject(
       })
       .optional(),
     rating: z
-      .number({
-        message: 'Rating is required',
-      })
-      .min(1, { error: 'Rating is required' })
+      .number()
       .max(5, { error: 'Rating must be between 1 and 5' })
       .optional(),
     start_date: z.iso.datetime({

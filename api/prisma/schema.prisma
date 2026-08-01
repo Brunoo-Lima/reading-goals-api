@@ -13,19 +13,35 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String   @db.VarChar(50)
-  email      String   @unique @db.VarChar(100)
-  password   String   @db.VarChar(100)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(50)
+  email       String   @unique @db.VarChar(100)
+  password    String   @db.VarChar(100)
+  securityKey String   @db.VarChar(100)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
-  books       Book[]
-  readingLogs ReadingLog[]
-  goals       Goal[]
-  notes       Note[]
+  books          Book[]
+  readingLogs    ReadingLog[]
+  goals          Goal[]
+  notes          Note[]
+  passwordResets PasswordReset[]
 
   @@map("users")
+}
+
+model PasswordReset {
+  id         String    @id @default(uuid())
+  user_id    String
+  token      String    @unique
+  expires_at DateTime
+  used_at    DateTime?
+  created_at DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("password_resets")
 }
 
 model Book {

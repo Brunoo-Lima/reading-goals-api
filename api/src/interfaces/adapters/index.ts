@@ -19,3 +19,11 @@ export interface ITokensGeneratorAdapter {
 export interface ITokenVerifierAdapter {
   execute(token: string, secret: string): IDecodedToken;
 }
+
+export interface IGenerateTokenAdapter {
+  execute(): string;
+}
+
+export interface ISecurityKeyComparatorAdapter {
+  execute(securityKey: string, hashedSecurityKey: string): Promise<boolean>;
+}

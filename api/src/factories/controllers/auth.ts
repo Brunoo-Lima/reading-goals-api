@@ -1,11 +1,31 @@
 import {
   PasswordComparatorAdapter,
+  PasswordHashAdapter,
   TokensGeneratorAdapter,
   TokenVerifierAdapter,
+  SecurityKeyComparatorAdapter,
+  GenerateTokenAdapter,
 } from '../../adapters';
-import { LoginController, RefreshTokenController } from '../../controllers';
-import { PostgresGetUserByEmailRepository } from '../../repositories/postgres';
-import { LoginUseCase, RefreshTokenUseCase } from '../../use-cases';
+import {
+  LoginController,
+  RefreshTokenController,
+  ResetPasswordController,
+  ForgotPasswordController,
+} from '../../controllers';
+import {
+  PostgresForgotPasswordRepository,
+  PostgresGetUserByEmailRepository,
+  PostgresMarkPasswordResetAsUsedRepository,
+  PostgresResetPasswordByTokenRepository,
+  PostgresUpdateUserRepository,
+} from '../../repositories/postgres';
+
+import {
+  ForgotPasswordUseCase,
+  LoginUseCase,
+  RefreshTokenUseCase,
+  ResetPasswordUseCase,
+} from '../../use-cases';
 
 export const makeLoginController = () => {
   const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
@@ -36,4 +56,46 @@ export const makeRefreshTokenController = () => {
   );
 
   return refreshTokenController;
+};
+
+export const makeForgotPasswordController = () => {
+  const forgotPasswordRepository = new PostgresForgotPasswordRepository();
+  const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
+  const generateTokenAdapter = new GenerateTokenAdapter();
+  const securityKeyComparatorAdapter = new SecurityKeyComparatorAdapter();
+
+  const forgotPasswordUseCase = new ForgotPasswordUseCase(
+    forgotPasswordRepository,
+    getUserByEmailRepository,
+    generateTokenAdapter,
+    securityKeyComparatorAdapter,
+  );
+
+  const forgotPasswordController = new ForgotPasswordController(
+    forgotPasswordUseCase,
+  );
+
+  return forgotPasswordController;
+};
+
+export const makeResetPasswordController = () => {
+  const passwordResetByTokenRepository =
+    new PostgresResetPasswordByTokenRepository();
+  const passwordHashAdapter = new PasswordHashAdapter();
+  const updateUserRepository = new PostgresUpdateUserRepository();
+  const markPasswordResetAsUsedRepository =
+    new PostgresMarkPasswordResetAsUsedRepository();
+
+  const resetPasswordUseCase = new ResetPasswordUseCase(
+    passwordResetByTokenRepository,
+    passwordHashAdapter,
+    updateUserRepository,
+    markPasswordResetAsUsedRepository,
+  );
+
+  const resetPasswordController = new ResetPasswordController(
+    resetPasswordUseCase,
+  );
+
+  return resetPasswordController;
 };

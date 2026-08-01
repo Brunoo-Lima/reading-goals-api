@@ -14,7 +14,7 @@ export class RefreshTokenController {
 
   async execute(request: Request) {
     try {
-      const { refreshToken } = request.body;
+      const refreshToken = request.cookies?.refreshToken;
 
       await refreshTokenSchema.parseAsync({ refreshToken });
 

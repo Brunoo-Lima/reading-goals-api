@@ -46,7 +46,7 @@ export class LoginController {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
           maxAge: 30 * 24 * 60 * 60 * 1000,
-          path: '/api/v1/auth/refresh-token', // opcional: restringe o cookie só à rota de refresh
+          path: '/',
         });
       }
 

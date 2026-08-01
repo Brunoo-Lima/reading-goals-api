@@ -3,3 +3,4 @@ export * from './book';
 export * from './reading-log';
 export * from './goal';
 export * from './note';
+export * from './auth';

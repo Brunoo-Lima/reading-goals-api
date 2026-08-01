@@ -11,6 +11,8 @@ export * from './book/update-book';
 
 export * from './auth/login';
 export * from './auth/refresh-token';
+export * from './auth/forgot-password';
+export * from './auth/reset-password';
 
 export * from './reading-log/register-reading-log';
 export * from './reading-log/get-reading-log';

@@ -3,9 +3,11 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
+
+export type ICreateUser = Omit<IUser, 'id' | 'created_at' | 'updated_at'>;
 
 export type IUserRequest = IUser & {
   tokens: {
@@ -13,3 +15,5 @@ export type IUserRequest = IUser & {
     refreshToken: string;
   };
 };
+
+export type IUpdateUser = Omit<IUser, 'id' | 'created_at' | 'updated_at'>;

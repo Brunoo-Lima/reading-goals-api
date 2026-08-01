@@ -8,8 +8,14 @@ import {
   HeaderPage,
   TitlePage,
 } from '@/components/ui/title-page';
+import { useState } from 'react';
+import { InfoUser } from './views/info-user';
 
 export function AccountPage() {
+  const [actionView, setActionView] = useState<'export' | 'settings'>(
+    'settings',
+  );
+
   return (
     <>
       <PageMeta title="Minha Conta" description="Informações da conta" />
@@ -22,18 +28,28 @@ export function AccountPage() {
           </ContentPage>
         </HeaderPage>
 
-        {/* Actions */}
         <Card className="p-6 bg-card border-border/50">
-          <h3 className="font-semibold text-foreground mb-4">Acoes</h3>
+          <h3 className="font-semibold text-foreground mb-2">Ações</h3>
+
           <div className="space-y-2">
-            <Button variant="outline" className="w-full justify-start">
-              Exportar dados
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => setActionView('settings')}
+            >
+              Configurações
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Configuracoes
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => setActionView('export')}
+            >
+              Exportar dados
             </Button>
           </div>
         </Card>
+
+        {actionView === 'settings' && <InfoUser />}
       </PageContainer>
     </>
   );

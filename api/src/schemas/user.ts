@@ -17,6 +17,10 @@ const createUserSchema = z.strictObject(
       .string('Password is required')
       .trim()
       .min(6, { error: 'Password must be at least 6 characters' }),
+    securityKey: z
+      .string('Security key is required')
+      .trim()
+      .min(1, { error: 'Security key is required' }),
   },
   {
     error: 'Some provided field is not allowed.',

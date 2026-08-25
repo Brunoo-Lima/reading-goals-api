@@ -9,6 +9,7 @@ import {
 } from '../helpers';
 import { resetPasswordSchema } from '../../schemas';
 import type { IResetPasswordUseCase } from '../../interfaces/use-cases';
+import type { Request } from 'express';
 
 export class ResetPasswordController {
   private resetPasswordUseCase: IResetPasswordUseCase;
@@ -19,16 +20,14 @@ export class ResetPasswordController {
 
   async execute(request: Request) {
     try {
-      const { token, newPassword } = request.body;
+      const params = request.body;
 
-      await resetPasswordSchema.parseAsync({ token, newPassword });
+      await resetPasswordSchema.parseAsync(params);
 
-      await this.resetPasswordUseCase.execute(token, newPassword);
+      await this.resetPasswordUseCase.execute(params.token, params.newPassword);
 
       return ok({ message: 'Password reset successful' });
     } catch (error) {
-      console.log(error);
-
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });
       }

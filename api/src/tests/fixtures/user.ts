@@ -5,6 +5,7 @@ export const user = {
   name: faker.person.fullName(),
   email: faker.internet.email(),
   password: faker.internet.password(),
+  securityKey: faker.string.uuid(),
   created_at: faker.date.anytime(),
   updated_at: faker.date.anytime(),
 };

@@ -20,7 +20,7 @@ describe('Refresh Token Controller', () => {
   };
 
   const baseHttpRequest = {
-    body: {
+    cookies: {
       refreshToken: 'any_token',
     },
   } as Partial<Request> as Request;
@@ -37,7 +37,7 @@ describe('Refresh Token Controller', () => {
     const { sut } = makeSut();
 
     const request = {
-      body: {
+      cookies: {
         refreshToken: '',
       },
     } as Partial<Request> as Request;
@@ -51,8 +51,8 @@ describe('Refresh Token Controller', () => {
     const { sut } = makeSut();
 
     const request = {
-      body: {
-        refreshToken: 123,
+      cookies: {
+        refreshToken: 1232,
       },
     } as Partial<Request> as Request;
 

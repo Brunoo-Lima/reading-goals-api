@@ -25,6 +25,7 @@ describe('Create User Controller', () => {
       password: faker.internet.password({
         length: 6,
       }),
+      securityKey: faker.string.uuid(),
     },
   } as Partial<Request> as Request;
 
@@ -47,6 +48,7 @@ describe('Create User Controller', () => {
         password: faker.internet.password({
           length: 6,
         }),
+        securityKey: faker.string.uuid(),
       },
     } as Partial<Request> as Request;
 
@@ -65,6 +67,7 @@ describe('Create User Controller', () => {
         password: faker.internet.password({
           length: 6,
         }),
+        securityKey: faker.string.uuid(),
       },
     } as Partial<Request> as Request;
 
@@ -81,6 +84,26 @@ describe('Create User Controller', () => {
         name: faker.person.fullName(),
         email: faker.internet.email(),
         password: '123',
+        securityKey: faker.string.uuid(),
+      },
+    } as Partial<Request> as Request;
+
+    const result = await sut.execute(request);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('should return 400 if security key is invalid', async () => {
+    const { sut } = makeSut();
+
+    const request = {
+      body: {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({
+          length: 6,
+        }),
+        securityKey: '',
       },
     } as Partial<Request> as Request;
 

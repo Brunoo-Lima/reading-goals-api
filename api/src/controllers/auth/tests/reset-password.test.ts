@@ -24,7 +24,7 @@ describe('Reset Password Controller', () => {
   it('should return 200 on reset password success', async () => {
     const { sut } = makeSut();
 
-    const response = await sut.execute(baseHttpRequest.body);
+    const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(200);
   });
@@ -89,7 +89,7 @@ describe('Reset Password Controller', () => {
       new Error(),
     );
 
-    const response = await sut.execute(baseHttpRequest.body);
+    const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(500);
   });

@@ -18,6 +18,7 @@ describe('Forgot Password Controller', () => {
   const baseHttpRequest = {
     body: {
       email: 'test@test.com',
+      securityKey: 'valid-security-key',
     },
   } as Partial<Request> as Request;
 
@@ -35,6 +36,20 @@ describe('Forgot Password Controller', () => {
     const response = await sut.execute({
       body: {
         email: undefined,
+        securityKey: 'valid-security-key',
+      },
+    } as Partial<Request> as Request);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('should return 400 if security key is missing', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      body: {
+        email: 'test@test.com',
+        securityKey: undefined,
       },
     } as Partial<Request> as Request);
 
@@ -47,6 +62,7 @@ describe('Forgot Password Controller', () => {
     const response = await sut.execute({
       body: {
         email: 'invalid-email',
+        securityKey: 'valid-security-key',
       },
     } as Partial<Request> as Request);
 

@@ -28,8 +28,6 @@ export class ForgotPasswordController {
           'Se o e-mail existir e a chave de segurança estiver correta você será redirecionado para a página de redefinição de senha. Aguarde...',
       });
     } catch (error) {
-      console.error(error);
-
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });
       }

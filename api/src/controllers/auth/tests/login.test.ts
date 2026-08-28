@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { LoginController } from '../login';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 import { InvalidPasswordError, UserNotFoundError } from '../../../errors';
 
 describe('Login Controller', () => {
@@ -35,10 +35,14 @@ describe('Login Controller', () => {
     },
   } as Partial<Request> as Request;
 
+  const baseResponse = {
+    cookie: vi.fn(),
+  } as Partial<Response> as Response;
+
   test('should login successfully', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute(baseHttpRequest);
+    const result = await sut.execute(baseHttpRequest, baseResponse);
 
     expect(result.statusCode).toBe(200);
   });
@@ -53,7 +57,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request);
+    const result = await sut.execute(request, baseResponse);
 
     expect(result.statusCode).toBe(400);
   });
@@ -68,7 +72,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request);
+    const result = await sut.execute(request, baseResponse);
 
     expect(result.statusCode).toBe(400);
   });
@@ -83,7 +87,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request);
+    const result = await sut.execute(request, baseResponse);
 
     expect(result.statusCode).toBe(400);
   });
@@ -98,7 +102,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request);
+    const result = await sut.execute(request, baseResponse);
 
     expect(result.statusCode).toBe(400);
   });
@@ -107,7 +111,7 @@ describe('Login Controller', () => {
     const { sut, loginUseCaseStub } = makeSut();
     vi.spyOn(loginUseCaseStub, 'execute').mockRejectedValueOnce(new Error());
 
-    const result = await sut.execute(baseHttpRequest);
+    const result = await sut.execute(baseHttpRequest, baseResponse);
 
     expect(result.statusCode).toBe(500);
   });
@@ -118,7 +122,7 @@ describe('Login Controller', () => {
       new UserNotFoundError(),
     );
 
-    const result = await sut.execute(baseHttpRequest);
+    const result = await sut.execute(baseHttpRequest, baseResponse);
 
     expect(result.statusCode).toBe(404);
   });
@@ -129,7 +133,7 @@ describe('Login Controller', () => {
       new InvalidPasswordError(),
     );
 
-    const result = await sut.execute(baseHttpRequest);
+    const result = await sut.execute(baseHttpRequest, baseResponse);
 
     expect(result.statusCode).toBe(401);
   });

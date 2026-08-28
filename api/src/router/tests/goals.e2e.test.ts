@@ -42,9 +42,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -52,7 +54,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .post(`/api/v1/goals?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -71,9 +73,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -81,7 +85,7 @@ describe('Goals Routes E2E tests', () => {
 
     const { body: createdGoal } = await request(app)
       .post(`/api/v1/goals?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -89,7 +93,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .get('/api/v1/goals')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body[0].id).toBe(createdGoal.id);
@@ -105,9 +109,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -115,7 +121,7 @@ describe('Goals Routes E2E tests', () => {
 
     const { body: createdGoal } = await request(app)
       .post(`/api/v1/goals?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -123,7 +129,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .get(`/api/v1/goals/${createdGoal.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdGoal.id);
@@ -139,9 +145,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdGoal } = await request(app)
       .post(`/api/v1/goals`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -149,7 +157,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .post(`/api/v1/goals/${createdGoal.id}/progress`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         value: 5,
         note: 'Read five pages',
@@ -172,9 +180,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdGoal } = await request(app)
       .post(`/api/v1/goals`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -182,7 +192,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .patch(`/api/v1/goals/${createdGoal.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -203,9 +213,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -213,7 +225,7 @@ describe('Goals Routes E2E tests', () => {
 
     const { body: createdGoal } = await request(app)
       .post(`/api/v1/goals?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -221,7 +233,7 @@ describe('Goals Routes E2E tests', () => {
 
     const response = await request(app)
       .delete(`/api/v1/goals/${createdGoal.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
   });
@@ -236,9 +248,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .delete(`/api/v1/goals/${faker.string.uuid()}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(404);
   });
@@ -253,9 +267,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .patch(`/api/v1/goals/${faker.string.uuid()}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,
@@ -275,9 +291,11 @@ describe('Goals Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .post('/api/v1/goals')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...goalData,
         user_id: createdUser.id,

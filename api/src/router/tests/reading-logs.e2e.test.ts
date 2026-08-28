@@ -35,14 +35,16 @@ describe('Reading Logs Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(bookData);
 
     const response = await request(app)
       .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(readingLogData);
 
     expect(response.status).toBe(201);
@@ -58,19 +60,21 @@ describe('Reading Logs Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(bookData);
 
     const { body: createdReadingLog } = await request(app)
       .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(readingLogData);
 
     const response = await request(app)
       .get(`/api/v1/reading-logs?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
@@ -87,19 +91,21 @@ describe('Reading Logs Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(bookData);
 
     const { body: createdReadingLog } = await request(app)
       .post(`/api/v1/reading-logs?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(readingLogData);
 
     const response = await request(app)
       .get(`/api/v1/reading-logs/book?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body[0].id).toBe(createdReadingLog.id);

@@ -26,9 +26,11 @@ describe('User Routes E2E tests', () => {
       password: userData.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .get('/api/v1/users/me')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdUser.id);
@@ -44,9 +46,11 @@ describe('User Routes E2E tests', () => {
       password: userData.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .patch('/api/v1/users/me')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({ name: 'John Doe' });
 
     expect(response.status).toBe(200);
@@ -63,9 +67,11 @@ describe('User Routes E2E tests', () => {
       password: userData.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .delete('/api/v1/users/me')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
   });

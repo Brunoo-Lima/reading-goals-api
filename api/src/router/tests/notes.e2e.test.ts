@@ -37,9 +37,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -47,7 +49,7 @@ describe('Notes Routes E2E tests', () => {
 
     const response = await request(app)
       .post(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     expect(response.status).toBe(201);
@@ -63,9 +65,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -73,12 +77,12 @@ describe('Notes Routes E2E tests', () => {
 
     const { body: createdNote } = await request(app)
       .post(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     const response = await request(app)
       .get(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
@@ -95,9 +99,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -105,12 +111,12 @@ describe('Notes Routes E2E tests', () => {
 
     const { body: createdNote } = await request(app)
       .post(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     const response = await request(app)
       .get(`/api/v1/notes/${createdNote.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdNote.id);
@@ -126,9 +132,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -136,12 +144,12 @@ describe('Notes Routes E2E tests', () => {
 
     const { body: createdNote } = await request(app)
       .post(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     const response = await request(app)
       .patch(`/api/v1/notes/${createdNote.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...noteData,
         content: 'updated note content',
@@ -160,9 +168,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const { body: createdBook } = await request(app)
       .post('/api/v1/books')
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...bookData,
         user_id: createdUser.id,
@@ -170,12 +180,12 @@ describe('Notes Routes E2E tests', () => {
 
     const { body: createdNote } = await request(app)
       .post(`/api/v1/notes?bookId=${createdBook.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     const response = await request(app)
       .delete(`/api/v1/notes/${createdNote.id}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
   });
@@ -190,9 +200,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .delete(`/api/v1/notes/${faker.string.uuid()}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`);
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(404);
   });
@@ -207,9 +219,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .patch(`/api/v1/notes/${faker.string.uuid()}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send({
         ...noteData,
         content: 'updated note content',
@@ -228,9 +242,11 @@ describe('Notes Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .post(`/api/v1/notes?bookId=${faker.string.uuid()}`)
-      .set(`Authorization`, `Bearer ${authResponse.body.tokens.accessToken}`)
+      .set('Cookie', cookies)
       .send(noteData);
 
     expect(response.status).toBe(404);

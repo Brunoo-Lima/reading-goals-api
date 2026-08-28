@@ -20,8 +20,6 @@ describe('Auth Routes E2E tests', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.tokens.accessToken).toBeDefined();
-    expect(response.body.tokens.refreshToken).toBeDefined();
   });
 
   test('should POST /api/v1/auth/login should return 401 when user credentials are invalid', async () => {
@@ -66,12 +64,12 @@ describe('Auth Routes E2E tests', () => {
       password: user.password,
     });
 
+    const cookies = authResponse.headers['set-cookie'] as string;
+
     const response = await request(app)
       .post('/api/v1/auth/refresh-token')
-      .send({ refreshToken: authResponse.body.tokens.refreshToken });
+      .set('Cookie', cookies);
 
     expect(response.status).toBe(200);
-    expect(response.body.accessToken).toBeDefined();
-    expect(response.body.refreshToken).toBeDefined();
   });
 });

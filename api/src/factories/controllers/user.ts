@@ -1,4 +1,5 @@
 import { IdGeneratorAdapter, PasswordHashAdapter } from '../../adapters';
+import { SecurityKeyHashAdapter } from '../../adapters/security-key-hash';
 import {
   CreateUserController,
   DeleteUserController,
@@ -25,11 +26,14 @@ export const makeCreateUseController = () => {
   const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
   const passwordHashAdapter = new PasswordHashAdapter();
   const idGeneratorAdapter = new IdGeneratorAdapter();
+  const securityKeyHashAdapter = new SecurityKeyHashAdapter();
+
   const createUserUseCase = new CreateUserUseCase(
     getUserByEmailRepository,
     createUserRepository,
     idGeneratorAdapter,
     passwordHashAdapter,
+    securityKeyHashAdapter,
   );
 
   const createUserController = new CreateUserController(createUserUseCase);

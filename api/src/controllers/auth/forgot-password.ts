@@ -18,14 +18,13 @@ export class ForgotPasswordController {
 
       await forgotPasswordSchema.parseAsync(params);
 
-      await this.forgotPasswordUseCase.execute(
+      const token = await this.forgotPasswordUseCase.execute(
         params.email,
         params.securityKey,
       );
 
       return ok({
-        message:
-          'Se o e-mail existir e a chave de segurança estiver correta você será redirecionado para a página de redefinição de senha. Aguarde...',
+        token,
       });
     } catch (error) {
       if (error instanceof ZodError) {

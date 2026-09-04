@@ -7,6 +7,7 @@ import type {
 import type {
   IPasswordHashAdapter,
   IIdGeneratorAdapter,
+  ISecurityKeyHashAdapter,
 } from '../../interfaces/adapters';
 import { EmailAlreadyInUseError } from '../../errors';
 
@@ -15,17 +16,20 @@ export class CreateUserUseCase {
   private createUserRepository: ICreateUserRepository;
   private idGeneratorAdapter: IIdGeneratorAdapter;
   private passwordHashAdapter: IPasswordHashAdapter;
+  private securityKeyHashAdapter: ISecurityKeyHashAdapter;
 
   constructor(
     getUserByEmailRepository: IGetUserByEmailRepository,
     createUserRepository: ICreateUserRepository,
     idGeneratorAdapter: IIdGeneratorAdapter,
     passwordHashAdapter: IPasswordHashAdapter,
+    securityKeyHashAdapter: ISecurityKeyHashAdapter,
   ) {
     this.getUserByEmailRepository = getUserByEmailRepository;
     this.createUserRepository = createUserRepository;
     this.idGeneratorAdapter = idGeneratorAdapter;
     this.passwordHashAdapter = passwordHashAdapter;
+    this.securityKeyHashAdapter = securityKeyHashAdapter;
   }
 
   async execute(user: IUser) {
@@ -43,9 +47,14 @@ export class CreateUserUseCase {
       user.password,
     );
 
+    const hashedSecurityKey = await this.securityKeyHashAdapter.execute(
+      user.securityKey || '',
+    );
+
     const userData = {
       ...user,
       password: hashedPassword,
+      securityKey: hashedSecurityKey,
       id: userId,
     };
 

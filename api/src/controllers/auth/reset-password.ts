@@ -1,5 +1,9 @@
 import { ZodError } from 'zod';
-import { InvalidTokenError, UserNotFoundError } from '../../errors';
+import {
+  ExpiredTokenError,
+  InvalidTokenError,
+  UserNotFoundError,
+} from '../../errors';
 import {
   badRequest,
   ok,
@@ -24,7 +28,7 @@ export class ResetPasswordController {
 
       await resetPasswordSchema.parseAsync(params);
 
-      await this.resetPasswordUseCase.execute(params.token, params.newPassword);
+      await this.resetPasswordUseCase.execute(params.token, params.password);
 
       return ok({ message: 'Password reset successful' });
     } catch (error) {
@@ -34,6 +38,10 @@ export class ResetPasswordController {
 
       if (error instanceof InvalidTokenError) {
         return unauthorized();
+      }
+
+      if (error instanceof ExpiredTokenError) {
+        return badRequest({ message: error.message });
       }
 
       if (error instanceof UserNotFoundError) {

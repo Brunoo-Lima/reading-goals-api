@@ -29,14 +29,16 @@ export class ForgotPasswordUseCase {
   async execute(email: string, securityKey: string) {
     const user = await this.getUserByEmailRepository.execute(email);
 
-    const DUMMY_HASH = '33d9cb6de7937b6ea44ba77dadd6c2f9f7d27031';
+    if (!user) {
+      throw new DataInvalidError('Data invalid');
+    }
 
     const isSecurityKeyValid = await this.securityKeyComparatorAdapter.execute(
       securityKey,
-      user?.securityKey || DUMMY_HASH,
+      user.securityKey as string,
     );
 
-    if (!user || !isSecurityKeyValid) {
+    if (!isSecurityKeyValid) {
       throw new DataInvalidError('Data invalid');
     }
 
@@ -51,6 +53,6 @@ export class ForgotPasswordUseCase {
       expires_at: expiresAt,
     });
 
-    return;
+    return token;
   }
 }

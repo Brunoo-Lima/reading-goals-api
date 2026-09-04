@@ -3,11 +3,14 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  securityKey?: string;
+  securityKey: string;
   created_at: Date;
   updated_at: Date;
 }
 
-export type IUserSafe = Omit<IUser, 'password'>;
+export type IUserSafe = Omit<IUser, 'password' | 'securityKey'>;
 
-export type IUpdateUser = Omit<IUser, 'id' | 'created_at'>;
+export type IUpdateUser = Omit<
+  IUser,
+  'id' | 'created_at' | 'updated_at' | 'securityKey'
+>;

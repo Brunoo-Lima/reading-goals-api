@@ -1,3 +1,4 @@
+import type { IUpdateUser } from '../../@types/IUser';
 import { ExpiredTokenError, InvalidTokenError } from '../../errors';
 import { type IPasswordHashAdapter } from '../../interfaces/adapters';
 import {
@@ -42,6 +43,6 @@ export class ResetPasswordUseCase {
 
     await this.updateUserRepository.execute(passwordReset.user_id, {
       password: hashedPassword,
-    });
+    } as IUpdateUser);
   }
 }

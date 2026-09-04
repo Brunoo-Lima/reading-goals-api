@@ -25,5 +25,9 @@ export interface IGenerateTokenAdapter {
 }
 
 export interface ISecurityKeyComparatorAdapter {
-  execute(securityKey: string, hashedSecurityKey: string): Promise<boolean>;
+  execute(securityKey: string, userSecurityKey: string): Promise<boolean>;
+}
+
+export interface ISecurityKeyHashAdapter {
+  execute(securityKey: string): Promise<string>;
 }

@@ -9,7 +9,7 @@ export interface IRefreshTokenUseCase {
 }
 
 export interface IForgotPasswordUseCase {
-  execute(email: string, securityKey: string): Promise<void>;
+  execute(email: string, securityKey: string): Promise<string>;
 }
 
 export interface IResetPasswordUseCase {

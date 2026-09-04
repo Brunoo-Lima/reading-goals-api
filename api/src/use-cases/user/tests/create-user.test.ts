@@ -32,16 +32,24 @@ describe('Create User Use Case', () => {
     }
   }
 
+  class SecurityKeyHashAdapterStub {
+    async execute() {
+      return 'hashed_security_key';
+    }
+  }
+
   const makeSut = () => {
     const getUserByEmailRepository = new GetUserByEmailRepositoryStub();
     const createUserRepository = new CreateUserRepositoryStub();
     const passwordHashAdapter = new PasswordHashAdapterStub();
     const idGeneratorAdapter = new IdGeneratorAdapterStub();
+    const securityKeyHashAdapter = new SecurityKeyHashAdapterStub();
     const sut = new CreateUserUseCase(
       getUserByEmailRepository,
       createUserRepository,
       idGeneratorAdapter,
       passwordHashAdapter,
+      securityKeyHashAdapter,
     );
 
     return {
@@ -50,6 +58,7 @@ describe('Create User Use Case', () => {
       createUserRepository,
       idGeneratorAdapter,
       passwordHashAdapter,
+      securityKeyHashAdapter,
     };
   };
 
@@ -86,6 +95,7 @@ describe('Create User Use Case', () => {
     expect(createUserRepositorySpy).toHaveBeenCalledWith({
       ...user,
       password: 'hashed_password',
+      securityKey: 'hashed_security_key',
       id: 'generated_id',
     });
   });
@@ -101,6 +111,26 @@ describe('Create User Use Case', () => {
     expect(createUserRepositorySpy).toHaveBeenCalledWith({
       ...user,
       password: 'hashed_password',
+      securityKey: 'hashed_security_key',
+      id: 'generated_id',
+    });
+  });
+
+  test('should call SecurityKeyHashAdapter to hash the security key', async () => {
+    const { sut, createUserRepository, securityKeyHashAdapter } = makeSut();
+    const createUserRepositorySpy = vi.spyOn(createUserRepository, 'execute');
+    const securityKeyHashAdapterSpy = vi.spyOn(
+      securityKeyHashAdapter,
+      'execute',
+    );
+
+    await sut.execute(user);
+
+    expect(securityKeyHashAdapterSpy).toHaveBeenCalledWith(user.securityKey);
+    expect(createUserRepositorySpy).toHaveBeenCalledWith({
+      ...user,
+      password: 'hashed_password',
+      securityKey: 'hashed_security_key',
       id: 'generated_id',
     });
   });
@@ -130,6 +160,17 @@ describe('Create User Use Case', () => {
     vi.spyOn(idGeneratorAdapter, 'execute').mockImplementationOnce(() => {
       throw new Error();
     });
+
+    const promise = sut.execute(user);
+
+    await expect(promise).rejects.toThrow();
+  });
+
+  test('should throw if SecurityKeyHashAdapter throws', async () => {
+    const { sut, securityKeyHashAdapter } = makeSut();
+    vi.spyOn(securityKeyHashAdapter, 'execute').mockRejectedValueOnce(
+      new Error(),
+    );
 
     const promise = sut.execute(user);
 

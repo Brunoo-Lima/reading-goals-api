@@ -22,11 +22,13 @@ describe('Reset Password Controller', () => {
   } as Partial<Request> as Request;
 
   it('should return 200 on reset password success', async () => {
-    const { sut } = makeSut();
+    const { sut, resetPasswordUseCaseStub } = makeSut();
+    const executeSpy = vi.spyOn(resetPasswordUseCaseStub, 'execute');
 
     const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(200);
+    expect(executeSpy).toHaveBeenCalledWith('valid_token', 'new_password');
   });
 
   it('should return 400 if token is missing', async () => {

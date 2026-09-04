@@ -4,7 +4,7 @@ import { ForgotPasswordController } from '../forgot-password';
 describe('Forgot Password Controller', () => {
   class ForgotPasswordUseCaseStub {
     async execute() {
-      return;
+      return 'valid-token';
     }
   }
 
@@ -28,6 +28,7 @@ describe('Forgot Password Controller', () => {
     const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ token: 'valid-token' });
   });
 
   it('should return 400 if email is missing', async () => {

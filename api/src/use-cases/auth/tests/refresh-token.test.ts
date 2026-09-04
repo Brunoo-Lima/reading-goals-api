@@ -56,6 +56,37 @@ describe('Refresh Token Use Case', () => {
     expect(executeSpy).toHaveBeenCalledWith('any_user_id', true);
   });
 
+  test('should not preserve rememberMe when refreshing tokens', async () => {
+    const { sut, tokenVerifierAdapterStub, tokensGeneratorAdapterStub } =
+      makeSut();
+    vi.spyOn(tokenVerifierAdapterStub, 'execute').mockReturnValueOnce({
+      userId: 'any_user_id',
+      rememberMe: false,
+    });
+
+    const executeSpy = vi.spyOn(tokensGeneratorAdapterStub, 'execute');
+
+    await sut.execute('any_refresh_token');
+
+    expect(executeSpy).toHaveBeenCalledWith('any_user_id', false);
+  });
+
+  test('should rememberMe false when for null', async () => {
+    const { sut, tokenVerifierAdapterStub, tokensGeneratorAdapterStub } =
+      makeSut();
+
+    vi.spyOn(tokenVerifierAdapterStub, 'execute').mockReturnValueOnce({
+      userId: 'any_user_id',
+      rememberMe: null as any,
+    });
+
+    const executeSpy = vi.spyOn(tokensGeneratorAdapterStub, 'execute');
+
+    await sut.execute('any_refresh_token');
+
+    expect(executeSpy).toHaveBeenCalledWith('any_user_id', false);
+  });
+
   test('should throw if TokensVerifierAdapter throws', async () => {
     const { sut, tokenVerifierAdapterStub } = makeSut();
     vi.spyOn(tokenVerifierAdapterStub, 'execute').mockReturnValueOnce(

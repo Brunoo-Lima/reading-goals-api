@@ -14,6 +14,7 @@ import {
 } from '@/schemas/login-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 export function LoginForm() {
   const {
@@ -59,6 +60,7 @@ export function LoginForm() {
           <Input
             id="password"
             type="password"
+            maxLength={6}
             placeholder="••••••••"
             {...register('password')}
           />
@@ -74,9 +76,9 @@ export function LoginForm() {
         <Field>
           <FieldDescription className="text-center">
             Não possui uma conta?
-            <a href="#" className="ml-1 underline underline-offset-4">
+            <Link to="/registro" className="ml-1 underline underline-offset-4">
               Registre-se
-            </a>
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

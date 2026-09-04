@@ -7,7 +7,10 @@ export interface IUser {
   updated_at?: Date;
 }
 
-export type ICreateUser = Omit<IUser, 'id' | 'created_at' | 'updated_at'>;
+export interface ICreateUser
+  extends Omit<IUser, 'id' | 'created_at' | 'updated_at'> {
+  securityKey?: string;
+}
 
 export type IUserRequest = IUser & {
   tokens: {

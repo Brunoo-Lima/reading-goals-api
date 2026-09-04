@@ -5,6 +5,7 @@ import { GeneralPage } from '@/pages/(protected)/general/geral';
 import { GoalsPage } from '@/pages/(protected)/goals/goals';
 import { StatisticsPage } from '@/pages/(protected)/statistics/statistics';
 import { LoginPage } from '@/pages/login/login';
+import { RegisterPage } from '@/pages/register/register';
 import { PrivateRoute } from '@/providers/private-route';
 import { Route, Routes } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="/registro" element={<RegisterPage />} />
 
       <Route element={<PrivateRoute />}>
         <Route element={<DefaultLayout />}>

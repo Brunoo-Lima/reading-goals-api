@@ -7,9 +7,12 @@ export interface IUser {
   updated_at?: Date;
 }
 
-export interface ICreateUser
-  extends Omit<IUser, 'id' | 'created_at' | 'updated_at'> {
+export interface ICreateUser extends Omit<
+  IUser,
+  'id' | 'created_at' | 'updated_at'
+> {
   securityKey?: string;
+  timeZone: string;
 }
 
 export type IUserRequest = IUser & {

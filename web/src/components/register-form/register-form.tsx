@@ -31,6 +31,7 @@ export function RegisterForm() {
       password: '',
       confirmPassword: '',
       securityKey: '',
+      timeZone: 'America/Sao_Paulo',
     },
   });
 
@@ -40,6 +41,7 @@ export function RegisterForm() {
       email: data.email,
       password: data.password,
       securityKey: data.securityKey,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     });
     navigate('/');
   };

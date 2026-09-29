@@ -1,3 +1,4 @@
+import { isValidTimeZone } from '@/utils/timezone';
 import { z } from 'zod';
 
 export const registerFormSchema = z
@@ -14,6 +15,10 @@ export const registerFormSchema = z
       .string('Chave de segurança é obrigatória')
       .trim()
       .min(1, 'Chave de segurança é obrigatória'),
+    timeZone: z
+      .string()
+      .refine(isValidTimeZone, { message: 'Invalid time zone' })
+      .default('America/Sao_Paulo'),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     message: 'As senhas não coincidem',

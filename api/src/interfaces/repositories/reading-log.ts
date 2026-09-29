@@ -11,3 +11,7 @@ export interface IGetReadingLogRepository {
 export interface IGetReadingLogsByBookIdRepository {
   execute(bookId: string, userId: string): Promise<IReadingLog[]>;
 }
+
+export interface IGetReadingLogDatesRepository {
+  execute(userId: string): Promise<Date[]>;
+}

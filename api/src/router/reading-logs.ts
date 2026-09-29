@@ -3,10 +3,25 @@ import { auth } from '../middlewares/auth';
 import {
   makeGetReadingLogController,
   makeGetReadingLogsByBookIdController,
+  makeGetReadingStreakController,
   makeRegisterReadingLogController,
 } from '../factories/controllers';
 
 const readingLogRoutes: IRouter = Router();
+
+readingLogRoutes.get(
+  '/streak',
+  auth,
+  async (request: Request, response: Response) => {
+    const getReadingStreakController = makeGetReadingStreakController();
+    request.params.userId = request.userId as string;
+
+    const { statusCode, body } =
+      await getReadingStreakController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
 
 readingLogRoutes.post(
   '/',

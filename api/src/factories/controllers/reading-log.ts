@@ -1,18 +1,21 @@
 import {
   GetReadingLogController,
   GetReadingLogsByBookIdController,
+  GetReadingStreakController,
   RegisterReadingLogController,
 } from '../../controllers';
 import {
   PostgresGetBookByIdRepository,
   PostgresGetReadingLogRepository,
   PostgresGetReadingLogsByBookIdRepository,
+  PostgresGetReadingLogDatesRepository,
   PostgresGetUserByIdRepository,
   PostgresRegisterReadingLogRepository,
 } from '../../repositories/postgres';
 import {
   GetReadingLogsByBookIdUseCase,
   GetReadingLogUseCase,
+  GetReadingStreakUseCase,
   RegisterReadingLogUseCase,
 } from '../../use-cases';
 
@@ -68,4 +71,16 @@ export const makeGetReadingLogsByBookIdController = () => {
   );
 
   return getReadingLogsByBookIdController;
+};
+export const makeGetReadingStreakController = () => {
+  const getReadingLogDatesRepository =
+    new PostgresGetReadingLogDatesRepository();
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+
+  return new GetReadingStreakController(
+    new GetReadingStreakUseCase(
+      getReadingLogDatesRepository,
+      getUserByIdRepository,
+    ),
+  );
 };

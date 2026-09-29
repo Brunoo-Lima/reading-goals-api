@@ -17,6 +17,7 @@ export * from './auth/reset-password';
 export * from './reading-log/register-reading-log';
 export * from './reading-log/get-reading-log';
 export * from './reading-log/get-reading-logs-by-book-id';
+export * from './reading-log/get-reading-streak';
 
 export * from './goal/create-goal';
 export * from './goal/get-goals';

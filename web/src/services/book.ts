@@ -1,6 +1,6 @@
 import type { ICreateBook } from '@/@types/IBook';
 import api from './api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { AxiosError } from 'axios';
 
@@ -11,10 +11,13 @@ export const createBook = async (book: ICreateBook) => {
 };
 
 export const useCreateBook = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ['createBook'],
     mutationFn: createBook,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
       toast.success('Livro criado com sucesso!');
     },
     onError: (error: AxiosError) => {
@@ -29,10 +32,11 @@ export const getBooks = async () => {
   return data;
 };
 
-export const useGetBooks = () => {
-  return useMutation({
-    mutationKey: ['getBooks'],
-    mutationFn: getBooks,
+export const useGetBooks = (enabled = true) => {
+  return useQuery({
+    queryKey: ['books'],
+    queryFn: getBooks,
+    enabled,
   });
 };
 
@@ -54,9 +58,18 @@ export const deleteBook = async (id: string) => {
 };
 
 export const useDeleteBook = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ['deleteBook'],
     mutationFn: deleteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      toast.success('Livro deletado com sucesso!');
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.message || 'Erro ao atualizar livro.');
+    },
   });
 };
 
@@ -66,10 +79,16 @@ export const updateBook = async (id: string, book: ICreateBook) => {
 };
 
 export const useUpdateBook = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ['updateBook'],
     mutationFn: (book: { id: string; book: ICreateBook }) => {
       return updateBook(book.id, book.book);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      toast.success('Livro atualizado com sucesso!');
     },
 
     onError: (error: AxiosError) => {

@@ -5,6 +5,8 @@ import { FlameIcon } from 'lucide-react';
 export const StreakCard = () => {
   const { streak } = useStreak();
 
+  console.log('streak', streak);
+
   return (
     <div className="p-4">
       <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-primary/10 border border-accent/30">
@@ -19,7 +21,7 @@ export const StreakCard = () => {
               )}
             />
           </div>
-          <div>
+          <div className="flex flex-row items-center gap-2">
             <p className="text-2xl font-bold text-foreground">
               {streak.currentStreak}
             </p>
@@ -30,7 +32,10 @@ export const StreakCard = () => {
         </div>
         {streak.longestStreak > 0 && (
           <p className="text-xs text-muted-foreground mt-2">
-            Recorde: {streak.longestStreak} dias
+            Recorde:{' '}
+            {streak.longestStreak === 1
+              ? '1 dia'
+              : `${streak.longestStreak} dias`}
           </p>
         )}
       </div>

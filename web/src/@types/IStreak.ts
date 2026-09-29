@@ -1,5 +1,6 @@
 export interface IStreak {
   currentStreak: number;
-  lastReadDate: string | null;
+  lastReadingDate: string | null;
   longestStreak: number;
+  readToday: boolean;
 }

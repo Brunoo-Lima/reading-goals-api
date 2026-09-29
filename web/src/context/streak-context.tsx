@@ -1,25 +1,41 @@
+import { useAuth } from '@/hooks/use-auth';
+import { getStreak } from '@/services/streak';
+import { useQuery } from '@tanstack/react-query';
+import { createContext, useCallback } from 'react';
 import type { IStreak } from '@/@types/IStreak';
-import { createContext, useState } from 'react';
 
 interface IStreakContext {
   streak: IStreak;
-  setStreak: (streak: IStreak) => void;
+  refreshStreak: () => Promise<void>;
 }
 
 export const StreakContext = createContext<IStreakContext | undefined>(
   undefined,
 );
 
+const emptyStreak: IStreak = {
+  currentStreak: 0,
+  lastReadingDate: null,
+  longestStreak: 0,
+  readToday: false,
+};
+
 export const StreakProvider = ({ children }: React.PropsWithChildren) => {
-  const [streak, setStreak] = useState<IStreak>({
-    currentStreak: 0,
-    lastReadDate: null,
-    longestStreak: 0,
+  const { isAuthenticated, user } = useAuth();
+
+  const { data: streak = emptyStreak, refetch } = useQuery({
+    queryKey: ['reading-streak', user?.id],
+    queryFn: getStreak,
+    enabled: isAuthenticated,
   });
+
+  const refreshStreak = useCallback(async () => {
+    await refetch();
+  }, [refetch]);
 
   const contextValue = {
     streak,
-    setStreak,
+    refreshStreak,
   };
 
   return (

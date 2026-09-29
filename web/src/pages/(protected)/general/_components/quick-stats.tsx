@@ -1,9 +1,10 @@
+import type { IStreak } from '@/@types/IStreak';
 import { Card } from '@/components/ui/card';
 import { FileTextIcon, TrendingUpIcon } from 'lucide-react';
 
 interface IQuickStatsProps {
   totalPagesRead: number;
-  streak: any;
+  streak: IStreak;
 }
 
 export const QuickStats = ({ totalPagesRead, streak }: IQuickStatsProps) => {

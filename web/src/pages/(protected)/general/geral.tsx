@@ -1,6 +1,6 @@
 import { useBooks } from '@/hooks/use-books';
 import { StatsCards } from './_components/stats-cards';
-import { CardProgressDaily } from './_components/card-progress-daily';
+import { CardProgressDaily } from './_components/card-reading-register/card-progress-daily';
 import { CardReadingCurrently } from './_components/card-reading-currently';
 import { QuickStats } from './_components/quick-stats';
 import { useStreak } from '@/hooks/use-streak';
@@ -52,7 +52,7 @@ export function GeneralPage() {
         {/* Currently Reading */}
         <div className="grid lg:grid-cols-[400px_1fr] gap-6">
           {/* Daily Progress Card */}
-          <CardProgressDaily hasReadToday={totalPagesRead > 0} />
+          <CardProgressDaily hasReadToday={totalPagesRead > 0} books={books} />
 
           {readingBooks.length > 0 && (
             <CardReadingCurrently readingBooks={readingBooks} />

@@ -9,7 +9,11 @@ import {
   serverError,
   userNotFoundResponse,
 } from '../helpers';
-import { BookNotFoundError, UserNotFoundError } from '../../errors';
+import {
+  BookNotFoundError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+  UserNotFoundError,
+} from '../../errors';
 import { ZodError } from 'zod';
 import { registerReadingLogSchema } from '../../schemas';
 
@@ -53,6 +57,10 @@ export class RegisterReadingLogController {
 
       if (error instanceof BookNotFoundError) {
         return bookNotFoundResponse();
+      }
+
+      if (error instanceof InvalidCurrentPageNotExceedTotalPagesError) {
+        return badRequest({ message: error.message });
       }
 
       return serverError();

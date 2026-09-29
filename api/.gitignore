@@ -4,6 +4,7 @@ node_modules
 # Environment variable
 .env
 .env*
+.env.example
 
 # Prisma
 /generated

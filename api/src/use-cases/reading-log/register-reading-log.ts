@@ -1,5 +1,9 @@
 import type { IReadingLog } from '../../@types/IReadingLog';
-import { BookNotFoundError, UserNotFoundError } from '../../errors';
+import {
+  BookNotFoundError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+  UserNotFoundError,
+} from '../../errors';
 import type {
   IGetBookByIdRepository,
   IGetUserByIdRepository,
@@ -32,6 +36,10 @@ export class RegisterReadingLogUseCase {
 
     if (!book) {
       throw new BookNotFoundError();
+    }
+
+    if (readingLog.pages_read > book.total_pages - (book.current_page || 0)) {
+      throw new InvalidCurrentPageNotExceedTotalPagesError();
     }
 
     const readingLogData = {

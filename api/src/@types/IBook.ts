@@ -9,7 +9,7 @@ export interface IBook {
   status: StatusReading;
   total_pages: number;
   current_page?: number;
-  rating?: number;
+  rating?: number | null;
   start_date?: Date | null;
   end_date?: Date | null;
   created_at: Date;

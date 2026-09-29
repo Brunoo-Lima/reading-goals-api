@@ -6,6 +6,7 @@ export interface IUser {
   securityKey: string;
   created_at: Date;
   updated_at: Date;
+  timeZone: string;
 }
 
 export type IUserSafe = Omit<IUser, 'password' | 'securityKey'>;

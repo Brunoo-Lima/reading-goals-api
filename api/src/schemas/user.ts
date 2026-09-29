@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isValidTimeZone } from '../utils/timezone';
 
 const createUserSchema = z.strictObject(
   {
@@ -21,6 +22,10 @@ const createUserSchema = z.strictObject(
       .string('Security key is required')
       .trim()
       .min(1, { error: 'Security key is required' }),
+    timeZone: z
+      .string()
+      .refine(isValidTimeZone, { message: 'Invalid time zone' })
+      .default('America/Sao_Paulo'),
   },
   {
     error: 'Some provided field is not allowed.',

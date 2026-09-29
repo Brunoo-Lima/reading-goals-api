@@ -7,9 +7,9 @@ import {
   type SetStateAction,
 } from 'react';
 import {
-  getBooks,
   useCreateBook,
   useDeleteBook,
+  useGetBooks,
   useUpdateBook,
 } from '@/services/book';
 import { toast } from 'sonner';
@@ -35,32 +35,40 @@ interface IBooksContext {
 export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
-  const [books, setBooks] = useState<IBook[]>([]);
+  // const [books, setBooks] = useState<IBook[]>([]);
   const [book, setBook] = useState<IBook | null>(null);
 
   const { isAuthenticated } = useAuth();
-
+  const { data: books = [], isError } = useGetBooks(isAuthenticated);
   const createBookService = useCreateBook();
   const deleteBookService = useDeleteBook();
   const updateBookService = useUpdateBook();
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await getBooks();
-        setBooks(response);
-      } catch (error) {
-        console.error(error);
-        toast.error(
-          'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
-        );
-      }
-    };
+  // useEffect(() => {
+  //   const fetchBooks = async () => {
+  //     try {
+  //       const response = await getBooks();
+  //       setBooks(response);
+  //     } catch (error) {
+  //       console.error(error);
+  //       toast.error(
+  //         'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
+  //       );
+  //     }
+  //   };
 
-    if (isAuthenticated) {
-      fetchBooks();
+  //   if (isAuthenticated) {
+  //     fetchBooks();
+  //   }
+  // }, [setBooks, isAuthenticated]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(
+        'Erro ao buscar livros. Por favor, tente novamente mais tarde.',
+      );
     }
-  }, [setBooks, isAuthenticated]);
+  }, [isError]);
 
   const addBook = async (book: ICreateBook) => {
     const newBook: ICreateBook = {
@@ -72,53 +80,28 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
           : (book.current_page ?? 0),
     };
 
-    const createdBook = await createBookService.mutateAsync(newBook);
-    setBooks((prev) => [...prev, createdBook]);
-
-    return createdBook;
+    return await createBookService.mutateAsync(newBook);
   };
 
   const updateBook = async (id: string, updates: ICreateBook) => {
-    await updateBookService.mutateAsync(
-      { id, book: updates },
-      {
-        onSuccess: () => {
-          setBooks((prev) =>
-            prev.map((book) =>
-              book.id === id ? { ...book, ...updates } : book,
-            ),
-          );
-          toast.success('Livro atualizado com sucesso!');
-        },
-      },
-    );
+    await updateBookService.mutateAsync({ id, book: updates });
   };
 
   const deleteBook = async (id: string) => {
-    try {
-      await deleteBookService.mutateAsync(id, {
-        onSuccess: () => {
-          setBooks((prev) => prev.filter((book) => book.id !== id));
-
-          setTimeout(() => {
-            toast.success('Livro deletado com sucesso!');
-          }, 100);
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    await deleteBookService.mutateAsync(id);
   };
 
   const getBooksByStatus = (status: StatusReading) => {
-    return books.filter((book) => book.status === status);
+    return books.filter((book: IBook) => book.status === status);
   };
 
-  const completedBooks = books.filter((book) => book.status === 'COMPLETED');
-  const readingBooks = books.filter((book) => book.status === 'READING');
-  const toReadBooks = books.filter((book) => book.status === 'WISHLIST');
+  const completedBooks = books.filter(
+    (book: IBook) => book.status === 'COMPLETED',
+  );
+  const readingBooks = books.filter((book: IBook) => book.status === 'READING');
+  const toReadBooks = books.filter((book: IBook) => book.status === 'WISHLIST');
 
-  const totalPagesRead = books.reduce((acc, book) => {
+  const totalPagesRead = books.reduce((acc: number, book: IBook) => {
     if (book.status === 'COMPLETED' && book.total_pages) {
       return acc + book.total_pages;
     }

@@ -6,7 +6,7 @@ export const readingLog = {
   user_id: faker.string.uuid(),
   pages_read: faker.number.int(),
   notes_about_session: faker.lorem.sentence(),
-  date: faker.date.anytime(),
+  date: new Date('2027-04-24'),
   created_at: faker.date.anytime(),
   updated_at: faker.date.anytime(),
 };
@@ -18,7 +18,7 @@ export const readingLogs = [
     user_id: faker.string.uuid(),
     pages_read: faker.number.int(),
     notes_about_session: faker.lorem.sentence(),
-    date: faker.date.anytime(),
+    date: new Date('2027-04-24'),
     created_at: faker.date.anytime(),
     updated_at: faker.date.anytime(),
   },

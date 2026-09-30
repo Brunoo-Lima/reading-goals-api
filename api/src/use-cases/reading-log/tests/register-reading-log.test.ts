@@ -8,6 +8,7 @@ describe('Register Reading Log Use Case', () => {
   const readingLog: IReadingLog = {
     ...fakerReadingLog,
     id: undefined as any,
+    pages_read: 40,
     user_id: user.id,
     book_id: book.id,
   };

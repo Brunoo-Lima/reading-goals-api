@@ -12,11 +12,6 @@ describe('Create Goal Repository', () => {
     id: undefined as any,
   };
 
-  const bookOld = {
-    ...fakeBook,
-    id: undefined as any,
-  };
-
   const sut = new PostgresCreateGoalRepository();
 
   test('should create a goal on db', async () => {
@@ -26,7 +21,7 @@ describe('Create Goal Repository', () => {
 
     const bookData = await prisma.book.create({
       data: {
-        ...bookOld,
+        ...fakeBook,
         user_id: userData.id,
       },
     });
@@ -51,7 +46,7 @@ describe('Create Goal Repository', () => {
 
     const bookData = await prisma.book.create({
       data: {
-        ...bookOld,
+        ...fakeBook,
         user_id: userData.id,
       },
     });

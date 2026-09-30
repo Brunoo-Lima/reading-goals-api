@@ -14,6 +14,7 @@ describe('Update User Repository', () => {
     securityKey: faker.string.uuid(),
     created_at: faker.date.anytime(),
     updated_at: faker.date.anytime(),
+    timeZone: faker.location.timeZone(),
   };
 
   const sut = new PostgresUpdateUserRepository();

@@ -12,6 +12,11 @@ describe('Register Reading Log Repository', () => {
     id: undefined as any,
   };
 
+  const readingLogOld = {
+    ...fakeReadingLog,
+    pages_read: 40,
+  };
+
   const sut = new PostgresRegisterReadingLogRepository();
 
   test('should register reading log on db', async () => {
@@ -27,8 +32,7 @@ describe('Register Reading Log Repository', () => {
     });
 
     const readingLog = {
-      ...fakeReadingLog,
-      pages_read: 40,
+      ...readingLogOld,
       user_id: userData.id,
       book_id: book.id,
     };
@@ -38,32 +42,29 @@ describe('Register Reading Log Repository', () => {
     expect(result).toEqual(readingLog);
   });
 
-  test('should call Prisma with correct params', async () => {
-    const userData = await prisma.user.create({
-      data: userOld,
-    });
+  test('should create reading log and increment book current_page', async () => {
+    const userData = await prisma.user.create({ data: userOld });
 
     const book = await prisma.book.create({
-      data: {
-        ...fakeBook,
-        user_id: userData.id,
-      },
+      data: { ...fakeBook, user_id: userData.id },
     });
 
-    const prismaSpy = vi.spyOn(prisma.readingLog, 'create');
-
     const readingLog = {
-      ...fakeReadingLog,
-      pages_read: 40,
+      ...readingLogOld,
       user_id: userData.id,
       book_id: book.id,
     };
 
-    await sut.execute(readingLog);
+    const result = await sut.execute(readingLog);
 
-    expect(prismaSpy).toHaveBeenCalledWith({
-      data: readingLog,
+    const updatedBook = await prisma.book.findUnique({
+      where: { id: book.id },
     });
+
+    expect(result).toMatchObject(readingLog);
+    expect(updatedBook?.current_page).toBe(
+      book.current_page + readingLog.pages_read,
+    );
   });
 
   test('should throw if Prisma throws', async () => {

@@ -8,5 +8,5 @@ export const user = {
   securityKey: faker.string.uuid(),
   created_at: faker.date.anytime(),
   updated_at: faker.date.anytime(),
-  timeZone: faker.location.timeZone(),
+  timeZone: 'America/Sao_Paulo',
 };

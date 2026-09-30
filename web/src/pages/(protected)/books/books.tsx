@@ -41,9 +41,16 @@ export function BooksPage() {
             <DescriptionPage>Gerencie sua biblioteca pessoal</DescriptionPage>
           </ContentPage>
 
-          <Button onClick={handleCreateBook} className="gap-2 cursor-pointer">
+          <Button
+            onClick={handleCreateBook}
+            className="gap-2 cursor-pointer self-end"
+          >
             <PlusIcon className="size-5" />
-            <p className="hidden sm:inline">Novo Livro</p>
+            <p
+            // className="hidden sm:inline"
+            >
+              Novo Livro
+            </p>
           </Button>
         </HeaderPage>
 

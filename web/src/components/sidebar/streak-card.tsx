@@ -23,8 +23,8 @@ export const StreakCard = () => {
             <p className="text-2xl font-bold text-foreground">
               {streak.currentStreak}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {streak.currentStreak === 1 ? 'dia de streak' : 'dias de streak'}
+            <p className="text-2xl font-bold text-foreground">
+              {streak.currentStreak === 1 ? 'dia' : 'dias'}
             </p>
           </div>
         </div>

@@ -7,6 +7,13 @@ import { useState } from 'react';
 import type { IBook, StatusReading } from '@/@types/IBook';
 import { ModalBookDetails } from './modal-book-details/modal-book-details';
 import { useGetBookById } from '@/services/book';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface ITabsComponentsProps {
   onEditBook: (book: IBook) => void;
@@ -39,15 +46,33 @@ export const TabsComponent = ({
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
-        className="space-y-6"
+        className="space-y-6 "
       >
-        <TabsList className="bg-card border border-border/50 *:cursor-pointer">
-          <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="READING">Lendo</TabsTrigger>
-          <TabsTrigger value="WISHLIST">Quero Ler</TabsTrigger>
-          <TabsTrigger value="COMPLETED">Concluidos</TabsTrigger>
-          <TabsTrigger value="ABANDONED">Abandonados</TabsTrigger>
-        </TabsList>
+        <div className="hidden sm:block">
+          <TabsList className="bg-card border border-border/50 *:cursor-pointer w-full *:flex-1">
+            <TabsTrigger value="all">Todos</TabsTrigger>
+            <TabsTrigger value="READING">Lendo</TabsTrigger>
+            <TabsTrigger value="WISHLIST">Quero Ler</TabsTrigger>
+            <TabsTrigger value="COMPLETED">Concluidos</TabsTrigger>
+            <TabsTrigger value="ABANDONED">Abandonados</TabsTrigger>
+          </TabsList>
+        </div>
+
+        <div className="sm:hidden">
+          <Select value={activeTab} onValueChange={setActiveTab}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem value="all">Todos</SelectItem>
+              <SelectItem value="READING">Lendo</SelectItem>
+              <SelectItem value="WISHLIST">Quero Ler</SelectItem>
+              <SelectItem value="COMPLETED">Concluidos</SelectItem>
+              <SelectItem value="ABANDONED">Abandonados</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <TabsContent value={activeTab} className="mt-0">
           {filteredBooks.length === 0 ? (

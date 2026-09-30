@@ -52,7 +52,7 @@ export function GeneralPage() {
         {/* Currently Reading */}
         <div className="grid lg:grid-cols-[400px_1fr] gap-6">
           {/* Daily Progress Card */}
-          <CardProgressDaily hasReadToday={totalPagesRead > 0} books={books} />
+          <CardProgressDaily books={books} />
 
           {readingBooks.length > 0 && (
             <CardReadingCurrently readingBooks={readingBooks} />

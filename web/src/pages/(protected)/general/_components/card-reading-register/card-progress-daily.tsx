@@ -4,16 +4,14 @@ import { CheckCircleIcon, ClockIcon } from 'lucide-react';
 import { FormRegisterReading } from './form-register-reading';
 import { useState } from 'react';
 import type { IBook } from '@/@types/IBook';
+import { useStreak } from '@/hooks/use-streak';
 
 interface ICardProgressDailyProps {
-  hasReadToday: boolean;
   books: IBook[];
 }
 
-export const CardProgressDaily = ({
-  hasReadToday,
-  books,
-}: ICardProgressDailyProps) => {
+export const CardProgressDaily = ({ books }: ICardProgressDailyProps) => {
+  const { streak } = useStreak();
   const [open, setOpen] = useState(false);
 
   return (
@@ -24,7 +22,7 @@ export const CardProgressDaily = ({
           <ClockIcon className="h-5 w-5 text-muted-foreground" />
         </div>
 
-        {hasReadToday ? (
+        {streak.currentStreak > 0 ? (
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-primary">
               <CheckCircleIcon className="h-5 w-5" />

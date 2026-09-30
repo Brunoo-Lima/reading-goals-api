@@ -10,7 +10,7 @@ export const AddGoalButton = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="self-end">
           <PlusIcon className="h-4 w-4 mr-2" />
           Nova Meta
         </Button>

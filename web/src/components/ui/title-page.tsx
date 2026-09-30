@@ -5,7 +5,9 @@ interface ITitlePageProps {
 
 export const HeaderPage = ({ children, className }: ITitlePageProps) => {
   return (
-    <div className={`flex justify-between gap-4 mb-6 ${className}`}>
+    <div
+      className={`flex justify-between gap-4 mb-6 ${className} sm:flex-row flex-col`}
+    >
       {children}
     </div>
   );

@@ -1,7 +1,5 @@
-'use client';
-
 import { cn } from '@/lib/utils';
-import { BookOpen, MessageCircle } from 'lucide-react';
+import { BookOpen, MenuIcon, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StreakCard } from './streak-card';
 import { NavLink } from 'react-router-dom';
@@ -25,11 +23,20 @@ export function Sidebar() {
         />
       )}
 
+      {!open && (
+        <Button
+          onClick={() => setOpen(true)}
+          className="fixed top-2 left-2 z-50 lg:hidden rounded-full p-2 bg-card border border-border/50 shadow-md"
+        >
+          <MenuIcon className="size-5 text-accent" />
+        </Button>
+      )}
+
       {/* Sidebar */}
       <aside
         className={cn(
           'fixed top-0 left-0 z-50 h-max w-64 bg-card border-r border-border/50 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:z-0',
-          // open ? 'translate-x-0' : '-translate-x-full',
+          open ? 'translate-x-0' : '-translate-x-full',
         )}
       >
         <div className="p-4 border-b border-border/50">

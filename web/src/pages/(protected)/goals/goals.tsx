@@ -87,7 +87,7 @@ export function GoalsPage() {
                     ? books.find((b) => b.id === goal.book_id)?.title
                     : undefined
                 }
-                onToggleActive={() => toggleGoalActive(goal.id)}
+                onToggleActive={() => toggleGoalActive()}
                 onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />
             ))}
@@ -109,7 +109,7 @@ export function GoalsPage() {
                     ? books.find((b) => b.id === goal.book_id)?.title
                     : undefined
                 }
-                onToggleActive={() => toggleGoalActive(goal.id)}
+                onToggleActive={() => toggleGoalActive()}
                 onDelete={() => handleOpenDialogDeleteGoal(goal.id)}
               />
             ))}

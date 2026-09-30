@@ -124,14 +124,17 @@ export const FormBook = ({
 
   return (
     <Dialog open={open} onOpenChange={handleCloseForm}>
-      <DialogContent className="sm:max-w-md h-[600px] scrollArea">
+      <DialogContent className="sm:max-w-md ">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold">
             {initialData ? 'Editar Livro' : 'Adicionar Novo Livro'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 max-h-[80dvh] scrollArea"
+        >
           <Field className="gap-2">
             <FieldLabel>Título</FieldLabel>
             <Input placeholder="Nome do livro" {...register('title')} />

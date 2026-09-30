@@ -53,13 +53,13 @@ export const FormRegisterProgressGoal = ({
           placeholder={`Valor (${unit})`}
           value={progressValue}
           onChange={(e) => setProgressValue(e.target.value)}
-          className="sm:w-40 bg-card"
+          className="sm:w-40 bg-card text-sm"
         />
         <Input
           placeholder="Nota (opcional)"
           value={progressNote}
           onChange={(e) => setProgressNote(e.target.value)}
-          className="flex-1 bg-card"
+          className="flex-1 bg-card text-sm"
         />
         <Button type="submit">
           {isSubmitting ? 'Registrando...' : 'Registrar'}

@@ -5,8 +5,6 @@ import { FlameIcon } from 'lucide-react';
 export const StreakCard = () => {
   const { streak } = useStreak();
 
-  console.log('streak', streak);
-
   return (
     <div className="p-4">
       <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-primary/10 border border-accent/30">

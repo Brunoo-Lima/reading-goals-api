@@ -18,7 +18,7 @@ export const CardProgressDaily = ({ books }: ICardProgressDailyProps) => {
     <>
       <Card className="h-max p-6 bg-card border-border/50">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-foreground">Progresso Diário</h3>
+          <h3 className="font-semibold text-foreground">Progresso diário</h3>
           <ClockIcon className="h-5 w-5 text-muted-foreground" />
         </div>
 

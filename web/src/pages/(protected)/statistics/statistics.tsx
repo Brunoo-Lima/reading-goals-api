@@ -111,7 +111,6 @@ export function StatisticsPage() {
           </ContentPage>
         </HeaderPage>
 
-        {/* Profile Card */}
         <Card className="p-6 bg-card border-border/50">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
@@ -124,10 +123,8 @@ export function StatisticsPage() {
           </div>
         </Card>
 
-        {/* Stats Grid */}
         <StatsCard stats={stats} />
 
-        {/* Reading Stats Card */}
         <ReadingStats
           avgRating={avgRating}
           completedBooks={completedBooks}

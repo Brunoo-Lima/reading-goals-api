@@ -60,7 +60,10 @@ export const FormUser = ({
         await updateUser.mutateAsync(data);
         await refreshUser();
       } else {
-        await createUser.mutateAsync(data);
+        await createUser.mutateAsync({
+          ...data,
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        });
       }
 
       handleCloseForm(false);
@@ -118,6 +121,7 @@ export const FormUser = ({
           <div className="flex justify-end gap-2">
             <Button
               type="button"
+              variant="secondary"
               onClick={() => handleCloseForm(false)}
               className="btn btn-ghost"
             >

@@ -8,24 +8,13 @@ import {
   HeaderPage,
   TitlePage,
 } from '@/components/ui/title-page';
-import { useState } from 'react';
-import type { IBook } from '@/@types/IBook';
 import { FormBook } from './_components/forms/form-book';
 import { PageMeta } from '@/components/page-meta';
+import { useBookForm } from '@/hooks/use-book-form';
 
 export function BooksPage() {
-  const [showForm, setShowForm] = useState(false);
-  const [editingBook, setEditingBook] = useState<IBook | null>(null);
-
-  const handleCreateBook = () => {
-    setEditingBook(null);
-    setShowForm(true);
-  };
-
-  const handleEditBook = (book: IBook) => {
-    setEditingBook(book);
-    setShowForm(true);
-  };
+  const { showForm, editingBook, createBook, editBook, setShowForm } =
+    useBookForm();
 
   return (
     <>
@@ -42,7 +31,7 @@ export function BooksPage() {
           </ContentPage>
 
           <Button
-            onClick={handleCreateBook}
+            onClick={createBook}
             className="gap-2 cursor-pointer self-end"
           >
             <PlusIcon className="size-5" />
@@ -54,10 +43,7 @@ export function BooksPage() {
           </Button>
         </HeaderPage>
 
-        <TabsComponent
-          onEditBook={handleEditBook}
-          onAddBook={handleCreateBook}
-        />
+        <TabsComponent onEditBook={editBook} onAddBook={createBook} />
 
         <FormBook
           open={showForm}

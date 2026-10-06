@@ -25,8 +25,8 @@ export const QuickStats = ({ totalPagesRead, streak }: IQuickStatsProps) => {
       </Card>
       <Card className="p-4 bg-card border-border/50">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-accent/10">
-            <TrendingUpIcon className="h-5 w-5 text-accent" />
+          <div className="p-2 rounded-lg bg-primary/10">
+            <TrendingUpIcon className="h-5 w-5 text-primary" />
           </div>
           <div>
             <p className="text-xl font-bold text-foreground">

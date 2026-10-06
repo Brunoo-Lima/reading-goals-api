@@ -1,7 +1,7 @@
 import { useBooks } from '@/hooks/use-books';
 import { StatsCards } from './_components/stats-cards';
 import { CardProgressDaily } from './_components/card-reading-register/card-progress-daily';
-import { CardReadingCurrently } from './_components/card-reading-currently';
+import { CardReadingCurrently } from './_components/card-reading-currently/card-reading-currently';
 import { QuickStats } from './_components/quick-stats';
 import { useStreak } from '@/hooks/use-streak';
 import {
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/title-page';
 import { PageContainer } from '@/components/ui/page-container';
 import { PageMeta } from '@/components/page-meta';
+import { Separator } from '@/components/ui/separator';
 
 export function GeneralPage() {
   const { books, readingBooks, totalPagesRead } = useBooks();
@@ -41,22 +42,26 @@ export function GeneralPage() {
         <QuickStats totalPagesRead={totalPagesRead} streak={streak} />
 
         {/* Main Grid */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Reading Goal */}
-          {/* <ReadingGoalCard
-            goal={goal}
-            completedThisYear={completedBooks.length}
+        {/* <div className="grid lg:grid-cols-2 gap-6"> */}
+        {/* Reading Goal */}
+        {/* <ReadingGoalCard
+            goal={{ year: new Date().getFullYear(), targetBooks: 20 }}
+            completedThisYear={
+              books.filter((b) => b.status === 'COMPLETED').length
+            }
           /> */}
-        </div>
+        {/* </div> */}
+
+        <Separator />
 
         {/* Currently Reading */}
         <div className="grid lg:grid-cols-[400px_1fr] gap-6">
           {/* Daily Progress Card */}
           <CardProgressDaily books={books} />
 
-          {readingBooks.length > 0 && (
-            <CardReadingCurrently readingBooks={readingBooks} />
-          )}
+          {/* {readingBooks.length > 0 && ( */}
+          <CardReadingCurrently readingBooks={readingBooks} />
+          {/* )} */}
         </div>
       </PageContainer>
     </>

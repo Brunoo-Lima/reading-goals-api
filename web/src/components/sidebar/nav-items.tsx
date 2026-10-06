@@ -55,7 +55,7 @@ export const NavItems = ({ onClose }: INavItemsProps) => {
 
       <Button
         variant="ghost"
-        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:bg-secondary hover:text-foreground w-full h-full justify-start cursor-pointer hover:bg-primary hover:text-primary-foreground"
+        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground w-full h-full justify-start cursor-pointer hover:bg-primary hover:text-primary-foreground"
         onClick={logOut}
       >
         <LogOutIcon className="h-5 w-5" />

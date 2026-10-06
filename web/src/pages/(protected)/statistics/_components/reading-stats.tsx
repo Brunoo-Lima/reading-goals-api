@@ -21,7 +21,9 @@ export const ReadingStats = ({
       <div className="space-y-4">
         <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
           <span className="text-muted-foreground">Avaliação Média</span>
-          <span className="font-semibold text-foreground">{avgRating} / 5</span>
+          <span className="font-semibold text-foreground">
+            {Number(avgRating) > 0 ? `${avgRating} / 5` : 'N/A'}
+          </span>
         </div>
         <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
           <span className="text-muted-foreground">Livros este ano</span>

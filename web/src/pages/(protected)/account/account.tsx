@@ -34,14 +34,14 @@ export function AccountPage() {
           <div className="space-y-2">
             <Button
               variant="outline"
-              className="w-full justify-start"
+              className={`w-full justify-start ${actionView === 'settings' ? 'bg-primary text-primary-foreground' : ''}`}
               onClick={() => setActionView('settings')}
             >
               Configurações
             </Button>
             <Button
               variant="outline"
-              className="w-full justify-start"
+              className={`w-full justify-start ${actionView === 'export' ? 'bg-primary text-primary-foreground' : ''}`}
               onClick={() => setActionView('export')}
             >
               Exportar dados

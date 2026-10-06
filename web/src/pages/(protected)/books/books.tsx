@@ -30,11 +30,8 @@ export function BooksPage() {
             <DescriptionPage>Gerencie sua biblioteca pessoal</DescriptionPage>
           </ContentPage>
 
-          <Button
-            onClick={createBook}
-            className="gap-2 cursor-pointer self-end"
-          >
-            <PlusIcon className="size-5" />
+          <Button onClick={createBook} className="cursor-pointer self-end">
+            <PlusIcon className="size-4" />
             <p
             // className="hidden sm:inline"
             >

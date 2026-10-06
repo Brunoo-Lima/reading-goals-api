@@ -10,11 +10,14 @@ import {
 } from '@/components/ui/title-page';
 import { useState } from 'react';
 import { InfoUser } from './views/info-user';
+import { ExportBook } from './views/export-book';
+import { useBooks } from '@/hooks/use-books';
 
 export function AccountPage() {
   const [actionView, setActionView] = useState<'export' | 'settings'>(
     'settings',
   );
+  const { books } = useBooks();
 
   return (
     <>
@@ -44,12 +47,13 @@ export function AccountPage() {
               className={`w-full justify-start ${actionView === 'export' ? 'bg-primary text-primary-foreground' : ''}`}
               onClick={() => setActionView('export')}
             >
-              Exportar dados
+              Exportar livros
             </Button>
           </div>
         </Card>
 
         {actionView === 'settings' && <InfoUser />}
+        {actionView === 'export' && <ExportBook books={books} />}
       </PageContainer>
     </>
   );

@@ -30,7 +30,7 @@ export const CardProgressDaily = ({ books }: ICardProgressDailyProps) => {
             </div>
 
             <Button onClick={() => setOpen(true)} className="w-full">
-              Registrar mais Leitura?
+              Registrar mais leitura?
             </Button>
           </div>
         ) : (

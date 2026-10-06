@@ -10,7 +10,7 @@ import { RegisterPage } from '@/pages/register/register';
 import { ResetPasswordPage } from '@/pages/reset-password/reset-password';
 import { PrivateRoute } from '@/providers/private-route';
 import { Route, Routes } from 'react-router-dom';
-// import { ChatPage } from '@/pages/(protected)/chat/chat';
+import { NotFoundPage } from '@/components/not-found/not-found';
 
 export function AppRoutes() {
   return (
@@ -19,6 +19,7 @@ export function AppRoutes() {
       <Route path="/registro" element={<RegisterPage />} />
       <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
       <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
+      <Route path="/*" element={<NotFoundPage />} />
 
       <Route element={<PrivateRoute />}>
         <Route element={<DefaultLayout />}>
@@ -28,7 +29,6 @@ export function AppRoutes() {
           <Route path="/estatisticas" element={<StatisticsPage />} />
           <Route path="/conta" element={<AccountPage />} />
           {/* <Route path="/chat" element={<ChatPage />} /> */}
-          {/* <Route path="/*" element={<NotFound />} /> */}
         </Route>
       </Route>
     </Routes>

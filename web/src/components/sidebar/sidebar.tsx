@@ -1,8 +1,7 @@
 import { cn } from '@/lib/utils';
-import { BookOpen, MenuIcon, MessageCircle } from 'lucide-react';
+import { BookOpenIcon, MenuIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StreakCard } from './streak-card';
-import { NavLink } from 'react-router-dom';
 import { NavItems } from './nav-items';
 import { useAuth } from '@/hooks/use-auth';
 
@@ -42,7 +41,7 @@ export function Sidebar() {
         <div className="p-4 border-b border-border/50">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-primary/10">
-              <BookOpen className="h-6 w-6 text-primary" />
+              <BookOpenIcon className="h-6 w-6 text-primary" />
             </div>
             <strong className="text-lg font-bold text-foreground">
               Minha Estante
@@ -54,7 +53,7 @@ export function Sidebar() {
 
         <NavItems onClose={onClose} />
 
-        <div className="p-4 border-t border-border/50">
+        {/* <div className="p-4 border-t border-border/50">
           <NavLink to="/chat">
             <Button
               variant="outline"
@@ -65,7 +64,7 @@ export function Sidebar() {
               Assistente IA
             </Button>
           </NavLink>
-        </div>
+        </div> */}
       </aside>
     </>
   );

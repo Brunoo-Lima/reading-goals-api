@@ -10,7 +10,7 @@ import { RegisterPage } from '@/pages/register/register';
 import { ResetPasswordPage } from '@/pages/reset-password/reset-password';
 import { PrivateRoute } from '@/providers/private-route';
 import { Route, Routes } from 'react-router-dom';
-import { ChatPage } from '@/pages/(protected)/chat/chat';
+// import { ChatPage } from '@/pages/(protected)/chat/chat';
 
 export function AppRoutes() {
   return (
@@ -27,7 +27,7 @@ export function AppRoutes() {
           <Route path="/metas" element={<GoalsPage />} />
           <Route path="/estatisticas" element={<StatisticsPage />} />
           <Route path="/conta" element={<AccountPage />} />
-          <Route path="/chat" element={<ChatPage />} />
+          {/* <Route path="/chat" element={<ChatPage />} /> */}
           {/* <Route path="/*" element={<NotFound />} /> */}
         </Route>
       </Route>

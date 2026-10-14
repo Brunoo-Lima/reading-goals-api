@@ -2,6 +2,7 @@ import { Router, type IRouter, type Request, type Response } from 'express';
 import {
   makeForgotPasswordController,
   makeLoginController,
+  makeLogOutController,
   makeRefreshTokenController,
   makeResetPasswordController,
 } from '../factories/controllers';
@@ -11,6 +12,14 @@ const authRoutes: IRouter = Router();
 authRoutes.post('/login', async (request: Request, response: Response) => {
   const loginController = makeLoginController();
   const { statusCode, body } = await loginController.execute(request, response);
+
+  return response.status(statusCode).send(body);
+});
+
+authRoutes.post('/logout', async (_request: Request, response: Response) => {
+  const logOutController = makeLogOutController();
+
+  const { statusCode, body } = await logOutController.execute(response);
 
   return response.status(statusCode).send(body);
 });

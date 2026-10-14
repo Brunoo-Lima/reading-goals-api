@@ -11,6 +11,7 @@ import {
   RefreshTokenController,
   ResetPasswordController,
   ForgotPasswordController,
+  LogOutController,
 } from '../../controllers';
 import {
   PostgresForgotPasswordRepository,
@@ -41,6 +42,12 @@ export const makeLoginController = () => {
   const loginController = new LoginController(loginUseCase);
 
   return loginController;
+};
+
+export const makeLogOutController = () => {
+  const logOutController = new LogOutController();
+
+  return logOutController;
 };
 
 export const makeRefreshTokenController = () => {

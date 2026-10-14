@@ -27,6 +27,11 @@ export const created = <T>(body: T) => ({
   body,
 });
 
+export const noContent = () => ({
+  statusCode: 204,
+  body: {},
+});
+
 export const notFound = <T>(body: T) => ({
   statusCode: 404,
   body,

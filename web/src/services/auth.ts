@@ -1,5 +1,5 @@
 import api from './api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const login = async (email: string, password: string) => {
@@ -13,6 +13,27 @@ export const useUserLogin = () => {
     mutationKey: ['login'],
     mutationFn: (user: { email: string; password: string }) => {
       return login(user.email, user.password);
+    },
+  });
+};
+
+export const logOut = async () => {
+  const { data } = await api.post('/auth/logout');
+
+  return data;
+};
+
+export const useUserLogOut = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['logout'],
+    mutationFn: () => logOut(),
+    onSuccess: () => {
+      queryClient.clear();
+    },
+    onError: (error: Error) => {
+      const message = error.message || 'Erro ao sair.';
+      toast.error(message);
     },
   });
 };

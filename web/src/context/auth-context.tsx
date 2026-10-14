@@ -106,10 +106,10 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   }
 
   const logOut = () => {
-    setUser(null);
     // localStorage.removeItem('accessToken');
     // localStorage.removeItem('refreshToken');
 
+    setUser(null);
     navigate('/');
   };
 

@@ -32,11 +32,11 @@ export const getBooks = async () => {
   return data;
 };
 
-export const useGetBooks = (enabled = true) => {
+export const useGetBooks = (userId?: string) => {
   return useQuery({
-    queryKey: ['books'],
+    queryKey: ['books', userId],
     queryFn: getBooks,
-    enabled,
+    enabled: !!userId, // Only fetch books if userId is provided
   });
 };
 

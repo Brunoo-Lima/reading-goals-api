@@ -10,6 +10,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '../ui/button';
+import { useUserLogOut } from '@/services/auth';
 
 const navItems = [
   { href: '/geral', label: 'Geral', icon: LayoutDashboardIcon },
@@ -30,6 +31,12 @@ interface INavItemsProps {
 export const NavItems = ({ onClose }: INavItemsProps) => {
   const location = useLocation();
   const { logOut } = useAuth();
+  const { mutate: handleLogout, isPending } = useUserLogOut();
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    logOut();
+  };
 
   return (
     <nav className="flex-1 p-4 space-y-1">
@@ -56,10 +63,10 @@ export const NavItems = ({ onClose }: INavItemsProps) => {
       <Button
         variant="ghost"
         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground w-full h-full justify-start cursor-pointer hover:bg-primary hover:text-primary-foreground"
-        onClick={logOut}
+        onClick={handleLogoutClick}
       >
         <LogOutIcon className="h-5 w-5" />
-        Sair
+        {isPending ? 'Saindo...' : 'Sair'}
       </Button>
     </nav>
   );

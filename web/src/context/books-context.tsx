@@ -35,11 +35,13 @@ interface IBooksContext {
 export const BooksContext = createContext<IBooksContext | undefined>(undefined);
 
 export const BooksProvider = ({ children }: React.PropsWithChildren) => {
-  // const [books, setBooks] = useState<IBook[]>([]);
   const [book, setBook] = useState<IBook | null>(null);
 
-  const { isAuthenticated } = useAuth();
-  const { data: books = [], isError } = useGetBooks(isAuthenticated);
+  const { isAuthenticated, user } = useAuth();
+  const { data: books = [], isError } = useGetBooks(
+    isAuthenticated ? user?.id : undefined,
+  );
+
   const createBookService = useCreateBook();
   const deleteBookService = useDeleteBook();
   const updateBookService = useUpdateBook();

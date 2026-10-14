@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import {
+  BookImageIcon,
   EditIcon,
   EyeIcon,
   MoreVerticalIcon,
@@ -13,8 +14,19 @@ import {
 } from 'lucide-react';
 import type { IBook } from '@/@types/IBook';
 import { AlertDialogDeleteBook } from '../alert-dialog-delete-book';
-import { FormNote } from '../forms/form-note';
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+const FormAddCoverBook = React.lazy(() =>
+  import('../forms/form-add-cover-book').then((module) => ({
+    default: module.FormAddCoverBook,
+  })),
+);
+
+const FormNote = React.lazy(() =>
+  import('../forms/form-note').then((module) => ({
+    default: module.FormNote,
+  })),
+);
 
 interface IDropdownProps {
   book: IBook;
@@ -30,6 +42,7 @@ export const Dropdown = ({
   onView,
 }: IDropdownProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [openAddCover, setOpenAddCover] = useState<boolean>(false);
 
   return (
     <>
@@ -43,7 +56,7 @@ export const Dropdown = ({
             <MoreVerticalIcon className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="*:text-xs">
           <DropdownMenuItem onClick={() => onView(book)}>
             <EyeIcon className="h-4 w-4 mr-2" />
             Detalhes
@@ -51,6 +64,11 @@ export const Dropdown = ({
           <DropdownMenuItem onClick={() => onEdit(book)}>
             <EditIcon className="h-4 w-4 mr-2" />
             Editar
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={() => setOpenAddCover(true)}>
+            <BookImageIcon className="h-4 w-4 mr-2" />
+            Capa do livro
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={() => setOpen(true)}>
@@ -67,6 +85,13 @@ export const Dropdown = ({
         bookId={book.id}
         open={open}
         onOpenChange={setOpen}
+      />
+
+      <FormAddCoverBook
+        initialData={book || null}
+        bookId={book.id}
+        open={openAddCover}
+        onOpenChange={setOpenAddCover}
       />
     </>
   );

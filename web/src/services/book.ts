@@ -73,7 +73,7 @@ export const useDeleteBook = () => {
   });
 };
 
-export const updateBook = async (id: string, book: ICreateBook) => {
+export const updateBook = async (id: string, book: Partial<ICreateBook>) => {
   const { data } = await api.patch(`/books/${id}`, book);
   return data;
 };
@@ -83,7 +83,7 @@ export const useUpdateBook = () => {
 
   return useMutation({
     mutationKey: ['updateBook'],
-    mutationFn: (book: { id: string; book: ICreateBook }) => {
+    mutationFn: (book: { id: string; book: Partial<ICreateBook> }) => {
       return updateBook(book.id, book.book);
     },
     onSuccess: () => {

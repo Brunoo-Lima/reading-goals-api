@@ -87,7 +87,7 @@ export const TabsComponent = ({
               </Button>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-[repeat(auto-fit,minmax(240px,280px))] lg:grid-cols-[repeat(auto-fit,minmax(240px,280px))] gap-4">
               {filteredBooks.map((book) => (
                 <CardBook
                   key={book.id}

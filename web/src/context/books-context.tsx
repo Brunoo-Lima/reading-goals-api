@@ -27,7 +27,7 @@ interface IBooksContext {
   totalPagesRead: number;
 
   addBook: (book: ICreateBook) => Promise<ICreateBook>;
-  updateBook: (id: string, updates: ICreateBook) => Promise<void>;
+  updateBook: (id: string, updates: Partial<ICreateBook>) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
   getBooksByStatus: (status: StatusReading) => IBook[];
 }
@@ -83,7 +83,7 @@ export const BooksProvider = ({ children }: React.PropsWithChildren) => {
     return await createBookService.mutateAsync(newBook);
   };
 
-  const updateBook = async (id: string, updates: ICreateBook) => {
+  const updateBook = async (id: string, updates: Partial<ICreateBook>) => {
     await updateBookService.mutateAsync({ id, book: updates });
   };
 

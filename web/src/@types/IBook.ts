@@ -4,6 +4,7 @@ export interface IBook {
   id: string;
   user_id?: string;
   title: string;
+  cover_id?: number | null;
   author: string;
   genre: string[];
   status: StatusReading;

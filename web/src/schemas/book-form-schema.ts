@@ -50,3 +50,14 @@ export const bookFormSchema = z
   );
 
 export type IBookFormSchema = z.infer<typeof bookFormSchema>;
+
+export const bookFormSchemaAddCover = z.object({
+  title: z.string('Título é obrigatório').trim().min(1, {
+    error: 'Título é obrigatório',
+  }),
+  // coverUrl: z.string('URL da capa é obrigatória').trim().min(1, {
+  //   error: 'URL da capa é obrigatória',
+  // }),
+});
+
+export type IBookFormSchemaAddCover = z.infer<typeof bookFormSchemaAddCover>;

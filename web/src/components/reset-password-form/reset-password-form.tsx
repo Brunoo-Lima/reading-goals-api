@@ -5,7 +5,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/input';
 import {
   resetPasswordFormSchema,
   type IResetPasswordFormSchema,
@@ -43,13 +43,7 @@ export function ResetPasswordForm({ token }: IResetPasswordFormProps) {
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="password">Nova senha</FieldLabel>
-          <Input
-            id="password"
-            type="password"
-            maxLength={6}
-            placeholder="••••••••"
-            {...register('password')}
-          />
+          <PasswordInput maxLength={6} {...register('password')} />
           <FieldError className="text-xs">
             {errors.password?.message}
           </FieldError>
@@ -59,13 +53,7 @@ export function ResetPasswordForm({ token }: IResetPasswordFormProps) {
           <FieldLabel htmlFor="confirmPassword">
             Confirme a nova senha
           </FieldLabel>
-          <Input
-            id="confirmPassword"
-            type="password"
-            maxLength={6}
-            placeholder="••••••••"
-            {...register('confirmPassword')}
-          />
+          \ <PasswordInput maxLength={6} {...register('confirmPassword')} />
           <FieldError className="text-xs">
             {errors.confirmPassword?.message}
           </FieldError>

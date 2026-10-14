@@ -6,7 +6,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Input, PasswordInput } from '@/components/ui/input';
 import {
   registerFormSchema,
   type IRegisterFormSchema,
@@ -24,7 +24,7 @@ export function RegisterForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<IRegisterFormSchema>({
-    resolver: zodResolver(registerFormSchema),
+    resolver: zodResolver(registerFormSchema as any),
     defaultValues: {
       name: '',
       email: '',
@@ -68,13 +68,7 @@ export function RegisterForm() {
 
         <Field>
           <FieldLabel htmlFor="password">Senha</FieldLabel>
-          <Input
-            id="password"
-            type="password"
-            maxLength={6}
-            placeholder="••••••••"
-            {...register('password')}
-          />
+          <PasswordInput maxLength={6} {...register('password')} />
           <FieldError className="text-xs">
             {errors.password?.message}
           </FieldError>
@@ -82,13 +76,7 @@ export function RegisterForm() {
 
         <Field>
           <FieldLabel htmlFor="confirmPassword">Confirme sua senha</FieldLabel>
-          <Input
-            id="confirmPassword"
-            type="password"
-            maxLength={6}
-            placeholder="••••••••"
-            {...register('confirmPassword')}
-          />
+          <PasswordInput maxLength={6} {...register('confirmPassword')} />
           <FieldError className="text-xs">
             {errors.confirmPassword?.message}
           </FieldError>

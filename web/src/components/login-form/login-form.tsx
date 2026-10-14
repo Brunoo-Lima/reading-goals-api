@@ -6,7 +6,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Input, PasswordInput } from '@/components/ui/input';
 import { useAuth } from '@/hooks/use-auth';
 import {
   loginFormSchema,
@@ -57,13 +57,7 @@ export function LoginForm() {
               Esqueceu a senha?
             </Link>
           </div>
-          <Input
-            id="password"
-            type="password"
-            maxLength={6}
-            placeholder="••••••••"
-            {...register('password')}
-          />
+          <PasswordInput maxLength={6} {...register('password')} />
           <FieldError className="text-xs">
             {errors.password?.message}
           </FieldError>

@@ -1,5 +1,6 @@
 import { Router, type IRouter, type Request, type Response } from 'express';
 import {
+  makeCoverBookSearchController,
   makeCreateBookController,
   makeDeleteBookController,
   makeGetBookByIdController,
@@ -19,6 +20,19 @@ bookRoutes.post('/', auth, async (request: Request, response: Response) => {
 
   return response.status(statusCode).send(body);
 });
+
+bookRoutes.get(
+  '/covers/search',
+  auth,
+  async (request: Request, response: Response) => {
+    const coverBookSearchController = makeCoverBookSearchController();
+
+    const { statusCode, body } =
+      await coverBookSearchController.execute(request);
+
+    return response.status(statusCode).send(body);
+  },
+);
 
 bookRoutes.get(
   '/:bookId',

@@ -9,6 +9,7 @@ const createBookSchema = z.strictObject(
     title: z.string('Title is required').trim().min(1, {
       error: 'Title is required',
     }),
+    cover_id: z.number().int().positive().nullable().optional(),
     author: z
       .string({
         message: 'Author is required',
@@ -69,3 +70,7 @@ export const updateBookSchema = createBookSchema.partial().refine(
     message: 'End date must be greater than or equal to start date',
   },
 );
+
+export const searchCoversSchema = z.object({
+  title: z.string().trim().min(1, 'title é obrigatório'),
+});

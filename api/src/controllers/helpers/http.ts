@@ -10,6 +10,13 @@ export const serverError = () => ({
   },
 });
 
+export const externalServiceUnavailable = () => ({
+  statusCode: 502,
+  body: {
+    message: 'External service unavailable',
+  },
+});
+
 export const ok = <T>(body: T) => ({
   statusCode: 200,
   body,

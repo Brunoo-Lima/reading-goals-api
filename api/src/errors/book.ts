@@ -53,3 +53,10 @@ export class InvalidCurrentPageNotExceedTotalPagesError extends Error {
 //     this.name = 'BookGenreNotFoundError';
 //   }
 // }
+
+export class CoverProviderUnavailableError extends Error {
+  constructor(message?: string) {
+    super(message || 'Cover provider is unavailable');
+    this.name = 'CoverProviderUnavailableError';
+  }
+}

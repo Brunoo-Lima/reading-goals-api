@@ -31,3 +31,11 @@ export interface ISecurityKeyComparatorAdapter {
 export interface ISecurityKeyHashAdapter {
   execute(securityKey: string): Promise<string>;
 }
+
+export interface ICoverSearchAdapter {
+  execute(
+    title: string,
+  ): Promise<
+    { cover_id: number; title: string; author?: string; cover_url: string }[]
+  >;
+}

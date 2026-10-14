@@ -49,6 +49,7 @@ model PasswordReset {
 model Book {
   id           String        @id @default(uuid())
   title        String        @db.VarChar(100)
+  cover_id     Int?
   author       String        @db.VarChar(100)
   genre        String[]
   status       StatusReading @default(WISHLIST)

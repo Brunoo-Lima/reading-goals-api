@@ -1,5 +1,8 @@
-import { IdGeneratorAdapter, PasswordHashAdapter } from '../../adapters';
-import { SecurityKeyHashAdapter } from '../../adapters/security-key-hash';
+import {
+  IdGeneratorAdapter,
+  PasswordHashAdapter,
+  SecurityKeyHashAdapter,
+} from '../../adapters';
 import {
   CreateUserController,
   DeleteUserController,
@@ -13,7 +16,6 @@ import {
   PostgresGetUserByIdRepository,
   PostgresUpdateUserRepository,
 } from '../../repositories/postgres';
-
 import {
   CreateUserUseCase,
   DeleteUserUseCase,

@@ -8,8 +8,10 @@ export * from './book/get-book-by-id';
 export * from './book/get-my-books';
 export * from './book/delete-book';
 export * from './book/update-book';
+export * from './book/cover-book-search';
 
 export * from './auth/login';
+export * from './auth/logout';
 export * from './auth/refresh-token';
 export * from './auth/forgot-password';
 export * from './auth/reset-password';
@@ -24,6 +26,7 @@ export * from './goal/get-goals';
 export * from './goal/get-goal-by-id';
 export * from './goal/update-goal';
 export * from './goal-progress/create-goal-progress';
+export * from './goal/delete-goal';
 
 export * from './note/create-note';
 export * from './note/get-notes-by-book-id';

@@ -9,7 +9,7 @@ export interface IUser {
   timeZone: string;
 }
 
-export type IUserSafe = Omit<IUser, 'password' | 'securityKey'>;
+export type IUserSafe = Omit<IUser, 'password' | 'securityKey' | 'timeZone'>;
 
 export type IUpdateUser = Omit<
   IUser,

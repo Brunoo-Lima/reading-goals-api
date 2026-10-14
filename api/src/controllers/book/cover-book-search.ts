@@ -10,7 +10,7 @@ import { ZodError } from 'zod';
 import { CoverProviderUnavailableError } from '../../errors';
 import { searchCoversSchema } from '../../schemas';
 
-export class SearchCoversController {
+export class CoverBookSearchController {
   private coverBookSearchUseCase: CoverBookSearchUseCase;
 
   constructor(coverBookSearchUseCase: CoverBookSearchUseCase) {

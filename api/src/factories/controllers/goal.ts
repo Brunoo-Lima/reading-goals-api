@@ -2,11 +2,11 @@ import { IdGeneratorAdapter } from '../../adapters';
 import {
   CreateGoalController,
   CreateGoalProgressController,
+  DeleteGoalController,
   GetGoalByIdController,
   GetGoalsController,
   UpdateGoalController,
 } from '../../controllers';
-import { DeleteGoalController } from '../../controllers/goal/delete-goal';
 import {
   PostgresCreateGoalRepository,
   PostgresCreateGoalProgressRepository,

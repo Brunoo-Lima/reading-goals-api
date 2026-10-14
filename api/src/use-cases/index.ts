@@ -8,6 +8,7 @@ export * from './book/get-book-by-id';
 export * from './book/get-my-books';
 export * from './book/delete-book';
 export * from './book/update-book';
+export * from './book/cover-book-search';
 
 export * from './auth/login';
 export * from './auth/refresh-token';

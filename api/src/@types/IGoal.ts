@@ -7,7 +7,7 @@ export interface IGoal {
   type: GoalsType;
   target_value: number;
   current_value: number;
-  start_date: Date;
+  start_date: Date | null;
   end_date: Date | null;
   is_active: boolean;
   created_at: Date;
@@ -21,7 +21,7 @@ export type ICreateGoal = Omit<
   book_id?: string | null;
   current_value?: number;
   is_active?: boolean;
-  start_date?: Date | string;
+  start_date?: Date | string | null;
   end_date?: Date | string | null;
 };
 

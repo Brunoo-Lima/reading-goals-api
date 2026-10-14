@@ -5,6 +5,7 @@ export const book = {
   id: faker.string.uuid(),
   title: faker.book.title(),
   author: faker.person.fullName(),
+  cover_id: null,
   genre: ['Fiction', 'Mystery', 'Thriller'],
   status: StatusReading.WISHLIST,
   total_pages: 500,

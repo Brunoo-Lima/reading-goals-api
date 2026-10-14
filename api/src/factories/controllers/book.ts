@@ -1,13 +1,12 @@
-import { IdGeneratorAdapter } from '../../adapters';
-import { CoverBookSearchAdapter } from '../../adapters/cover-book-search-adapter';
+import { CoverBookSearchAdapter, IdGeneratorAdapter } from '../../adapters';
 import {
+  CoverBookSearchController,
   CreateBookController,
   DeleteBookController,
   GetBookByIdController,
   GetMyBooksController,
   UpdateBookController,
 } from '../../controllers';
-import { SearchCoversController } from '../../controllers/book/cover-book-search';
 import {
   PostgresCreateBookRepository,
   PostgresDeleteBookRepository,
@@ -18,13 +17,13 @@ import {
   PostgresUpdateBookRepository,
 } from '../../repositories/postgres';
 import {
+  CoverBookSearchUseCase,
   CreateBookUseCase,
   DeleteBookUseCase,
   GetBookByIdUseCase,
   GetMyBooksUseCase,
   UpdateBookUseCase,
 } from '../../use-cases';
-import { CoverBookSearchUseCase } from '../../use-cases/book/cover-book-search';
 
 export const makeCreateBookController = () => {
   const createBookRepository = new PostgresCreateBookRepository();
@@ -98,7 +97,7 @@ export const makeCoverBookSearchController = () => {
     coverBookSearchAdapter,
   );
 
-  const coverBookSearchController = new SearchCoversController(
+  const coverBookSearchController = new CoverBookSearchController(
     coverBookSearchUseCase,
   );
 

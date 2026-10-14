@@ -5,3 +5,5 @@ export * from './tokens-generator';
 export * from './token-verifier';
 export * from './security-key-comparator';
 export * from './generate-token';
+export * from './cover-book-search';
+export * from './security-key-hash';

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -59,6 +59,13 @@ export const FormAddCoverBook = ({
   const notFound =
     isCurrent && !isFetching && !isError && !!data && !data.coverId;
 
+  useEffect(() => {
+    if (initialData?.cover_id) {
+      setSearchedTitle(initialData.title);
+      reset({ title: initialData.title });
+    }
+  }, [initialData, reset]);
+
   function handleSearchCover() {
     if (trimmedTitle.length < 3) return;
     setSearchedTitle(trimmedTitle);
@@ -86,23 +93,28 @@ export const FormAddCoverBook = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold">
-            {`${initialData ? 'Editar' : 'Adicionar'} capa do livro`}
+            Adicionar/Editar capa do livro
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <span className="font-light italic">
+          A busca pela capa é feita através do título do livro. Digite o título
+          e clique em "Buscar". Se houver uma capa disponível, ela será exibida
+          abaixo.
+        </span>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           <Field className="gap-2">
             <FieldLabel>Titulo do livro</FieldLabel>
             <div className="flex gap-2">
               <Input
                 placeholder="Digite o titulo do livro"
                 {...register('title', {
-                  // título mudou -> descarta a capa antiga
                   onChange: () => setSearchedTitle(''),
                 })}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault(); // não submete o form
+                    e.preventDefault();
                     handleSearchCover();
                   }
                 }}

@@ -81,8 +81,8 @@ export const TabsComponent = ({
               <p className="text-muted-foreground">
                 Nenhum livro encontrado nesta categoria.
               </p>
-              <Button variant="outline" className="mt-4" onClick={onAddBook}>
-                <PlusIcon className="h-4 w-4 mr-2" />
+              <Button variant="default" className="mt-4" onClick={onAddBook}>
+                <PlusIcon className="h-4 w-4" />
                 Adicionar Livro
               </Button>
             </div>

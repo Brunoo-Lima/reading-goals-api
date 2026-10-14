@@ -52,7 +52,7 @@ export function LoginForm() {
             <FieldLabel htmlFor="password">Senha</FieldLabel>
             <Link
               to="/esqueci-senha"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+              className="ml-auto text-primary/80 text-xs underline-offset-4 hover:underline"
             >
               Esqueceu a senha?
             </Link>

@@ -316,7 +316,7 @@ export const FormBook = ({
                     <Button
                       variant="outline"
                       className={cn(
-                        'w-full justify-start text-left font-normal',
+                        'w-full bg-secondary justify-start text-left font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
@@ -358,7 +358,7 @@ export const FormBook = ({
                     <Button
                       variant="outline"
                       className={cn(
-                        'w-full justify-start text-left font-normal',
+                        'w-full bg-secondary justify-start text-left font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >

@@ -5,13 +5,14 @@ export function LoginPage() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <div className="flex flex-col gap-1 mb-4">
+          <div className="w-full max-w-sm">
+            <div className="flex flex-col gap-1 mb-6">
               <h1 className="text-2xl font-bold">
                 Faça login para acessar sua conta.
               </h1>
-              <p className="text-sm text-balance text-muted-foreground">
-                Insira seu e-mail abaixo para acessar sua conta.
+              <p className="text-sm text-muted-foreground">
+                Entre e gerencie seus livros e as suas leituras de forma simples
+                e prática.
               </p>
             </div>
 

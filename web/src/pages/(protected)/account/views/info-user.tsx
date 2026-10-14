@@ -1,4 +1,4 @@
-import { FormUser } from '@/components/form-user';
+import { FormUser } from '@/pages/(protected)/account/views/modal/form-user';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/use-auth';

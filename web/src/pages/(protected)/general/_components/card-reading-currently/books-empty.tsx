@@ -12,7 +12,12 @@ export const BooksEmpty = ({ createBook }: IBooksEmptyProps) => {
       <p className="text-sm text-muted-foreground">
         Você não está lendo nenhum livro no momento.
       </p>
-      <Button onClick={createBook} className="gap-2 cursor-pointer">
+      <Button
+        type="button"
+        variant="default"
+        onClick={createBook}
+        className="gap-2 cursor-pointer"
+      >
         <PlusIcon className="size-5" />
         <p>Novo Livro</p>
       </Button>

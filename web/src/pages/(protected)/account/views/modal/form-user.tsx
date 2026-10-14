@@ -11,9 +11,13 @@ import {
 } from '@/schemas/user-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Field, FieldError, FieldLabel } from './ui/field';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from '../../../../../components/ui/field';
+import { Input, PasswordInput } from '../../../../../components/ui/input';
+import { Button } from '../../../../../components/ui/button';
 import { useCreateUser, useUpdateUser } from '@/services/user';
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
@@ -50,7 +54,6 @@ export const FormUser = ({
     reset({
       name: initialData?.name || '',
       email: initialData?.email || '',
-      password: initialData?.password || '',
     });
   }, [initialData, reset]);
 
@@ -107,9 +110,8 @@ export const FormUser = ({
 
           <Field>
             <FieldLabel htmlFor="password">Senha</FieldLabel>
-            <Input
-              id="password"
-              type="password"
+            <PasswordInput
+              maxLength={6}
               placeholder="********"
               {...register('password')}
             />

@@ -31,7 +31,7 @@ export const ExportBook = ({ books }: IExportBookProps) => {
           variant="outline"
           onClick={() => handleExport('excel')}
           disabled={!books.length || loading !== null}
-          className="px-4 py-2 rounded-md border disabled:opacity-50"
+          className="px-4 py-2 rounded-md bg-white border disabled:opacity-50"
         >
           {loading === 'excel' ? 'Gerando...' : 'Exportar Excel'}
         </Button>
@@ -39,7 +39,7 @@ export const ExportBook = ({ books }: IExportBookProps) => {
           variant="outline"
           onClick={() => handleExport('pdf')}
           disabled={!books.length || loading !== null}
-          className="px-4 py-2 rounded-md border disabled:opacity-50"
+          className="px-4 py-2 rounded-md bg-white border disabled:opacity-50"
         >
           {loading === 'pdf' ? 'Gerando...' : 'Exportar PDF'}
         </Button>

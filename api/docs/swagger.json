@@ -1,0 +1,795 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Reading Goals API",
+    "description": "API REST para gerenciamento de livros, metas e hábitos de leitura.",
+    "version": "1.0.0"
+  },
+  "schemes": ["http", "https"],
+  "basePath": "/api/v1",
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Bearer <token>. A API também mantém accessToken e refreshToken em cookies httpOnly."
+    }
+  },
+  "tags": [
+    { "name": "Auth" },
+    { "name": "Users" },
+    { "name": "Books" },
+    { "name": "Goals" },
+    { "name": "Notes" },
+    { "name": "Reading logs" }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Autentica um usuário",
+        "parameters": [{ "$ref": "#/parameters/Login" }],
+        "responses": {
+          "200": {
+            "description": "Usuário autenticado",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" },
+          "401": { "$ref": "#/responses/Unauthorized" },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Encerra a sessão",
+        "responses": { "204": { "description": "Sessão encerrada" } }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Renova os tokens usando o cookie refreshToken",
+        "responses": {
+          "200": { "description": "Tokens renovados" },
+          "400": { "$ref": "#/responses/BadRequest" },
+          "401": { "$ref": "#/responses/Unauthorized" }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Solicita recuperação de senha",
+        "parameters": [{ "$ref": "#/parameters/ForgotPassword" }],
+        "responses": {
+          "200": {
+            "description": "Token gerado",
+            "schema": {
+              "type": "object",
+              "properties": { "token": { "type": "string" } }
+            }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Redefine a senha",
+        "parameters": [{ "$ref": "#/parameters/ResetPassword" }],
+        "responses": {
+          "200": {
+            "description": "Senha redefinida",
+            "schema": { "$ref": "#/definitions/Message" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" },
+          "401": { "$ref": "#/responses/Unauthorized" }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Cria uma conta",
+        "parameters": [{ "$ref": "#/parameters/UserInput" }],
+        "responses": {
+          "201": {
+            "description": "Conta criada",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Consulta a conta autenticada",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Usuário",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "401": { "$ref": "#/responses/Unauthorized" }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Atualiza a conta autenticada",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/UserUpdate" }],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Exclui a conta autenticada",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Conta excluída" },
+          "401": { "$ref": "#/responses/Unauthorized" }
+        }
+      }
+    },
+    "/books": {
+      "post": {
+        "tags": ["Books"],
+        "summary": "Adiciona um livro",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/BookInput" }],
+        "responses": {
+          "201": {
+            "description": "Livro criado",
+            "schema": { "$ref": "#/definitions/Book" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "get": {
+        "tags": ["Books"],
+        "summary": "Lista os livros do usuário",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "search", "in": "query", "type": "string" },
+          { "name": "genre", "in": "query", "type": "string" },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string",
+            "enum": ["READING", "COMPLETED", "WISHLIST", "ABANDONED"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Livros",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Book" }
+            }
+          }
+        }
+      }
+    },
+    "/books/covers/search": {
+      "get": {
+        "tags": ["Books"],
+        "summary": "Pesquisa capas por título",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "title", "in": "query", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Capas encontradas",
+            "schema": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            }
+          },
+          "503": { "$ref": "#/responses/Unavailable" }
+        }
+      }
+    },
+    "/books/{bookId}": {
+      "parameters": [{ "$ref": "#/parameters/BookId" }],
+      "get": {
+        "tags": ["Books"],
+        "summary": "Consulta um livro",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Livro",
+            "schema": { "$ref": "#/definitions/Book" }
+          },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      },
+      "patch": {
+        "tags": ["Books"],
+        "summary": "Atualiza um livro",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/BookUpdate" }],
+        "responses": {
+          "200": {
+            "description": "Livro atualizado",
+            "schema": { "$ref": "#/definitions/Book" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Books"],
+        "summary": "Exclui um livro",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Livro excluído" },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      }
+    },
+    "/goals": {
+      "post": {
+        "tags": ["Goals"],
+        "summary": "Cria uma meta",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "$ref": "#/parameters/GoalInput" },
+          {
+            "name": "bookId",
+            "in": "query",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Meta criada",
+            "schema": { "$ref": "#/definitions/Goal" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "get": {
+        "tags": ["Goals"],
+        "summary": "Lista metas",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Metas",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Goal" }
+            }
+          }
+        }
+      }
+    },
+    "/goals/{goalId}": {
+      "parameters": [{ "$ref": "#/parameters/GoalId" }],
+      "get": {
+        "tags": ["Goals"],
+        "summary": "Consulta uma meta",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Meta",
+            "schema": { "$ref": "#/definitions/Goal" }
+          },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      },
+      "patch": {
+        "tags": ["Goals"],
+        "summary": "Atualiza uma meta",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/GoalUpdate" }],
+        "responses": {
+          "200": {
+            "description": "Meta atualizada",
+            "schema": { "$ref": "#/definitions/Goal" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "delete": {
+        "tags": ["Goals"],
+        "summary": "Exclui uma meta",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Meta excluída" },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      }
+    },
+    "/goals/{goalId}/progress": {
+      "post": {
+        "tags": ["Goals"],
+        "summary": "Registra progresso",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "$ref": "#/parameters/GoalId" },
+          { "$ref": "#/parameters/ProgressInput" }
+        ],
+        "responses": {
+          "201": {
+            "description": "Progresso registrado",
+            "schema": { "$ref": "#/definitions/GoalProgress" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      }
+    },
+    "/notes": {
+      "post": {
+        "tags": ["Notes"],
+        "summary": "Cria uma anotação",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "$ref": "#/parameters/NoteInput" },
+          { "$ref": "#/parameters/BookQuery" }
+        ],
+        "responses": {
+          "201": {
+            "description": "Anotação criada",
+            "schema": { "$ref": "#/definitions/Note" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "get": {
+        "tags": ["Notes"],
+        "summary": "Lista anotações de um livro",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/BookQuery" }],
+        "responses": {
+          "200": {
+            "description": "Anotações",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Note" }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{noteId}": {
+      "parameters": [{ "$ref": "#/parameters/NoteId" }],
+      "get": {
+        "tags": ["Notes"],
+        "summary": "Consulta uma anotação",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Anotação",
+            "schema": { "$ref": "#/definitions/Note" }
+          },
+          "404": { "$ref": "#/responses/NotFound" }
+        }
+      },
+      "patch": {
+        "tags": ["Notes"],
+        "summary": "Atualiza uma anotação",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/NoteUpdate" }],
+        "responses": {
+          "200": {
+            "description": "Anotação atualizada",
+            "schema": { "$ref": "#/definitions/Note" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "delete": {
+        "tags": ["Notes"],
+        "summary": "Exclui uma anotação",
+        "security": [{ "BearerAuth": [] }],
+        "responses": { "200": { "description": "Anotação excluída" } }
+      }
+    },
+    "/reading-logs": {
+      "post": {
+        "tags": ["Reading logs"],
+        "summary": "Registra uma sessão de leitura",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "$ref": "#/parameters/ReadingLogInput" },
+          { "$ref": "#/parameters/BookQuery" }
+        ],
+        "responses": {
+          "201": {
+            "description": "Registro criado",
+            "schema": { "$ref": "#/definitions/ReadingLog" }
+          },
+          "400": { "$ref": "#/responses/BadRequest" }
+        }
+      },
+      "get": {
+        "tags": ["Reading logs"],
+        "summary": "Lista o histórico de leitura",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Histórico",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ReadingLog" }
+            }
+          }
+        }
+      }
+    },
+    "/reading-logs/book/": {
+      "get": {
+        "tags": ["Reading logs"],
+        "summary": "Lista registros de um livro",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/parameters/BookQuery" }],
+        "responses": {
+          "200": {
+            "description": "Registros",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ReadingLog" }
+            }
+          }
+        }
+      }
+    },
+    "/reading-logs/streak": {
+      "get": {
+        "tags": ["Reading logs"],
+        "summary": "Consulta a sequência de leitura",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Sequência",
+            "schema": { "type": "object", "additionalProperties": true }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "BookId": {
+      "name": "bookId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "GoalId": {
+      "name": "goalId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "NoteId": {
+      "name": "noteId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "BookQuery": {
+      "name": "bookId",
+      "in": "query",
+      "required": true,
+      "type": "string",
+      "format": "uuid"
+    },
+    "Login": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6
+          },
+          "rememberMe": { "type": "boolean" }
+        }
+      }
+    },
+    "ForgotPassword": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "required": ["email", "securityKey"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "securityKey": { "type": "string" }
+        }
+      }
+    },
+    "ResetPassword": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "required": ["token", "password"],
+        "properties": {
+          "token": { "type": "string" },
+          "password": { "type": "string", "format": "password", "minLength": 6 }
+        }
+      }
+    },
+    "UserInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/UserInput" }
+    },
+    "UserUpdate": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/UserUpdate" }
+    },
+    "BookInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/BookInput" }
+    },
+    "BookUpdate": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/BookUpdate" }
+    },
+    "GoalInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/GoalInput" }
+    },
+    "GoalUpdate": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/GoalUpdate" }
+    },
+    "ProgressInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/GoalProgressInput" }
+    },
+    "NoteInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/NoteInput" }
+    },
+    "NoteUpdate": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/NoteUpdate" }
+    },
+    "ReadingLogInput": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": { "$ref": "#/definitions/ReadingLogInput" }
+    }
+  },
+  "responses": {
+    "BadRequest": {
+      "description": "Dados inválidos",
+      "schema": { "$ref": "#/definitions/Error" }
+    },
+    "Unauthorized": {
+      "description": "Não autenticado",
+      "schema": { "$ref": "#/definitions/Error" }
+    },
+    "NotFound": {
+      "description": "Recurso não encontrado",
+      "schema": { "$ref": "#/definitions/Error" }
+    },
+    "Unavailable": {
+      "description": "Serviço externo indisponível",
+      "schema": { "$ref": "#/definitions/Error" }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": { "message": { "type": "string" } }
+    },
+    "Message": {
+      "type": "object",
+      "properties": { "message": { "type": "string" } }
+    },
+    "UserInput": {
+      "type": "object",
+      "required": ["name", "email", "password", "securityKey"],
+      "properties": {
+        "name": { "type": "string", "maxLength": 50 },
+        "email": { "type": "string", "format": "email" },
+        "password": { "type": "string", "format": "password", "minLength": 6 },
+        "securityKey": { "type": "string" },
+        "timeZone": { "type": "string", "default": "America/Sao_Paulo" }
+      }
+    },
+    "UserUpdate": {
+      "allOf": [{ "$ref": "#/definitions/UserInput" }],
+      "description": "Todos os campos são opcionais."
+    },
+    "User": {
+      "allOf": [
+        { "$ref": "#/definitions/UserInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      ]
+    },
+    "BookInput": {
+      "type": "object",
+      "required": [
+        "title",
+        "author",
+        "genre",
+        "status",
+        "total_pages",
+        "start_date"
+      ],
+      "properties": {
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "genre": { "type": "array", "items": { "type": "string" } },
+        "status": {
+          "type": "string",
+          "enum": ["READING", "COMPLETED", "WISHLIST", "ABANDONED"]
+        },
+        "total_pages": { "type": "integer", "minimum": 1 },
+        "current_page": { "type": "integer", "minimum": 0 },
+        "rating": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "cover_id": { "type": "integer" },
+        "start_date": { "type": "string", "format": "date-time" },
+        "end_date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "BookUpdate": { "allOf": [{ "$ref": "#/definitions/BookInput" }] },
+    "Book": {
+      "allOf": [
+        { "$ref": "#/definitions/BookInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "user_id": { "type": "string", "format": "uuid" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      ]
+    },
+    "GoalInput": {
+      "type": "object",
+      "required": ["type", "target_value"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "DAILY_PAGES",
+            "BOOKS_PER_MONTH",
+            "BOOKS_PER_YEAR",
+            "TOTAL_PAGES",
+            "SPECIFIC_BOOK"
+          ]
+        },
+        "target_value": { "type": "integer", "minimum": 1 },
+        "current_value": { "type": "integer", "minimum": 0 },
+        "is_active": { "type": "boolean" },
+        "start_date": { "type": "string", "format": "date-time" },
+        "end_date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "GoalUpdate": { "allOf": [{ "$ref": "#/definitions/GoalInput" }] },
+    "Goal": {
+      "allOf": [
+        { "$ref": "#/definitions/GoalInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "user_id": { "type": "string", "format": "uuid" },
+            "book_id": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    },
+    "GoalProgressInput": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "integer", "minimum": 1 },
+        "note": { "type": "string" },
+        "logged_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "GoalProgress": {
+      "allOf": [
+        { "$ref": "#/definitions/GoalProgressInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "goal_id": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    },
+    "NoteInput": {
+      "type": "object",
+      "required": ["content"],
+      "properties": {
+        "content": { "type": "string", "minLength": 1 },
+        "page_number": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "NoteUpdate": { "allOf": [{ "$ref": "#/definitions/NoteInput" }] },
+    "Note": {
+      "allOf": [
+        { "$ref": "#/definitions/NoteInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "book_id": { "type": "string", "format": "uuid" },
+            "user_id": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    },
+    "ReadingLogInput": {
+      "type": "object",
+      "required": ["pages_read", "date"],
+      "properties": {
+        "pages_read": { "type": "integer", "minimum": 1 },
+        "date": { "type": "string", "format": "date-time" },
+        "notes_about_session": { "type": "string" }
+      }
+    },
+    "ReadingLog": {
+      "allOf": [
+        { "$ref": "#/definitions/ReadingLogInput" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "book_id": { "type": "string", "format": "uuid" },
+            "user_id": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    }
+  }
+}

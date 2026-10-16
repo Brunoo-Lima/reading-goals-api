@@ -35,7 +35,7 @@ export class LoginController {
       response.cookie('accessToken', tokens.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'none',
         maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 15 * 60 * 1000,
         path: '/',
       });
@@ -44,7 +44,7 @@ export class LoginController {
         response.cookie('refreshToken', tokens.refreshToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: 'none',
           maxAge: 30 * 24 * 60 * 60 * 1000,
           path: '/',
         });

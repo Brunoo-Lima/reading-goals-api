@@ -67,7 +67,7 @@ Desenvolver um sistema para que o leitor cadastre sua biblioteca, acompanhe o pr
 ## Requisitos Não Funcionais
 
 - **RNF01 — Responsividade:** a interface deve se adaptar a telas de celular, tablet e desktop.
-- **RNF02 — Autenticação segura:** as sessões devem usar JWT em cookies `httpOnly`, com política `sameSite: strict`; o cookie deve usar o atributo `secure` em produção.
+- **RNF02 — Autenticação segura:** as sessões devem usar JWT em cookies `httpOnly`, com política `sameSite: none`; o cookie deve usar o atributo `secure` em produção.
 - **RNF03 — Proteção de rotas:** páginas e endpoints privados devem exigir uma sessão autenticada; solicitações sem credencial válida devem receber resposta de não autorizado.
 - **RNF04 — Validação:** entradas da API e formulários da interface devem ser validados antes do processamento, com mensagens de erro ao usuário.
 - **RNF05 — Confiabilidade do cliente:** as chamadas da interface devem ter tempo limite de 10 segundos e tentar renovar a sessão uma única vez após resposta 401.

@@ -34,7 +34,7 @@ authRoutes.post(
       response.cookie('accessToken', body.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'none',
         maxAge: 15 * 60 * 1000, // 15min, mesmo tempo do jwt.sign
         path: '/',
       });
@@ -43,7 +43,7 @@ authRoutes.post(
         response.cookie('refreshToken', body.refreshToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: 'none',
           maxAge: 7 * 24 * 60 * 60 * 1000, // ajustar conforme rememberMe
           path: '/',
         });

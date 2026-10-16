@@ -1,5 +1,6 @@
 import type { Request } from 'express';
 import { ForgotPasswordController } from '../forgot-password';
+import { DataInvalidError } from '../../../errors';
 
 describe('Forgot Password Controller', () => {
   class ForgotPasswordUseCaseStub {
@@ -66,6 +67,22 @@ describe('Forgot Password Controller', () => {
         securityKey: 'valid-security-key',
       },
     } as Partial<Request> as Request);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('should return 400 if DataInvalidError throws', async () => {
+    const { sut, forgotPasswordUseCaseStub } = makeSut();
+    vi.spyOn(forgotPasswordUseCaseStub, 'execute').mockRejectedValueOnce(
+      new DataInvalidError('Data invalid'),
+    );
+
+    const params = {
+      ...baseHttpRequest,
+      securityKey: 'key-invalid',
+    } as Partial<Request> as Request;
+
+    const response = await sut.execute(params);
 
     expect(response.statusCode).toBe(400);
   });

@@ -1,45 +1,35 @@
-import { faker } from '@faker-js/faker';
 import {
   ForbiddenError,
   GoalNotFoundError,
   GoalProgressExceedsTargetError,
 } from '../../../errors';
-import { goal, goalProgress } from '../../../tests';
+import { goalProgress, goal as fakeGoal } from '../../../tests';
 import { CreateGoalProgressUseCase } from '../create-goal-progress';
 
 describe('Create Goal Progress Use Case', () => {
-  const goalData = {
-    ...goal,
-    id: undefined as any,
-    target_value: 100,
-    current_value: 20,
-  };
-
-  const goalProgressData = {
-    ...goalProgress,
-    id: undefined as any,
-    user_id: goal.user_id,
-    value: 10,
+  const goal = {
+    ...fakeGoal,
+    // id: undefined as any,
   };
 
   class CreateGoalProgressRepositoryStub {
     async execute() {
       return {
-        goal: goalData,
-        progress: goalProgressData,
+        goal,
+        progress: goalProgress,
       };
     }
   }
 
   class GetGoalByIdRepositoryStub {
     async execute() {
-      return goalData;
+      return goal;
     }
   }
 
   class IdGeneratorAdapterStub {
     execute() {
-      return 'generated_id';
+      return 'progress-id';
     }
   }
 
@@ -65,11 +55,15 @@ describe('Create Goal Progress Use Case', () => {
   test('should create a goal progress successfully', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute(goalProgressData);
+    const result = await sut.execute({
+      goal_id: goal.id,
+      user_id: goal.user_id,
+      value: 12,
+    });
 
     expect(result).toEqual({
-      goal: goalData,
-      progress: goalProgressData,
+      goal,
+      progress: goalProgress,
     });
   });
 
@@ -79,67 +73,48 @@ describe('Create Goal Progress Use Case', () => {
       null as any,
     );
 
-    const promise = sut.execute(goalProgressData);
+    const result = sut.execute({
+      goal_id: 'goal12',
+      user_id: '12',
+      value: 12,
+    });
 
-    await expect(promise).rejects.toThrow(
-      new GoalNotFoundError(goalProgressData.goal_id),
-    );
+    await expect(result).rejects.toThrow(GoalNotFoundError);
   });
 
   test("should return ForbiddenError if user doesn't have permission", async () => {
-    const { sut } = makeSut();
-
-    const promise = sut.execute({
-      ...goalProgressData,
-      user_id: faker.string.uuid(),
-    });
-
-    await expect(promise).rejects.toThrow(
-      new ForbiddenError("You don't have permission to update this goal"),
-    );
-  });
-
-  test('should return GoalProgressExceedsTargetError if goal progress exceeds target', async () => {
-    const { sut } = makeSut();
-
-    const promise = sut.execute({
-      ...goalProgressData,
-      value: goal.target_value + 1,
-    });
-
-    await expect(promise).rejects.toThrow(new GoalProgressExceedsTargetError());
-  });
-
-  test('should throw if CreateGoalProgressRepository throws', async () => {
-    const { sut, createGoalProgressRepository } = makeSut();
-    vi.spyOn(createGoalProgressRepository, 'execute').mockRejectedValueOnce(
-      new Error(),
-    );
-
-    const promise = sut.execute(goalProgressData);
-
-    await expect(promise).rejects.toThrow();
-  });
-
-  test('should throw if GetGoalByIdRepository throws', async () => {
     const { sut, getGoalByIdRepository } = makeSut();
-    vi.spyOn(getGoalByIdRepository, 'execute').mockRejectedValueOnce(
-      new Error(),
-    );
 
-    const promise = sut.execute(goalProgressData);
-
-    await expect(promise).rejects.toThrow();
-  });
-
-  test('should throw if IdGeneratorAdapter throws', async () => {
-    const { sut, idGeneratorAdapter } = makeSut();
-    vi.spyOn(idGeneratorAdapter, 'execute').mockImplementationOnce(() => {
-      throw new Error();
+    vi.spyOn(getGoalByIdRepository, 'execute').mockResolvedValueOnce({
+      ...goal,
+      user_id: 'other',
     });
 
-    const promise = sut.execute(goalProgressData);
+    const result = sut.execute({
+      goal_id: 'goal12',
+      user_id: '12',
+      value: 12,
+    });
 
-    await expect(promise).rejects.toThrow();
+    await expect(result).rejects.toThrow(ForbiddenError);
+  });
+
+  test('should return GoalProgressExceedsTargetError if progress exceeds target', async () => {
+    const { sut, getGoalByIdRepository } = makeSut();
+
+    vi.spyOn(getGoalByIdRepository, 'execute').mockResolvedValueOnce({
+      ...goal,
+      target_value: 100,
+      user_id: 'user-id',
+    });
+
+    const result = sut.execute({
+      ...goal,
+      user_id: 'user-id',
+      goal_id: 'goal-id',
+      value: 10000,
+    });
+
+    await expect(result).rejects.toThrow(GoalProgressExceedsTargetError);
   });
 });

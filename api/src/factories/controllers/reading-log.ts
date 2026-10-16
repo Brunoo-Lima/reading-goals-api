@@ -76,11 +76,14 @@ export const makeGetReadingStreakController = () => {
   const getReadingLogDatesRepository =
     new PostgresGetReadingLogDatesRepository();
   const getUserByIdRepository = new PostgresGetUserByIdRepository();
-
-  return new GetReadingStreakController(
-    new GetReadingStreakUseCase(
-      getReadingLogDatesRepository,
-      getUserByIdRepository,
-    ),
+  const getReadingStreakUseCase = new GetReadingStreakUseCase(
+    getReadingLogDatesRepository,
+    getUserByIdRepository,
   );
+
+  const getReadingStreakController = new GetReadingStreakController(
+    getReadingStreakUseCase,
+  );
+
+  return getReadingStreakController;
 };

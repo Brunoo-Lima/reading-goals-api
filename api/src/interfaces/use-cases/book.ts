@@ -29,3 +29,7 @@ export interface IUpdateBookUseCase {
     book: IUpdateBook,
   ): Promise<IBook | null>;
 }
+
+export interface ICoverBookSearchUseCase {
+  execute(title: string): Promise<{ cover_id: number }[]>;
+}

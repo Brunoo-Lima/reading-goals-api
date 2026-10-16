@@ -1,4 +1,5 @@
 import {
+  CoverBookSearchController,
   CreateBookController,
   DeleteBookController,
   GetBookByIdController,
@@ -6,6 +7,7 @@ import {
   UpdateBookController,
 } from '../../../controllers';
 import {
+  makeCoverBookSearchController,
   makeCreateBookController,
   makeDeleteBookController,
   makeGetBookByIdController,
@@ -37,5 +39,10 @@ describe('Factory Book Controller', () => {
   test('should return a UpdateBookController', () => {
     const updateBookController = makeUpdateBookController();
     expect(updateBookController).toBeInstanceOf(UpdateBookController);
+  });
+
+  test('should return a CoverBookSearchController', () => {
+    const coverBookSearchController = makeCoverBookSearchController();
+    expect(coverBookSearchController).toBeInstanceOf(CoverBookSearchController);
   });
 });

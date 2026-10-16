@@ -1,11 +1,13 @@
 import {
   GetReadingLogController,
   GetReadingLogsByBookIdController,
+  GetReadingStreakController,
   RegisterReadingLogController,
 } from '../../../controllers';
 import {
   makeGetReadingLogController,
   makeGetReadingLogsByBookIdController,
+  makeGetReadingStreakController,
   makeRegisterReadingLogController,
 } from '../reading-log';
 
@@ -27,6 +29,13 @@ describe('Factory Reading Log Controller', () => {
       makeGetReadingLogsByBookIdController();
     expect(getReadingLogsByBookIdController).toBeInstanceOf(
       GetReadingLogsByBookIdController,
+    );
+  });
+
+  test('should return a GetReadingStreakController', () => {
+    const getReadingStreakController = makeGetReadingStreakController();
+    expect(getReadingStreakController).toBeInstanceOf(
+      GetReadingStreakController,
     );
   });
 });

@@ -1,5 +1,9 @@
 import type { Request } from 'express';
-import { ExpiredTokenError, InvalidTokenError } from '../../../errors';
+import {
+  ExpiredTokenError,
+  InvalidTokenError,
+  UserNotFoundError,
+} from '../../../errors';
 import { ResetPasswordController } from '../reset-password';
 
 describe('Reset Password Controller', () => {
@@ -96,15 +100,15 @@ describe('Reset Password Controller', () => {
     expect(response.statusCode).toBe(500);
   });
 
-  it('should return 400 if InvalidTokenError is thrown', async () => {
+  it('should return 401 if InvalidTokenError is thrown', async () => {
     const { sut, resetPasswordUseCaseStub } = makeSut();
     vi.spyOn(resetPasswordUseCaseStub, 'execute').mockRejectedValueOnce(
       new InvalidTokenError(),
     );
 
-    const response = await sut.execute(baseHttpRequest.body);
+    const response = await sut.execute(baseHttpRequest);
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
   });
 
   it('should return 400 if ExpiredTokenError is thrown', async () => {
@@ -113,8 +117,20 @@ describe('Reset Password Controller', () => {
       new ExpiredTokenError(),
     );
 
-    const response = await sut.execute(baseHttpRequest.body);
+    const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(400);
+    expect(response.body).toEqual({ message: new ExpiredTokenError().message });
+  });
+
+  it('should return 404 if UserNotFoundError is thrown', async () => {
+    const { sut, resetPasswordUseCaseStub } = makeSut();
+    vi.spyOn(resetPasswordUseCaseStub, 'execute').mockRejectedValueOnce(
+      new UserNotFoundError(),
+    );
+
+    const response = await sut.execute(baseHttpRequest);
+
+    expect(response.statusCode).toBe(404);
   });
 });

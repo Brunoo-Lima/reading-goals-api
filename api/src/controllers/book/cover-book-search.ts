@@ -1,5 +1,4 @@
 import type { Request } from 'express';
-import type { CoverBookSearchUseCase } from '../../use-cases/book/cover-book-search';
 import {
   badRequest,
   externalServiceUnavailable,
@@ -9,11 +8,12 @@ import {
 import { ZodError } from 'zod';
 import { CoverProviderUnavailableError } from '../../errors';
 import { searchCoversSchema } from '../../schemas';
+import type { ICoverBookSearchUseCase } from '../../interfaces/use-cases';
 
 export class CoverBookSearchController {
-  private coverBookSearchUseCase: CoverBookSearchUseCase;
+  private coverBookSearchUseCase: ICoverBookSearchUseCase;
 
-  constructor(coverBookSearchUseCase: CoverBookSearchUseCase) {
+  constructor(coverBookSearchUseCase: ICoverBookSearchUseCase) {
     this.coverBookSearchUseCase = coverBookSearchUseCase;
   }
 

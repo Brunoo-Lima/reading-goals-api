@@ -35,14 +35,15 @@ describe('Login Controller', () => {
     },
   } as Partial<Request> as Request;
 
-  const baseResponse = {
-    cookie: vi.fn(),
-  } as Partial<Response> as Response;
+  const makeResponse = () =>
+    ({
+      cookie: vi.fn(),
+    }) as Partial<Response> as Response;
 
   test('should login successfully', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute(baseHttpRequest, baseResponse);
+    const result = await sut.execute(baseHttpRequest, makeResponse());
 
     expect(result.statusCode).toBe(200);
   });
@@ -57,7 +58,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request, baseResponse);
+    const result = await sut.execute(request, makeResponse());
 
     expect(result.statusCode).toBe(400);
   });
@@ -72,7 +73,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request, baseResponse);
+    const result = await sut.execute(request, makeResponse());
 
     expect(result.statusCode).toBe(400);
   });
@@ -87,7 +88,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request, baseResponse);
+    const result = await sut.execute(request, makeResponse());
 
     expect(result.statusCode).toBe(400);
   });
@@ -102,7 +103,7 @@ describe('Login Controller', () => {
       },
     } as Partial<Request> as Request;
 
-    const result = await sut.execute(request, baseResponse);
+    const result = await sut.execute(request, makeResponse());
 
     expect(result.statusCode).toBe(400);
   });
@@ -111,7 +112,7 @@ describe('Login Controller', () => {
     const { sut, loginUseCaseStub } = makeSut();
     vi.spyOn(loginUseCaseStub, 'execute').mockRejectedValueOnce(new Error());
 
-    const result = await sut.execute(baseHttpRequest, baseResponse);
+    const result = await sut.execute(baseHttpRequest, makeResponse());
 
     expect(result.statusCode).toBe(500);
   });
@@ -122,7 +123,7 @@ describe('Login Controller', () => {
       new UserNotFoundError(),
     );
 
-    const result = await sut.execute(baseHttpRequest, baseResponse);
+    const result = await sut.execute(baseHttpRequest, makeResponse());
 
     expect(result.statusCode).toBe(404);
   });
@@ -133,8 +134,37 @@ describe('Login Controller', () => {
       new InvalidPasswordError(),
     );
 
-    const result = await sut.execute(baseHttpRequest, baseResponse);
+    const result = await sut.execute(baseHttpRequest, makeResponse());
 
     expect(result.statusCode).toBe(401);
+  });
+
+  test('should set access token maxAge to 15 minutes when rememberMe is false', async () => {
+    const { sut } = makeSut();
+    const response = makeResponse();
+
+    await sut.execute(baseHttpRequest, response);
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      'accessToken',
+      expect.any(String),
+      expect.objectContaining({ maxAge: 15 * 60 * 1000 }),
+    );
+  });
+
+  test('should set access token maxAge to 7 days when rememberMe is true', async () => {
+    const { sut } = makeSut();
+    const response = makeResponse();
+    const request = {
+      body: { ...baseHttpRequest.body, rememberMe: true },
+    } as Partial<Request> as Request;
+
+    await sut.execute(request, response);
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      'accessToken',
+      expect.any(String),
+      expect.objectContaining({ maxAge: 7 * 24 * 60 * 60 * 1000 }),
+    );
   });
 });

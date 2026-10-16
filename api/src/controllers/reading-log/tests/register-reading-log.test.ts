@@ -2,7 +2,11 @@ import type { Request } from 'express';
 import { RegisterReadingLogController } from '../register-reading-log';
 import { readingLog } from '../../../tests';
 import { faker } from '@faker-js/faker';
-import { BookNotFoundError, UserNotFoundError } from '../../../errors';
+import {
+  BookNotFoundError,
+  InvalidCurrentPageNotExceedTotalPagesError,
+  UserNotFoundError,
+} from '../../../errors';
 
 describe('Register Reading Log Controller', () => {
   class RegisterReadingLogUseCaseStub {
@@ -164,5 +168,16 @@ describe('Register Reading Log Controller', () => {
     const result = await sut.execute(baseHttpRequest);
 
     expect(result.statusCode).toBe(404);
+  });
+
+  test('should return 400 if InvalidCurrentPageNotExceedTotalPagesError throws', async () => {
+    const { sut, registerReadingLogUseCaseStub } = makeSut();
+    vi.spyOn(registerReadingLogUseCaseStub, 'execute').mockRejectedValueOnce(
+      new InvalidCurrentPageNotExceedTotalPagesError(),
+    );
+
+    const result = await sut.execute(baseHttpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });

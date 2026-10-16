@@ -72,4 +72,22 @@ describe('Login Use Case', () => {
     expect(result.tokens.accessToken).toBeDefined();
     expect(result.tokens.refreshToken).toBeDefined();
   });
+
+  test('should generate tokens with user id and rememberMe', async () => {
+    const { sut, tokensGeneratorAdapterStub } = makeSut();
+    const tokensGeneratorSpy = vi.spyOn(tokensGeneratorAdapterStub, 'execute');
+
+    await sut.execute(user.email, user.password, true);
+
+    expect(tokensGeneratorSpy).toHaveBeenCalledWith(user.id, true);
+  });
+
+  test('should use false as rememberMe by default when generating tokens', async () => {
+    const { sut, tokensGeneratorAdapterStub } = makeSut();
+    const tokensGeneratorSpy = vi.spyOn(tokensGeneratorAdapterStub, 'execute');
+
+    await sut.execute(user.email, user.password);
+
+    expect(tokensGeneratorSpy).toHaveBeenCalledWith(user.id, false);
+  });
 });

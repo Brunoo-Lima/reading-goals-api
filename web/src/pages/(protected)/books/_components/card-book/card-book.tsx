@@ -28,7 +28,7 @@ export const CardBook = ({
   const rating = book.rating ?? 0;
 
   const bookCoverUrl = book.cover_id
-    ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg?default=false`
+    ? `${import.meta.env.VITE_API_LIB_BOOKS_URL_COVER}/b/id/${book.cover_id}-M.jpg?default=false`
     : null;
 
   return (

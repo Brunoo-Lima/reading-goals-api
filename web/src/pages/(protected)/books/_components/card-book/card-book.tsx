@@ -53,7 +53,6 @@ export const CardBook = ({
         </div>
 
         <div className="flex-1 mt-4 ">
-          {/* {book.cover_url ? ( */}
           {bookCoverUrl && !coverUnavailable ? (
             <img
               src={bookCoverUrl}

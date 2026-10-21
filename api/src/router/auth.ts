@@ -31,10 +31,12 @@ authRoutes.post(
     const { statusCode, body } = await refreshTokenController.execute(request);
 
     if (statusCode === 200 && 'accessToken' in body) {
+      const isProduction = process.env.NODE_ENV === 'production';
+
       response.cookie('accessToken', body.accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 15 * 60 * 1000, // 15min, mesmo tempo do jwt.sign
         path: '/',
       });
@@ -42,8 +44,8 @@ authRoutes.post(
       if ('refreshToken' in body) {
         response.cookie('refreshToken', body.refreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'none',
+          secure: isProduction,
+          sameSite: isProduction ? 'none' : 'lax',
           maxAge: 7 * 24 * 60 * 60 * 1000, // ajustar conforme rememberMe
           path: '/',
         });

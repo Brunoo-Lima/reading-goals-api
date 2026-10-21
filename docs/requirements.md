@@ -22,7 +22,7 @@ Desenvolver um sistema para que o leitor cadastre sua biblioteca, acompanhe o pr
 - **RF01 — Cadastrar usuário:** o sistema deve permitir o cadastro de usuário com nome, e-mail, senha e chave de segurança.
 - **RF02 — Autenticar usuário:** o sistema deve permitir o login com e-mail e senha e iniciar uma sessão autenticada.
 - **RF03 — Manter sessão:** o sistema deve renovar o token de acesso por meio do token de atualização quando a sessão expirar e ele for válido.
-- **RF04 — Recuperar senha:** o sistema deve permitir solicitar a recuperação de senha informando e-mail e chave de segurança.
+- **RF04 — Recuperar senha:** o sistema deve permitir solicitar a recuperação de senha informando e-mail e chave de segurança. No estado atual, o endpoint retorna o token para o fluxo de desenvolvimento; o envio de e-mail ainda não está implementado.
 - **RF05 — Redefinir senha:** o sistema deve permitir definir uma nova senha mediante token válido de recuperação.
 - **RF06 — Consultar dados da conta:** o usuário autenticado deve poder consultar seus próprios dados cadastrais.
 - **RF07 — Editar usuário:** o usuário autenticado deve poder alterar seus dados cadastrais.
@@ -62,12 +62,12 @@ Desenvolver um sistema para que o leitor cadastre sua biblioteca, acompanhe o pr
 - **RF29 — Exibir visão geral:** o sistema deve apresentar resumo da biblioteca, páginas lidas, sequência de leitura, progresso diário e livros em leitura.
 - **RF30 — Exibir estatísticas:** o sistema deve apresentar totais de livros por status, páginas lidas, metas concluídas, sequência atual e maior sequência de leitura.
 - **RF31 — Calcular média de avaliações:** o sistema deve apresentar a média das avaliações dos livros concluídos que foram avaliados.
-- **RF32 — Exibir conta:** o sistema deve disponibilizar uma área de conta com configurações do usuário e acesso à ação de exportar dados.
+- **RF32 — Exibir conta:** o sistema deve disponibilizar uma área de conta com edição dos dados do usuário e exportação da biblioteca em Excel e PDF.
 
 ## Requisitos Não Funcionais
 
 - **RNF01 — Responsividade:** a interface deve se adaptar a telas de celular, tablet e desktop.
-- **RNF02 — Autenticação segura:** as sessões devem usar JWT em cookies `httpOnly`, com política `sameSite: none`; o cookie deve usar o atributo `secure` em produção.
+- **RNF02 — Autenticação segura:** as sessões usam JWT em cookies `httpOnly`, com política `sameSite: none`; o cookie usa o atributo `secure` apenas em produção.
 - **RNF03 — Proteção de rotas:** páginas e endpoints privados devem exigir uma sessão autenticada; solicitações sem credencial válida devem receber resposta de não autorizado.
 - **RNF04 — Validação:** entradas da API e formulários da interface devem ser validados antes do processamento, com mensagens de erro ao usuário.
 - **RNF05 — Confiabilidade do cliente:** as chamadas da interface devem ter tempo limite de 10 segundos e tentar renovar a sessão uma única vez após resposta 401.
@@ -85,7 +85,7 @@ Desenvolver um sistema para que o leitor cadastre sua biblioteca, acompanhe o pr
 - **RN08 — Status permitidos:** o status do livro deve ser um entre `READING`, `COMPLETED`, `WISHLIST` e `ABANDONED`.
 - **RN09 — Integridade de páginas:** o total de páginas deve ser maior que zero, a página atual não pode ser negativa nem maior que o total e a página de uma nota não pode superar o total de páginas do livro.
 - **RN10 — Datas do livro:** quando informadas, a data final de leitura não pode ser anterior à data inicial.
-- **RN11 — Identificação de livro:** não pode haver dois livros cadastrados com o mesmo título.
+- **RN11 — Identificação de livro:** não pode haver dois livros cadastrados com o mesmo título no fluxo de criação atual. Essa regra é aplicada pela camada de caso de uso, não por uma restrição única no banco.
 - **RN12 — Propriedade de livros:** o usuário só pode consultar, editar ou excluir livros vinculados à sua conta.
 - **RN13 — Nota válida:** uma nota deve conter conteúdo; seu número de página, quando informado, deve ser maior que zero.
 - **RN14 — Registro de leitura válido:** cada sessão deve informar quantidade de páginas maior que zero e uma data válida; a observação é opcional.

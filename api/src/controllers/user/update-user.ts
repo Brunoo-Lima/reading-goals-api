@@ -44,7 +44,10 @@ export class UpdateUserController {
       }
 
       if (error instanceof EmailAlreadyInUseError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'EMAIL_ALREADY_EXISTS',
+          message: error.message,
+        });
       }
 
       return serverError();

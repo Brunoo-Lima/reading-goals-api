@@ -64,7 +64,10 @@ export class CreateGoalProgressController {
       }
 
       if (error instanceof GoalProgressExceedsTargetError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'GOAL_PROGRESS_EXCEEDS_TARGET_ERROR',
+          message: error.message,
+        });
       }
 
       return serverError();

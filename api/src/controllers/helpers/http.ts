@@ -6,6 +6,7 @@ export const badRequest = <T>(body: T) => ({
 export const serverError = () => ({
   statusCode: 500,
   body: {
+    code: 'INTERNAL_ERROR',
     message: 'Internal server error',
   },
 });
@@ -13,6 +14,7 @@ export const serverError = () => ({
 export const externalServiceUnavailable = () => ({
   statusCode: 502,
   body: {
+    code: 'EXTERNAL_ERROR',
     message: 'External service unavailable',
   },
 });
@@ -40,6 +42,7 @@ export const notFound = <T>(body: T) => ({
 export const unauthorized = () => ({
   statusCode: 401,
   body: {
+    code: 'UNAUTHORIZED',
     message: 'Unauthorized',
   },
 });
@@ -47,6 +50,7 @@ export const unauthorized = () => ({
 export const forbidden = () => ({
   statusCode: 403,
   body: {
+    code: 'FORBIDDEN',
     message: 'Forbidden',
   },
 });

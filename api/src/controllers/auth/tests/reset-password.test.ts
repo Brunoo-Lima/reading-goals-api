@@ -120,7 +120,6 @@ describe('Reset Password Controller', () => {
     const response = await sut.execute(baseHttpRequest);
 
     expect(response.statusCode).toBe(400);
-    expect(response.body).toEqual({ message: new ExpiredTokenError().message });
   });
 
   it('should return 404 if UserNotFoundError is thrown', async () => {

@@ -146,7 +146,7 @@ describe('Update User Use Case', () => {
   test('should throw if GetUserByEmailRepository throws', async () => {
     const { sut, getUserByEmailRepository } = makeSut();
     vi.spyOn(getUserByEmailRepository, 'execute').mockRejectedValueOnce(
-      new EmailAlreadyInUseError(user.email),
+      new EmailAlreadyInUseError(),
     );
 
     const promise = sut.execute(user.id, baseHttpRequest.body);
@@ -166,9 +166,7 @@ describe('Update User Use Case', () => {
       email: user.email,
     });
 
-    await expect(promise).rejects.toThrow(
-      new EmailAlreadyInUseError(user.email),
-    );
+    await expect(promise).rejects.toThrow(new EmailAlreadyInUseError());
   });
 
   test('should throw if PasswordHashAdapter throws', async () => {

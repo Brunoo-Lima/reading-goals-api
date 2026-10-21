@@ -1,25 +1,37 @@
+import { getErrorMessage } from '@/utils/get-error-message';
 import api from './api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type { ApiError } from '@/@types/IApiErrorResponse';
 
-export const login = async (email: string, password: string) => {
-  const { data } = await api.post('/auth/login', { email, password });
-
+export const login = async (
+  email: string,
+  password: string,
+  rememberMe: boolean,
+) => {
+  const { data } = await api.post('/auth/login', {
+    email,
+    password,
+    rememberMe,
+  });
   return data;
 };
 
 export const useUserLogin = () => {
   return useMutation({
     mutationKey: ['login'],
-    mutationFn: (user: { email: string; password: string }) => {
-      return login(user.email, user.password);
+    mutationFn: (user: {
+      email: string;
+      password: string;
+      rememberMe: boolean;
+    }) => {
+      return login(user.email, user.password, user.rememberMe);
     },
   });
 };
 
 export const logOut = async () => {
   const { data } = await api.post('/auth/logout');
-
   return data;
 };
 
@@ -31,9 +43,8 @@ export const useUserLogOut = () => {
     onSuccess: () => {
       queryClient.clear();
     },
-    onError: (error: Error) => {
-      const message = error.message || 'Erro ao sair.';
-      toast.error(message);
+    onError: (error: ApiError) => {
+      toast.error(getErrorMessage(error));
     },
   });
 };
@@ -61,12 +72,11 @@ export const useForgotPassword = () =>
       email: string;
       securityKey: string;
     }) => forgotPassword(email, securityKey),
-    onError: (error: Error) => toast.error(error.message),
+    onError: (error: Error) => toast.error(getErrorMessage(error)),
   });
 
 export const resetPassword = async (token: string, password: string) => {
   const { data } = await api.post('/auth/reset-password', { token, password });
-
   return data;
 };
 
@@ -75,5 +85,5 @@ export const useResetPassword = () =>
     mutationKey: ['reset-password'],
     mutationFn: ({ token, password }: { token: string; password: string }) =>
       resetPassword(token, password),
-    onError: (error: Error) => toast.error(error.message),
+    onError: (error: Error) => toast.error(getErrorMessage(error)),
   });

@@ -13,6 +13,7 @@ interface IGoalsContext {
   goals: IGoal[];
 
   goal: IGoal | null;
+  setGoal: React.Dispatch<React.SetStateAction<IGoal | null>>;
   selectedGoalId: string | null;
   setSelectedGoalId: React.Dispatch<React.SetStateAction<string | null>>;
 
@@ -144,6 +145,7 @@ export const GoalsProvider = ({ children }: React.PropsWithChildren) => {
   const contextValue = {
     goals,
     goal,
+    setGoal,
     selectedGoalId,
     setSelectedGoalId,
 

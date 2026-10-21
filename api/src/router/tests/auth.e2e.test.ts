@@ -22,7 +22,7 @@ describe('Auth Routes E2E tests', () => {
     expect(response.status).toBe(200);
   });
 
-  test('should POST /api/v1/auth/login should return 401 when user credentials are invalid', async () => {
+  test('should POST /api/v1/auth/login should return 400 when user credentials are invalid', async () => {
     const { body: createdUser } = await request(app)
       .post('/api/v1/users')
       .send({
@@ -37,7 +37,7 @@ describe('Auth Routes E2E tests', () => {
       password: faker.internet.password(),
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(400);
   });
 
   test('should POST /api/v1/auth/login should return 404 when user email is not found', async () => {

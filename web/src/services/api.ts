@@ -1,3 +1,4 @@
+import { ApiError, type ApiErrorResponse } from '@/@types/IApiErrorResponse';
 import axios, { type AxiosRequestConfig } from 'axios';
 
 interface QueueItem {
@@ -6,7 +7,7 @@ interface QueueItem {
 }
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + '/api/v1',
+  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
   timeout: 10000,
   withCredentials: true, // manda e recebe cookies
 });
@@ -65,9 +66,15 @@ api.interceptors.response.use(
       }
     }
 
-    const message: string =
-      error.response?.data?.message ?? 'Ocorreu um erro. Tente novamente.';
-    return Promise.reject(new Error(message));
+    const data = error.response?.data as ApiErrorResponse | undefined;
+
+    return Promise.reject(
+      new ApiError(
+        data?.code ?? 'INTERNAL_ERROR',
+        data?.message,
+        error.response?.status,
+      ),
+    );
   },
 );
 

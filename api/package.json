@@ -13,7 +13,9 @@
     "test": "dotenv -e .env.test vitest --silent --passWithNoTests",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "dotenv -e .env.test vitest run e2e"
+    "test:e2e": "dotenv -e .env.test vitest run e2e",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:deploy": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",

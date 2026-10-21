@@ -38,7 +38,7 @@ export class CreateUserUseCase {
     );
 
     if (userAlreadyExists) {
-      throw new EmailAlreadyInUseError(user.email);
+      throw new EmailAlreadyInUseError();
     }
 
     const userId = this.idGeneratorAdapter.execute();

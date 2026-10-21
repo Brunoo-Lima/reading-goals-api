@@ -136,7 +136,7 @@ describe('Login Controller', () => {
 
     const result = await sut.execute(baseHttpRequest, makeResponse());
 
-    expect(result.statusCode).toBe(401);
+    expect(result.statusCode).toBe(400);
   });
 
   test('should set access token maxAge to 15 minutes when rememberMe is false', async () => {

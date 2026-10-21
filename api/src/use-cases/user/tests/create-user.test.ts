@@ -79,9 +79,7 @@ describe('Create User Use Case', () => {
 
     const promise = sut.execute(user);
 
-    await expect(promise).rejects.toThrow(
-      new EmailAlreadyInUseError(user.email),
-    );
+    await expect(promise).rejects.toThrow(new EmailAlreadyInUseError());
   });
 
   test('should call IdGeneratorAdapter to generate a random ID', async () => {

@@ -52,12 +52,15 @@ export class UpdateNoteController {
         return bookNotFoundResponse();
       }
 
-      if (error instanceof NotePageNumberExceedsTotalPagesError) {
-        return badRequest({ message: error.message });
-      }
-
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });
+      }
+
+      if (error instanceof NotePageNumberExceedsTotalPagesError) {
+        return badRequest({
+          code: 'EXCEEDS_TOTAL_PAGES',
+          message: error.message,
+        });
       }
 
       return serverError();

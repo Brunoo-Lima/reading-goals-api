@@ -1,75 +1,45 @@
-# React + TypeScript + Vite
+# Reading Goals Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web do Diário de Metas de Leitura, construída com React, TypeScript e Vite. Permite administrar a biblioteca, acompanhar a leitura, criar metas, registrar progresso e consultar estatísticas.
 
-Currently, two official plugins are available:
+## Funcionalidades disponíveis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- cadastro, login, logout e recuperação/redefinição de senha;
+- visão geral com livros em leitura, progresso diário, páginas lidas e streak;
+- biblioteca com cadastro, edição, exclusão, status, gêneros, avaliação e capa;
+- busca de capas por título;
+- notas por livro e registros de sessões de leitura;
+- metas de páginas, livros, total de páginas e livro específico;
+- estatísticas de livros, páginas, metas, avaliações e streak;
+- exportação da biblioteca para Excel e PDF;
+- layout responsivo e feedback das operações.
 
-## React Compiler
+## Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+React 19, TypeScript, Vite, React Router, TanStack Query, Axios, React Hook Form, Zod, Tailwind CSS, Radix UI, date-fns, ExcelJS e jsPDF.
 
-Note: This will impact Vite dev & build performances.
+## Executar localmente
 
-## Expanding the ESLint configuration
+Na pasta `web`, crie `.env` apontando `VITE_API_URL` para a API:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Depois execute `pnpm install` e `pnpm run dev`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm run build    # checagem TypeScript e build de produção
+pnpm run lint
+pnpm run preview  # pré-visualiza o build
 ```
+
+## Rotas
+
+Públicas: `/`, `/registro`, `/esqueci-senha` e `/redefinir-senha`.
+
+Protegidas: `/geral`, `/livros`, `/metas`, `/estatisticas` e `/conta`.
+
+As requisições usam cookies de sessão, timeout de 10 segundos e uma tentativa automática de renovação após `401`. A rota de chat ainda não está habilitada na navegação.

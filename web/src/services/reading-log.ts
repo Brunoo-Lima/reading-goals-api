@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import api from './api';
+import { getErrorMessage } from '@/utils/get-error-message';
 
 export const getReadingLogs = async (): Promise<IReadingLog[]> => {
   const { data } = await api.get('/reading-logs');
@@ -46,7 +47,7 @@ export const useRegisterReadingLog = () => {
       toast.success('Leitura registrada com sucesso!');
     },
     onError: (error: AxiosError) => {
-      toast.error(error.message || 'Erro ao registrar leitura.');
+      toast.error(getErrorMessage(error.message));
     },
   });
 };

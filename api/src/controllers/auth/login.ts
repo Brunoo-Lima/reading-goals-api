@@ -1,12 +1,6 @@
 import type { Request, Response } from 'express';
 import type { ILoginUseCase } from '../../interfaces/use-cases';
-import {
-  badRequest,
-  ok,
-  serverError,
-  unauthorized,
-  userNotFoundResponse,
-} from '../helpers';
+import { badRequest, ok, serverError, userNotFoundResponse } from '../helpers';
 import { loginSchema } from '../../schemas';
 import { ZodError } from 'zod';
 import { InvalidPasswordError, UserNotFoundError } from '../../errors';
@@ -32,10 +26,12 @@ export class LoginController {
 
       const { tokens, ...user } = result;
 
+      const isProduction = process.env.NODE_ENV === 'production';
+
       response.cookie('accessToken', tokens.accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 15 * 60 * 1000,
         path: '/',
       });
@@ -43,8 +39,8 @@ export class LoginController {
       if (tokens.refreshToken) {
         response.cookie('refreshToken', tokens.refreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          secure: isProduction,
+          sameSite: isProduction ? 'none' : 'lax',
           maxAge: 30 * 24 * 60 * 60 * 1000,
           path: '/',
         });
@@ -57,7 +53,10 @@ export class LoginController {
       }
 
       if (error instanceof InvalidPasswordError) {
-        return unauthorized();
+        return badRequest({
+          code: 'INVALID_CREDENTIALS',
+          message: error.message,
+        });
       }
 
       if (error instanceof UserNotFoundError) {

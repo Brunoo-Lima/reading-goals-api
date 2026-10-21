@@ -3,6 +3,7 @@ import validator from 'validator';
 
 export const invalidIdResponse = () =>
   badRequest({
+    code: 'INVALID_ID',
     message: 'Invalid id',
   });
 

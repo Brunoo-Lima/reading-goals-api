@@ -53,7 +53,7 @@ export function ResetPasswordForm({ token }: IResetPasswordFormProps) {
           <FieldLabel htmlFor="confirmPassword">
             Confirme a nova senha
           </FieldLabel>
-          \ <PasswordInput maxLength={6} {...register('confirmPassword')} />
+          <PasswordInput maxLength={6} {...register('confirmPassword')} />
           <FieldError className="text-xs">
             {errors.confirmPassword?.message}
           </FieldError>

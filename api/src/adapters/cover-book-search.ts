@@ -23,7 +23,7 @@ export class CoverBookSearchAdapter implements ICoverSearchAdapter {
       .map((d: any) => ({
         title: d.title,
         cover_id: d.cover_i,
-        cover_url: `https://covers.openlibrary.org/b/id/${d.cover_i}-L.jpg`,
+        cover_url: `${process.env.API_LIB_BOOKS_URL_COVER}/b/id/${d.cover_i}-L.jpg`,
         ...(d.author_name?.[0] ? { author: d.author_name[0] } : {}),
       }));
   }

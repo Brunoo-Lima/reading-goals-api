@@ -3,10 +3,11 @@ import api from './api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { AxiosError } from 'axios';
+import { getErrorMessage } from '@/utils/get-error-message';
+import { bookMessage } from '@/constants/book';
 
 export const createBook = async (book: ICreateBook) => {
   const { data } = await api.post('/books', book);
-
   return data;
 };
 
@@ -18,11 +19,10 @@ export const useCreateBook = () => {
     mutationFn: createBook,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
-      toast.success('Livro criado com sucesso!');
+      toast.success(bookMessage.success.created);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao criar livro.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -36,7 +36,7 @@ export const useGetBooks = (userId?: string) => {
   return useQuery({
     queryKey: ['books', userId],
     queryFn: getBooks,
-    enabled: !!userId, // Only fetch books if userId is provided
+    enabled: !!userId, // Busca os livros apenas se o userId for fornecido
   });
 };
 
@@ -65,10 +65,10 @@ export const useDeleteBook = () => {
     mutationFn: deleteBook,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
-      toast.success('Livro deletado com sucesso!');
+      toast.success(bookMessage.success.deleted);
     },
     onError: (error: AxiosError) => {
-      toast.error(error.message || 'Erro ao atualizar livro.');
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -88,12 +88,10 @@ export const useUpdateBook = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
-      toast.success('Livro atualizado com sucesso!');
+      toast.success(bookMessage.success.updated);
     },
-
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao atualizar livro.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };

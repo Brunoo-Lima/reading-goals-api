@@ -3,6 +3,8 @@ import api from './api';
 import { useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/utils/get-error-message';
+import { noteMessage } from '@/constants/note';
 
 export const createNote = async (note: ICreateNote, bookId: string) => {
   const { data } = await api.post(`/notes?bookId=${bookId}`, note);
@@ -17,11 +19,10 @@ export const useCreateNote = () => {
       return createNote(note, bookId);
     },
     onSuccess: () => {
-      toast.success('Nota criada com sucesso!');
+      toast.success(noteMessage.success.created);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao criar nota.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -55,8 +56,7 @@ export const useUpdateNote = () => {
       return updateNote(note, noteId, bookId);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao atualizar nota.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -73,8 +73,7 @@ export const useDeleteNote = () => {
       return deleteNote(noteId);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao deletar nota.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };

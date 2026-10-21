@@ -7,6 +7,7 @@ import { ZodError } from 'zod';
 
 export class CreateUserController {
   private createUserUseCase: ICreateUserUseCase;
+
   constructor(createUserUseCase: ICreateUserUseCase) {
     this.createUserUseCase = createUserUseCase;
   }
@@ -26,7 +27,10 @@ export class CreateUserController {
       }
 
       if (error instanceof EmailAlreadyInUseError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'EMAIL_ALREADY_EXISTS',
+          message: error.message,
+        });
       }
 
       return serverError();

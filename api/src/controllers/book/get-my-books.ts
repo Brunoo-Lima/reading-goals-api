@@ -53,15 +53,24 @@ export class GetMyBooksController {
       }
 
       if (error instanceof InvalidBookStatusError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_BOOK_STATUS',
+          message: error.message,
+        });
       }
 
       if (error instanceof InvalidBookTitleError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_BOOK_TITLE',
+          message: error.message,
+        });
       }
 
       if (error instanceof InvalidBookGenreError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_BOOK_GENRE',
+          message: error.message,
+        });
       }
 
       return serverError();

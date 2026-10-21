@@ -7,6 +7,7 @@ export const loginFormSchema = z.object({
   password: z
     .string('Senha é obrigatória')
     .min(6, 'Senha deve ter pelo menos 6 caracteres'),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 export type ILoginFormSchema = z.infer<typeof loginFormSchema>;

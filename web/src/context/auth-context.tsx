@@ -1,6 +1,8 @@
 import type { IUserRequest } from '@/@types/IUser';
+import { messages } from '@/constants/messages';
 import { useUserLogin } from '@/services/auth';
 import { getUser } from '@/services/user';
+import { getErrorMessage } from '@/utils/get-error-message';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -9,7 +11,11 @@ interface IAuthContextProps {
   user: IUserRequest | null;
   open: boolean;
   setOpen: (open: boolean) => void;
-  loginService: (email: string, password: string) => Promise<void>;
+  loginService: (
+    email: string,
+    password: string,
+    rememberMe: boolean,
+  ) => Promise<void>;
   logOut: () => void;
   refreshUser: () => Promise<void>;
   isAuthenticated: boolean;
@@ -80,26 +86,29 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     getUserData();
   }, [refreshUser]);
 
-  async function loginService(email: string, password: string) {
+  async function loginService(
+    email: string,
+    password: string,
+    rememberMe: boolean,
+  ) {
     setIsLoading(true);
 
     try {
       await login.mutateAsync(
-        { email, password },
+        { email, password, rememberMe },
         {
           onSuccess: (user) => {
             // localStorage.setItem('accessToken', user.tokens.accessToken);
             // localStorage.setItem('refreshToken', user.tokens.refreshToken);
 
             setUser(user);
-            toast.success('Login realizado com sucesso!');
+            toast.success(messages.success.login);
             navigate('/geral');
           },
         },
       );
     } catch (error: any) {
-      const message = error.message || 'Erro ao fazer login.';
-      toast.error(message);
+      toast.error(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }

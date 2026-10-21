@@ -15,6 +15,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { Spinner } from '../ui/spinner';
+import { Checkbox } from '../ui/checkbox';
 
 export function LoginForm() {
   const {
@@ -22,16 +24,17 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginFormSchema>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(loginFormSchema as any),
     defaultValues: {
       email: '',
       password: '',
+      rememberMe: false,
     },
   });
-  const { loginService } = useAuth();
+  const { loginService, isLoading } = useAuth();
 
   const onSubmit = (data: ILoginFormSchema) => {
-    loginService(data.email, data.password);
+    loginService(data.email, data.password, data.rememberMe);
   };
 
   return (
@@ -62,9 +65,28 @@ export function LoginForm() {
             {errors.password?.message}
           </FieldError>
         </Field>
+
+        <Field orientation="horizontal">
+          <Checkbox
+            id="rememberMe"
+            className="cursor-pointer"
+            {...register('rememberMe')}
+          />
+          <FieldLabel htmlFor="rememberMe" className="text-xs">
+            Lembrar-me
+          </FieldLabel>
+        </Field>
+
         <Field>
           <Button type="submit" className="cursor-pointer">
-            Entrar
+            {isLoading ? (
+              <>
+                Entrando
+                <Spinner />
+              </>
+            ) : (
+              'Entrar'
+            )}
           </Button>
         </Field>
         <Field>

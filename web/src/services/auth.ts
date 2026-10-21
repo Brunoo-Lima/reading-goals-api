@@ -7,9 +7,13 @@ import type { ApiError } from '@/@types/IApiErrorResponse';
 export const login = async (
   email: string,
   password: string,
-  remember: boolean,
+  rememberMe: boolean,
 ) => {
-  const { data } = await api.post('/auth/login', { email, password, remember });
+  const { data } = await api.post('/auth/login', {
+    email,
+    password,
+    rememberMe,
+  });
   return data;
 };
 
@@ -19,9 +23,9 @@ export const useUserLogin = () => {
     mutationFn: (user: {
       email: string;
       password: string;
-      remember: boolean;
+      rememberMe: boolean;
     }) => {
-      return login(user.email, user.password, user.remember);
+      return login(user.email, user.password, user.rememberMe);
     },
   });
 };

@@ -3,6 +3,7 @@ import api from './api';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { AxiosError } from 'axios';
+import { getErrorMessage } from '@/utils/get-error-message';
 
 export const getGoals = async () => {
   const { data } = await api.get('/goals');
@@ -24,8 +25,7 @@ export const useCreateGoal = () => {
       return createGoal(data, bookId);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao criar meta.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -41,8 +41,7 @@ export const useDeleteGoal = () => {
       return deleteGoal(id);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao deletar meta.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };
@@ -71,8 +70,7 @@ export const useRegisterProgressGoal = () => {
       return registerProgressGoal(goalId, goalProgressData);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao registrar progresso da meta.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };

@@ -3,6 +3,8 @@ import api from './api';
 import type { ICreateUser, IUpdateUser } from '@/@types/IUser';
 import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/utils/get-error-message';
+import { userMessage } from '@/constants/user';
 
 export const getUser = async () => {
   const { data } = await api.get('/users/me');
@@ -21,11 +23,10 @@ export const useCreateUser = () => {
       return createUser(user);
     },
     onSuccess: () => {
-      toast.success('Usuário criado com sucesso!');
+      toast.success(userMessage.success.created);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao criar usuário.';
-      toast.error(message);
+      toast.error(getErrorMessage(error));
     },
   });
 };
@@ -42,11 +43,10 @@ export const useUpdateUser = () => {
       return updateUser(user);
     },
     onSuccess: () => {
-      toast.success('Usuário atualizado com sucesso!');
+      toast.success(userMessage.success.updated);
     },
     onError: (error: AxiosError) => {
-      const message = error.message || 'Erro ao atualizar usuário.';
-      toast.error(message);
+      toast.error(getErrorMessage(error.message));
     },
   });
 };

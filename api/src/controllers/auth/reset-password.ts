@@ -30,7 +30,10 @@ export class ResetPasswordController {
 
       await this.resetPasswordUseCase.execute(params.token, params.password);
 
-      return ok({ message: 'Password reset successful!' });
+      return ok({
+        code: 'RESET_PASSWORD_SUCCESS',
+        message: 'Password reset successful!',
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0]?.message });

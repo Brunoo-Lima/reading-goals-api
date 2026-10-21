@@ -60,7 +60,10 @@ export class RegisterReadingLogController {
       }
 
       if (error instanceof InvalidCurrentPageNotExceedTotalPagesError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_CURRENT_PAGE_NOT_EXCEED_TOTAL_PAGES',
+          message: error.message,
+        });
       }
 
       return serverError();

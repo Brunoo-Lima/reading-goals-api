@@ -32,7 +32,7 @@ export class ForgotPasswordController {
       }
 
       if (error instanceof DataInvalidError) {
-        return badRequest({ message: error.message });
+        return badRequest({ code: 'VALIDATION_ERROR', message: error.message });
       }
 
       return serverError();

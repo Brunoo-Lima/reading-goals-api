@@ -1,12 +1,6 @@
 import type { Request, Response } from 'express';
 import type { ILoginUseCase } from '../../interfaces/use-cases';
-import {
-  badRequest,
-  ok,
-  serverError,
-  unauthorized,
-  userNotFoundResponse,
-} from '../helpers';
+import { badRequest, ok, serverError, userNotFoundResponse } from '../helpers';
 import { loginSchema } from '../../schemas';
 import { ZodError } from 'zod';
 import { InvalidPasswordError, UserNotFoundError } from '../../errors';
@@ -57,7 +51,10 @@ export class LoginController {
       }
 
       if (error instanceof InvalidPasswordError) {
-        return unauthorized();
+        return badRequest({
+          code: 'INVALID_CREDENTIALS',
+          message: error.message,
+        });
       }
 
       if (error instanceof UserNotFoundError) {

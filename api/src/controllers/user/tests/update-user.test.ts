@@ -138,7 +138,7 @@ describe('Update User Controller', () => {
   test('should return 400 if EmailAlreadyInUseError throws', async () => {
     const { sut, updateUserUseCaseStub } = makeSut();
     vi.spyOn(updateUserUseCaseStub, 'execute').mockRejectedValueOnce(
-      new EmailAlreadyInUseError(user.email),
+      new EmailAlreadyInUseError(),
     );
 
     const result = await sut.execute(baseHttpRequest);

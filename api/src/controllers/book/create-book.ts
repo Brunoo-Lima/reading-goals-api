@@ -29,15 +29,24 @@ export class CreateBookController {
       }
 
       if (error instanceof BookAlreadyExistsError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'BOOK_ALREADY_EXISTS',
+          message: error.message,
+        });
       }
 
       if (error instanceof InvalidBookDatesError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_BOOK_DATES',
+          message: error.message,
+        });
       }
 
       if (error instanceof InvalidCurrentPageNotExceedTotalPagesError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'INVALID_CURRENT_PAGE_NOT_EXCEED_TOTAL_PAGES',
+          message: error.message,
+        });
       }
 
       return serverError();

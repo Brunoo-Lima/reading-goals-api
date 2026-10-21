@@ -57,7 +57,10 @@ export class CreateNoteController {
       }
 
       if (error instanceof NotePageNumberExceedsTotalPagesError) {
-        return badRequest({ message: error.message });
+        return badRequest({
+          code: 'EXCEEDS_TOTAL_PAGES',
+          message: error.message,
+        });
       }
 
       return serverError();

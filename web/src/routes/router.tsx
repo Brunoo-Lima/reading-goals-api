@@ -11,14 +11,18 @@ import { ResetPasswordPage } from '@/pages/reset-password/reset-password';
 import { PrivateRoute } from '@/providers/private-route';
 import { Route, Routes } from 'react-router-dom';
 import { NotFoundPage } from '@/components/not-found/not-found';
+import { PublicRoute } from '@/providers/public-route';
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/registro" element={<RegisterPage />} />
-      <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
-      <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
+      <Route element={<PublicRoute />}>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/registro" element={<RegisterPage />} />
+        <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
+        <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
+      </Route>
+
       <Route path="/*" element={<NotFoundPage />} />
 
       <Route element={<PrivateRoute />}>

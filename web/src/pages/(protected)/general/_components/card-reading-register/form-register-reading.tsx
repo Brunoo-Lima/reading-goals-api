@@ -64,7 +64,8 @@ export const FormRegisterReading = ({
   const submit = async (data: IReadingLogFormSchema) => {
     const payload = {
       pages_read: data.pages_read,
-      date: new Date(data.date),
+      // Evita que a conversão de YYYY-MM-DD para UTC faça a leitura cair no dia anterior.
+      date: new Date(`${data.date}T12:00:00`),
       notes_about_session: data.notes_about_session || undefined,
     };
 

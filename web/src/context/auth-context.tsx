@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     //     };
     //   });
     // }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const getUserData = async () => {

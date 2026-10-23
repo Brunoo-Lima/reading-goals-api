@@ -98,9 +98,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         { email, password, rememberMe },
         {
           onSuccess: (user) => {
-            // localStorage.setItem('accessToken', user.tokens.accessToken);
-            // localStorage.setItem('refreshToken', user.tokens.refreshToken);
-
             setUser(user);
             toast.success(messages.success.login);
             navigate('/geral');
@@ -115,9 +112,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   }
 
   const logOut = () => {
-    // localStorage.removeItem('accessToken');
-    // localStorage.removeItem('refreshToken');
-
     setUser(null);
     navigate('/');
   };

@@ -78,7 +78,11 @@ export function LoginForm() {
         </Field>
 
         <Field>
-          <Button type="submit" className="cursor-pointer">
+          <Button
+            type="submit"
+            className="cursor-pointer"
+            disabled={isLoading ? true : false}
+          >
             {isLoading ? (
               <>
                 Entrando

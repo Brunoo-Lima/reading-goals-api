@@ -13,9 +13,7 @@ export const StreakCard = () => {
             <FlameIcon
               className={cn(
                 'h-5 w-5',
-                streak.currentStreak > 0
-                  ? 'text-orange-500'
-                  : 'text-muted-foreground',
+                streak.readToday ? 'text-orange-500' : 'text-muted-foreground',
               )}
             />
           </div>

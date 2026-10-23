@@ -21,6 +21,8 @@ const toDateKey = (date: Date, timeZone: string) => {
   return formatter.format(date); // "2026-09-29"
 };
 
+const toDateOnlyKey = (date: Date) => date.toISOString().slice(0, 10);
+
 const shiftDay = (key: string, days: number) => {
   const [y, m, d] = key.split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
@@ -61,9 +63,7 @@ export class GetReadingStreakUseCase {
   ): IReadingStreak {
     const today = toDateKey(this.current_date(), timeZone);
 
-    const dates = Array.from(
-      new Set(readingLogDates.map((d) => toDateKey(d, timeZone))),
-    )
+    const dates = Array.from(new Set(readingLogDates.map(toDateOnlyKey)))
       .filter((d) => d <= today)
       .sort();
 

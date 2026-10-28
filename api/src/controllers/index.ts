@@ -33,3 +33,5 @@ export * from './note/get-notes-by-book-id';
 export * from './note/get-note-by-id';
 export * from './note/update-note';
 export * from './note/delete-note';
+
+export * from './agent/chat';

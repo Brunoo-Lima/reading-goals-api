@@ -4,3 +4,4 @@ export * from './auth';
 export * from './reading-log';
 export * from './goal';
 export * from './note';
+export * from './agent';

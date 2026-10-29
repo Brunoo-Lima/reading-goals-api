@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils';
-import { BookOpenIcon, MenuIcon } from 'lucide-react';
+import { BookOpenIcon, MenuIcon, MessageCircleIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StreakCard } from './streak-card';
 import { NavItems } from './nav-items';
 import { useAuth } from '@/hooks/use-auth';
+import { NavLink } from 'react-router-dom';
 
 export function Sidebar() {
   const { open, setOpen } = useAuth();
@@ -53,18 +54,18 @@ export function Sidebar() {
 
         <NavItems onClose={onClose} />
 
-        {/* <div className="p-4 border-t border-border/50">
+        <div className="p-4 border-t border-border/50">
           <NavLink to="/chat">
             <Button
               variant="outline"
               className="w-full gap-2 justify-start"
               onClick={onClose}
             >
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircleIcon className="h-5 w-5" />
               Assistente IA
             </Button>
           </NavLink>
-        </div> */}
+        </div>
       </aside>
     </>
   );

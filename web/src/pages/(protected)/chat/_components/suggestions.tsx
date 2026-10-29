@@ -4,7 +4,7 @@ interface ISuggestionsProps {
 
 export const Suggestions = ({ onSuggestion }: ISuggestionsProps) => {
   const suggestions = [
-    'Recomende um livro de fantasia',
+    'Recomende um livro',
     'Quero adicionar um novo livro',
     'Como esta meu progresso?',
     'Qual livro devo ler em seguida?',

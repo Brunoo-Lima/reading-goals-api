@@ -6,14 +6,9 @@ import type {
   IUpdateBookUseCase,
 } from '../../interfaces/use-cases';
 import { aiClient, aiModel } from '../../lib/ai-client';
+import { instructions } from '../../utils/instructions';
 import { tools } from '../../utils/tools';
 import type { Response } from 'openai/resources/responses/responses';
-
-const instructions = `Você é o assistente de leitura do Bbookly. Responda em português, seja objetivo e amigável.
-Você pode recomendar livros, consultar o acervo do usuário, cadastrar livros, ver progresso e registrar avaliações.
-Nunca invente livros do acervo nem diga que uma alteração foi feita sem executar a ferramenta.
-Para recomendações de obras novas, deixe claro que são sugestões. Antes de cadastrar, confirme dados faltantes.
-Não exponha IDs internos, segredos ou dados de outros usuários.`;
 
 export class AgentUseCase {
   constructor(
@@ -50,7 +45,7 @@ export class AgentUseCase {
     ): Promise<Response> =>
       this.client.responses.create({
         model: aiModel,
-        instructions,
+        instructions: instructions,
         tools,
         input: requestInput,
         ...(previousResponseId

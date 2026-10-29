@@ -6,12 +6,14 @@ import {
   PostgresGetMyBooksRepository,
   PostgresGetUserByIdRepository,
   PostgresUpdateBookRepository,
+  PostgresChatRepository,
 } from '../../repositories/postgres';
 import {
   AgentUseCase,
   CreateBookUseCase,
   GetMyBooksUseCase,
   UpdateBookUseCase,
+  ChatUseCase,
 } from '../../use-cases';
 import { ChatAgentController } from '../../controllers';
 import { aiClient } from '../../lib/ai-client';
@@ -51,7 +53,10 @@ export const makeChatAgentController = () => {
     aiClient,
   );
 
-  const chatAgentController = new ChatAgentController(agentUseCase);
+  const chatRepository = new PostgresChatRepository();
+
+  const chatUseCase = new ChatUseCase(agentUseCase, chatRepository);
+  const chatAgentController = new ChatAgentController(chatUseCase);
 
   return chatAgentController;
 };

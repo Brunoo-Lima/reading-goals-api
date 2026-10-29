@@ -4,3 +4,4 @@ export * from './reading-log';
 export * from './goal';
 export * from './note';
 export * from './auth';
+export * from './chat';

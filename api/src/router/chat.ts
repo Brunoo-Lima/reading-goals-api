@@ -16,4 +16,16 @@ chatRoutes.post(
   },
 );
 
+chatRoutes.get('/history', auth, async (request, response) => {
+  const controller = makeChatAgentController();
+  const { statusCode, body } = await controller.history(request);
+  return response.status(statusCode).send(body);
+});
+
+chatRoutes.delete('/history', auth, async (request, response) => {
+  const controller = makeChatAgentController();
+  const { statusCode, body } = await controller.clear(request);
+  return response.status(statusCode).send(body);
+});
+
 export { chatRoutes };

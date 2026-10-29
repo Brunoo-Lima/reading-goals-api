@@ -7,9 +7,10 @@ import type {
 } from '../../interfaces/use-cases';
 import { aiClient, aiModel } from '../../lib/ai-client';
 import { tools } from '../../utils/tools';
+import type { Response } from 'openai/resources/responses/responses';
 
 const instructions = `Você é o assistente de leitura do Bbookly. Responda em português, seja objetivo e amigável.
-Você pode recomendar livros, consultar o acervo do usuário, cadastrar livros e registrar avaliações.
+Você pode recomendar livros, consultar o acervo do usuário, cadastrar livros, ver progresso e registrar avaliações.
 Nunca invente livros do acervo nem diga que uma alteração foi feita sem executar a ferramenta.
 Para recomendações de obras novas, deixe claro que são sugestões. Antes de cadastrar, confirme dados faltantes.
 Não exponha IDs internos, segredos ou dados de outros usuários.`;
@@ -22,9 +23,20 @@ export class AgentUseCase {
     private readonly client = aiClient,
   ) {}
 
+  private getResponseText(response: Response) {
+    if (response.output_text?.trim()) return response.output_text;
+
+    return response.output
+      .filter((item) => item.type === 'message')
+      .flatMap((item) => item.content)
+      .filter((content) => content.type === 'output_text')
+      .map((content) => content.text)
+      .join('\n')
+      .trim();
+  }
+
   async execute(userId: string, input: IAgentInput) {
-    if (!process.env.OPENAI_API_KEY)
-      throw new Error('OPENAI_API_KEY is not configured');
+    if (!process.env.API_KEY) throw new Error('API_KEY is not configured');
 
     const createResponse = (
       requestInput:
@@ -35,7 +47,7 @@ export class AgentUseCase {
             output: string;
           }>,
       previousResponseId?: string,
-    ) =>
+    ): Promise<Response> =>
       this.client.responses.create({
         model: aiModel,
         instructions,
@@ -56,7 +68,12 @@ export class AgentUseCase {
         (item) => item.type === 'function_call',
       );
       if (calls.length === 0)
-        return { responseId: response.id, message: response.output_text };
+        return {
+          responseId: response.id,
+          message:
+            this.getResponseText(response) ||
+            'Não consegui gerar uma resposta agora. Tente novamente.',
+        };
 
       const outputs = [];
       for (const call of calls) {
@@ -71,6 +88,23 @@ export class AgentUseCase {
               ? (args.status as never)
               : undefined,
           );
+        } else if (call.name === 'get_reading_progress') {
+          const books = await this.getMyBooksUseCase.execute(
+            userId,
+            typeof args.search === 'string' ? args.search : undefined,
+          );
+          result = books.map((book) => ({
+            title: book.title,
+            status: book.status,
+            current_page: book.current_page ?? 0,
+            total_pages: book.total_pages,
+            percentage:
+              book.total_pages > 0
+                ? Math.round(
+                    ((book.current_page ?? 0) / book.total_pages) * 100,
+                  )
+                : 0,
+          }));
         } else if (call.name === 'add_book') {
           result = await this.createBookUseCase.execute({
             user_id: userId,

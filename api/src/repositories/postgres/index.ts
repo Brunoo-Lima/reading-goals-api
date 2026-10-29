@@ -32,3 +32,4 @@ export * from './note/delete-note';
 export * from './auth/forgot-password';
 export * from './auth/reset-password-by-token';
 export * from './auth/mark-password-reset-as-used';
+export * from './chat/chat';

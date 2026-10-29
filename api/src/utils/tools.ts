@@ -20,6 +20,18 @@ export const tools = [
   {
     type: 'function' as const,
     strict: false,
+    name: 'get_reading_progress',
+    description:
+      'Consulta o progresso de leitura dos livros do usuário, com páginas lidas e percentual, e pode filtrar por livro.',
+    parameters: {
+      type: 'object',
+      properties: { search: { type: 'string' } },
+      additionalProperties: false,
+    },
+  },
+  {
+    type: 'function' as const,
+    strict: false,
     name: 'add_book',
     description:
       'Adiciona um livro ao acervo do usuário. Só use depois de obter os dados necessários ou confirmar os dados inferidos.',

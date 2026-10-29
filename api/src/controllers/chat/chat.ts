@@ -1,13 +1,13 @@
 import type { Request } from 'express';
 import { badRequest, ok, serverError } from '../helpers';
 import { chatSchema } from '../../schemas/chat';
-import type { IAgentUseCase } from '../../interfaces/use-cases';
+import type { IChatUseCase } from '../../interfaces/use-cases';
 
 export class ChatAgentController {
-  private agentUseCase: IAgentUseCase;
+  private chatUseCase: IChatUseCase;
 
-  constructor(agentUseCase: IAgentUseCase) {
-    this.agentUseCase = agentUseCase;
+  constructor(chatUseCase: IChatUseCase) {
+    this.chatUseCase = chatUseCase;
   }
 
   async execute(request: Request) {
@@ -16,14 +16,25 @@ export class ChatAgentController {
     if (!parsed.success) return badRequest({ message: 'message is required' });
 
     try {
-      const result = await this.agentUseCase.execute(
+      const result = await this.chatUseCase.execute(
         request.userId as string,
         parsed.data,
       );
+
       return ok(result);
     } catch (error) {
       console.error(error);
       return serverError();
     }
+  }
+
+  async history(request: Request) {
+    const messages = await this.chatUseCase.history(request.userId as string);
+    return ok({ messages });
+  }
+
+  async clear(request: Request) {
+    await this.chatUseCase.clear(request.userId as string);
+    return ok({ message: 'Chat history cleared' });
   }
 }
